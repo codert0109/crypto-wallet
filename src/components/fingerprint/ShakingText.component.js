@@ -54,7 +54,7 @@ ShakingText.propTypes = {
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node
   ]),
-  style: Text.propTypes.style,
+  // style: Text.propTypes.style,
 };
 
 export default ShakingText;

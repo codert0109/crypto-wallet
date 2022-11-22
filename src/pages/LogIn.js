@@ -6,12 +6,14 @@ import {
   SafeAreaView,
   Text,
   View,
+  TouchableOpacity,
 } from 'react-native';
 
 import {colors, fonts} from '../styles';
 import FloatLabelInput from '../components/FloatLabelInput';
 import {PrimaryButton} from '../components/Buttons';
 import ToggleSwitch from 'toggle-switch-react-native';
+import FontAwesome, {SolidIcons, RegularIcons} from 'react-native-fontawesome';
 import {checkAuthentication, saveRememberOption} from '../utils/auth';
 
 //import actions
@@ -21,7 +23,7 @@ import {loadTokensDataFromStorage} from '../redux/actions/TokensActions';
 import {loadSettingsDataFromStorage} from '../redux/actions/SettingsAction';
 
 //import images
-const logoImage = require('../assets/images/splash/logo.png');
+const shapeImage = require('../assets/images/icon.png');
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LogIn = ({
@@ -34,6 +36,7 @@ const LogIn = ({
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+  const [loginType, setLoginType] = useState(0);
   const [error, setError] = useState('');
 
   useEffect(() => {}, []);
@@ -90,10 +93,36 @@ const LogIn = ({
           paddingHorizontal: 24,
         }}>
         <View style={{width: '100%'}}>
-          <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-            <Image source={logoImage} />
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'center',
+              width: '100%',
+            }}>
+            <Image source={shapeImage} style={{width: 100, height: 100}} />
           </View>
-          <View style={{marginTop: 90, width: '100%'}}>
+          <TouchableOpacity onPress={() => {}}>
+            <View
+              style={{
+                marginTop: 24,
+                paddingLeft: 7,
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <Text
+                style={{
+                  color: loginType == 0 ? 'white' : colors.grey12,
+                  ...fonts.para_semibold,
+                }}>
+                Using Password{'   '}
+              </Text>
+              <FontAwesome
+                style={{fontSize: 16, color: colors.grey12}}
+                icon={SolidIcons.chevronRight}
+              />
+            </View>
+          </TouchableOpacity>
+          <View style={{marginTop: 24, width: '100%'}}>
             <FloatLabelInput
               label={'Password'}
               isPassword
@@ -116,6 +145,42 @@ const LogIn = ({
               </Text>
             )}
           </View>
+          <TouchableOpacity onPress={() => {}}>
+            <View
+              style={{
+                marginTop: 24,
+                // width: '100%',
+                paddingLeft: 7,
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <Text style={{color: colors.grey12, ...fonts.para_semibold}}>
+                Using Touch ID{'   '}
+              </Text>
+              <FontAwesome
+                style={{fontSize: 16, color: colors.grey12}}
+                icon={SolidIcons.chevronRight}
+              />
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => {}}>
+            <View
+              style={{
+                marginTop: 24,
+                // width: '100%',
+                paddingLeft: 7,
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <Text style={{color: colors.grey12, ...fonts.para_semibold}}>
+                Using PIN{'   '}
+              </Text>
+              <FontAwesome
+                style={{fontSize: 16, color: colors.grey12}}
+                icon={SolidIcons.chevronRight}
+              />
+            </View>
+          </TouchableOpacity>
           <View
             style={{
               marginTop: 24,

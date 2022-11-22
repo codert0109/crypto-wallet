@@ -49,12 +49,26 @@ class BiometricPopup extends Component {
 
   authCurrent() {
     FingerprintScanner
-      .authenticate({ description: this.props.description || 'Log in with Biometrics' })
+      .authenticate({ description: this.props.description || 'Register with FingerPrint' })
       .then(() => {
-        Alert.alert('Fingerprint Authentication', 'Authenticated successfully');
+        Alert.alert('Fingerprint Authentication', 
+        'Authenticated successfully',
+        [
+          {
+            text: "OK",
+            onPress: () => this.props.success(true),
+          },
+        ]);
       })
       .catch((error) => {
-        Alert.alert('Fingerprint Authentication', error.message);
+        console.log(error);
+        
+        if(error.UserCancel != undefined || error.SystemCancel != undefined || error.userFallback != undefined) {
+          // this.props.success(false);
+          console.log('cancel');
+        }
+        this.props.success(false);
+        // Alert.alert('Fingerprint Authentication', error.message);
       });
   }
 

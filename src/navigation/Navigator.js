@@ -4,12 +4,12 @@ import {connect} from 'react-redux';
 import {createStackNavigator} from '@react-navigation/stack';
 
 
-// import LogIn from '../pages/LogIn';
+import LogIn from '../pages/LogIn';
 import SplashScreen from '../pages/SplashScreen';
 import ThroughScreen from '../pages/ThroughScreen';
 // import ImportWalletScreen from '../pages/ImportWallet/ImportWalletScreen';
-import CreateWalletScreen from '../pages/CreateWallet/CreateWalletScreen';
-// import MainScreen from '../pages/MainScreen/MainScreen';
+import CreateSecureScreen from '../pages/CreateWallet/CreateSecureScreen';
+import MainScreen from '../pages/MainScreen/MainScreen';
 
 // import {colors, commonStyles} from '../styles';
 // import FontAwesome, {SolidIcons} from 'react-native-fontawesome';
@@ -57,11 +57,11 @@ class App extends React.Component {
           component={SplashScreen}
           options={{headerShown: false}}
         />
-        {/* <Stack.Screen
+        <Stack.Screen
           name="login"
           component={LogIn}
           options={{headerShown: false}}
-        /> */}
+        />
         <Stack.Screen
           name="through"
           component={ThroughScreen}
@@ -76,14 +76,14 @@ class App extends React.Component {
         /> */}
         <Stack.Screen
           name="createwallet"
-          component={CreateWalletScreen}
+          component={CreateSecureScreen}
           options={{headerShown: false}}
         />
-        {/* <Stack.Screen
+        <Stack.Screen
           name="mainscreen"
           component={MainScreen}
           options={{headerShown: false}}
-        /> */}
+        />
       </Stack.Navigator>
     );
   }

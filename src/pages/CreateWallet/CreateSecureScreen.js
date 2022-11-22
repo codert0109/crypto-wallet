@@ -10,6 +10,7 @@ import {
   Linking,
   Dimensions,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 
 import {
@@ -36,7 +37,7 @@ import FloatLabelInput from '../../components/FloatLabelInput';
 
 import Constants from '../../constants';
 //import actions
-import {createWallet} from '../../redux/actions/WalletActions';
+import {createSecure} from '../../redux/actions/SecureActions';
 
 //import utils
 import {passwordStrength} from 'check-password-strength';
@@ -51,13 +52,14 @@ const count_stages = 4;
 
 const screenWidth = Dimensions.get('screen').width;
 
-const CreateWalletScreen = ({navigation, createWallet}) => {
+const CreateSecureScreen = ({navigation, createSecure}) => {
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
   const [passwordStrengthLabel, setPasswordStrengthLabel] =
     useState('No Password');
   const [createPasswordModalVisible, setCreatePasswordModalVisible] =
     useState(false);
+  const [isFingerPrintUsed, setIsFingerPrintUsed] = useState(false);
   const [signInWithFaceId, setSignInWithFaceId] = useState(true);
   const [isAgreeChecked, setIsAgreeChecked] = useState(true);
   const [canPass, setCanPass] = useState(false);
@@ -86,10 +88,11 @@ const CreateWalletScreen = ({navigation, createWallet}) => {
   };
 
   const onPressSuccess = () => {
-    createWallet(
+    createSecure(
       {
         password,
         mnemonic: mnemonic.join(' '),
+        isFingerPrintUsed: isFingerPrintUsed
       },
       () => {
         setSuccessLoading(true);
@@ -101,6 +104,7 @@ const CreateWalletScreen = ({navigation, createWallet}) => {
       },
       () => {
         console.log('fail on press success');
+        Alert.alert('Failed to create secure', 'Please try again later!');
         setSuccessLoading(false);
       },
     );
@@ -191,6 +195,9 @@ const CreateWalletScreen = ({navigation, createWallet}) => {
               height: 8,
               backgroundColor:
                 status === 'fingerprint' ||
+                status === 'secure_wallet' ||
+                status === 'secure_seed' ||
+                status === 'write_seed' ||
                 status === 'confirm_seed' ||
                 status === 'success'
                   ? colors.green5
@@ -387,7 +394,7 @@ const CreateWalletScreen = ({navigation, createWallet}) => {
             )}
           </View>
         </View>
-        <View
+        {/* <View
           style={{
             marginTop: 40,
             flexDirection: 'row',
@@ -412,7 +419,7 @@ const CreateWalletScreen = ({navigation, createWallet}) => {
               trackOffStyle={{borderRadius: 8, width: 68, height: 32}}
             />
           </View>
-        </View>
+        </View> */}
         <View
           style={{
             marginTop: 24,
@@ -482,7 +489,12 @@ const CreateWalletScreen = ({navigation, createWallet}) => {
   const fingerprintRender = () => {
     return (
       <View style={{height: '100%'}}>
-        <FingerPrintScreen />
+        <FingerPrintScreen
+          success={is_fingerprint_used => {
+            setStatus('secure_wallet');
+            setIsFingerPrintUsed(is_fingerprint_used);
+          }}
+        />
       </View>
     );
   };
@@ -1113,8 +1125,8 @@ const CreateWalletScreen = ({navigation, createWallet}) => {
 
 const mapStateToProps = state => ({});
 const mapDispatchToProps = dispatch => ({
-  createWallet: (data, beforeWork, successCallback, failCallback) =>
-    createWallet(dispatch, data, beforeWork, successCallback, failCallback),
+  createSecure: (data, beforeWork, successCallback, failCallback) =>
+    createSecure(dispatch, data, beforeWork, successCallback, failCallback),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(CreateWalletScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(CreateSecureScreen);

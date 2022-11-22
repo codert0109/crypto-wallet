@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
 import {
   Image,
@@ -30,6 +30,12 @@ const titleImageList = [
 
 const ThroughScreen = ({navigation}) => {
   const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    if(current) {
+      navigation.navigate('createwallet');
+    }
+  }, [current])
 
   return (
     <KeyboardAvoidingView>
@@ -82,7 +88,7 @@ const ThroughScreen = ({navigation}) => {
             </View>
           </>
         )}
-        {current == 3 && (
+        {/* {current == 3 && (
           <>
             <View
               style={{
@@ -103,12 +109,12 @@ const ThroughScreen = ({navigation}) => {
                   onPress={() => {
                     navigation.navigate('createwallet');
                   }}
-                  text="Create a New Wallet"
+                  text="Create a New Secure"
                 />
               </View>
             </View>
           </>
-        )}
+        )} */}
       </SafeAreaView>
     </KeyboardAvoidingView>
   );

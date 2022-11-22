@@ -16,7 +16,7 @@ import {createInitialAccountFromMasterSeed} from '../../utils/account';
 
 import {initialSettings, NetworkList, RINKEBY} from '../../engine/constants';
 
-export const createWallet = (
+export const createSecure = (
   dispatch,
   data,
   beforeWork,
@@ -28,7 +28,7 @@ export const createWallet = (
   bcrypt
     .getSalt(Constants.saltRound)
     .then(salt => {
-      const {password, mnemonic} = data;
+      const {password, mnemonic, isFingerPrintUsed} = data;
       const masterSeedString = ethers.utils.mnemonicToSeed(mnemonic).slice(2);
       const masterSeed = Buffer.from(masterSeedString, 'hex');
       bcrypt
@@ -63,6 +63,7 @@ export const createWallet = (
           AsyncStorage.multiSet([
             ['password', hash],
             ['mnemonic', mnemonic],
+            ['isFingerPrintUsed', JSON.stringify(isFingerPrintUsed)],
             ['master_seed', masterSeedString],
             ['accounts_info', JSON.stringify(accountsInfo)],
             ['networks_info', JSON.stringify(networksInfo)],
@@ -79,19 +80,20 @@ export const createWallet = (
               successCallback();
             })
             .catch(err => {
-              console.log('Wallet Actions: ERROR!!!!!: ', err);
+              console.log('Wallet Actions: ERROR!: ', err);
               failCallback();
             });
         })
         .catch(err => {
-          console.log('Wallet Actions: ERROR!!!!!: ', err);
+          console.log('Wallet Actions: ERROR!!: ', err);
           failCallback();
         });
     })
     .catch(err => {
-      console.log('Wallet Actions: ERROR!!!!!: ', err);
+      console.log('Wallet Actions: ERROR!!!', err);
       failCallback();
     });
+    
 };
 
 export const testAction = dispatch => {

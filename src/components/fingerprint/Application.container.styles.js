@@ -8,7 +8,9 @@ export default StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#00a4de'
+    flexGrow: 1,
+    height: '100%'
+    // backgroundColor: '#00a4de'
   },
   heading: {
     color: '#ffffff',

@@ -13,19 +13,19 @@ import FontAwesome, {SolidIcons} from 'react-native-fontawesome';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 const Tab = createBottomTabNavigator();
 
-import WalletTab from './WalletTab/WalletTab';
-import SettingsTab from './SettingsTab/SettingsTab';
-import {getFeeData} from '../../redux/actions/EngineAction';
-import SwapTab from './SwapTab/SwapTab';
-import SwapTabBnb from './SwapTab/SwapTabBnb';
+// import {getFeeData} from '../../redux/actions/EngineAction';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {initialSettings, NetworkList} from '../../engine/constants';
 import {ethers, utils} from 'ethers';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import TxnRBSheet from './WalletTab/TxnRBSheet';
+// import TxnRBSheet from './WalletTab/TxnRBSheet';
 import Toast from 'react-native-toast-message';
-import moment from 'moment';
-import TxnRBSheetBnb from './WalletTab/TxnRBSheetBnb';
+// import moment from 'moment';
+// import SwapTab from './SwapTab/SwapTab';
+// import SwapTabBnb from './SwapTab/SwapTabBnb';
+// import WalletTab from './WalletTab/WalletTab';
+// import SettingsTab from './SettingsTab/SettingsTab';
+// import TxnRBSheetBnb from './WalletTab/TxnRBSheetBnb';
 
 const tempTxn = {
   type: 2,
@@ -404,7 +404,7 @@ const MainScreen = ({
           width: '100%',
           height: '100%',
         }}>
-        {renderTxnRBSheet()}
+        {/* {renderTxnRBSheet()}
         <Tab.Navigator backBehavior="history" tabBar={tabBar}>
           <Tab.Screen
             name="Wallet"
@@ -427,7 +427,10 @@ const MainScreen = ({
               tabBarLabel: 'Settings',
             }}
           />
-        </Tab.Navigator>
+        </Tab.Navigator> */}
+        <Text>
+          Main Screen
+        </Text>
       </SafeAreaView>
     </KeyboardAvoidingView>
   );
