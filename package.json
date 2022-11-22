@@ -8,7 +8,7 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint .",
-    "postinstall": "npx jetify"
+    "postinstall": "rn-nodeify --install --hack && npx jetify"
   },
   "dependencies": {
     "@ethersproject/shims": "^5.7.0",
@@ -46,7 +46,7 @@
     "react-native-check-box": "^2.1.7",
     "react-native-crypto": "^2.2.0",
     "react-native-dots-pagination": "^0.2.0",
-    "react-native-fingerprint-scanner": "^6.0.0",
+    "react-native-fingerprint-scanner": "git+https://github.com/hieuvp/react-native-fingerprint-scanner.git#9cecc0db326471c571553ea85f7c016fee2f803d",
     "react-native-floating-label-input": "^1.4.2",
     "react-native-fontawesome": "^7.0.0",
     "react-native-gesture-handler": "^2.8.0",

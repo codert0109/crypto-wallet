@@ -23,6 +23,7 @@ import {colors, fonts} from '../../styles';
 import ToggleSwitch from 'toggle-switch-react-native';
 import CheckBox from 'react-native-check-box';
 import ConfirmSeedScreen from './ConfirmSeedScreen';
+import FingerPrintScreen from '../../components/fingerprint/Application.container';
 import {SvgXml} from 'react-native-svg';
 import {BlurView} from '@react-native-community/blur';
 import RBSheet from 'react-native-raw-bottom-sheet';
@@ -45,6 +46,8 @@ const passwordStrengthCheckOption = Constants.passwordStrengthCheckOption;
 const passwordLevelColor = Constants.passwordLevelColor;
 
 const image = require('../../assets/images/createwallet2/image.png');
+
+const count_stages = 4;
 
 const screenWidth = Dimensions.get('screen').width;
 
@@ -79,8 +82,9 @@ const CreateWalletScreen = ({navigation, createWallet}) => {
   }, []);
 
   const onPressCreatePassword = async () => {
-    setStatus('secure_wallet');
+    setStatus('fingerprint');
   };
+
   const onPressSuccess = () => {
     createWallet(
       {
@@ -144,6 +148,9 @@ const CreateWalletScreen = ({navigation, createWallet}) => {
             onPress={() => {
               if (status === 'success') {
                 setStatus('secure_wallet');
+              } else if (status == 'fingerprint') {
+                setStatus('create_password');
+                setCreatePasswordModalVisible(false);
               } else if (status === 'confirm_seed') {
                 setStatus('write_seed');
               } else if (status === 'write_seed') {
@@ -152,8 +159,7 @@ const CreateWalletScreen = ({navigation, createWallet}) => {
               } else if (status === 'secure_seed') {
                 setStatus('secure_wallet');
               } else if (status === 'secure_wallet') {
-                setStatus('create_password');
-                setCreatePasswordModalVisible(false);
+                setStatus('fingerprint');
               } else if (status === 'create_password') {
                 navigation.goBack();
               }
@@ -174,14 +180,25 @@ const CreateWalletScreen = ({navigation, createWallet}) => {
           }}>
           <View
             style={{
-              width: '30%',
+              width: '20%',
               height: 8,
               backgroundColor: colors.green5,
               borderRadius: 2,
             }}></View>
           <View
             style={{
-              width: '30%',
+              width: '20%',
+              height: 8,
+              backgroundColor:
+                status === 'fingerprint' ||
+                status === 'confirm_seed' ||
+                status === 'success'
+                  ? colors.green5
+                  : colors.grey23,
+            }}></View>
+          <View
+            style={{
+              width: '20%',
               height: 8,
               backgroundColor:
                 status === 'secure_wallet' ||
@@ -194,7 +211,7 @@ const CreateWalletScreen = ({navigation, createWallet}) => {
             }}></View>
           <View
             style={{
-              width: '30%',
+              width: '20%',
               height: 8,
               backgroundColor:
                 status === 'confirm_seed' || status === 'success'
@@ -206,13 +223,15 @@ const CreateWalletScreen = ({navigation, createWallet}) => {
           <Text
             style={{color: colors.grey13, ...fonts.caption_small12_16_regular}}>
             {status === 'create_password'
-              ? '1/3'
+              ? '1/' + count_stages
+              : status === 'fingerprint'
+              ? '2/' + count_stages
               : status === 'secure_wallet' ||
                 status === 'secure_seed' ||
                 status === 'write_seed'
-              ? '2/3'
+              ? '3/' + count_stages
               : status === 'confirm_seed' || status === 'success'
-              ? '3/3'
+              ? '4/' + count_stages
               : '??'}
           </Text>
         </View>
@@ -276,7 +295,8 @@ const CreateWalletScreen = ({navigation, createWallet}) => {
                 paddingHorizontal: 24,
                 paddingTop: 16,
               }}>
-              This password will unlock your DeGe Wallet only on this service.
+              This password will unlock your Smart Contract Wallet only on this
+              service.
             </Text>
           </View>
         </View>
@@ -425,7 +445,7 @@ const CreateWalletScreen = ({navigation, createWallet}) => {
                 color: 'white',
                 ...fonts.para_regular,
               }}>
-              I understand that DeGe cannot recover this password for me.{' '}
+              I understand that this wallet cannot recover this password for me.{' '}
               <Text
                 style={{color: colors.blue5}}
                 onPress={() => Linking.openURL('http://google.com')}>
@@ -455,6 +475,14 @@ const CreateWalletScreen = ({navigation, createWallet}) => {
             text="Create Password"
           />
         </View>
+      </View>
+    );
+  };
+
+  const fingerprintRender = () => {
+    return (
+      <View style={{height: '100%'}}>
+        <FingerPrintScreen />
       </View>
     );
   };
@@ -838,6 +866,7 @@ const CreateWalletScreen = ({navigation, createWallet}) => {
       </View>
     );
   };
+
   const writeSeedRender = () => {
     return (
       <View style={{width: '100%', paddingTop: 40, height: '100%'}}>
@@ -1052,6 +1081,8 @@ const CreateWalletScreen = ({navigation, createWallet}) => {
     );
   };
 
+  console.log('status', status);
+
   return (
     <KeyboardAvoidingView>
       <SafeAreaView
@@ -1062,6 +1093,7 @@ const CreateWalletScreen = ({navigation, createWallet}) => {
         }}>
         {createWalletHeaderRender()}
         {status === 'create_password' && createPasswordRender()}
+        {status === 'fingerprint' && fingerprintRender()}
         {status === 'secure_wallet' && secureWalletRender()}
         {status === 'secure_seed' && secureSeedRender()}
         {status === 'write_seed' && writeSeedRender()}
