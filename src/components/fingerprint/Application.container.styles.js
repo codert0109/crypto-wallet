@@ -27,14 +27,14 @@ export default StyleSheet.create({
   },
   fingerprint: {
     padding: 20,
-    marginVertical: 30,
+    marginVertical: 10,
   },
   errorMessage: {
     color: '#ea3d13',
     fontSize: 16,
     textAlign: 'center',
     marginHorizontal: 10,
-    marginTop: 30,
+    marginTop: 10,
   },
   popup: {
     width: width * 0.8,

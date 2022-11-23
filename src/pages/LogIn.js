@@ -12,8 +12,11 @@ import {
 import {colors, fonts} from '../styles';
 import FloatLabelInput from '../components/FloatLabelInput';
 import {PrimaryButton} from '../components/Buttons';
+import FingerPrintScreen from '../components/fingerprint/Application.container';
 import ToggleSwitch from 'toggle-switch-react-native';
 import FontAwesome, {SolidIcons, RegularIcons} from 'react-native-fontawesome';
+import FingerprintScanner from 'react-native-fingerprint-scanner';
+import PINCode from '@haskkor/react-native-pincode'; 
 import {checkAuthentication, saveRememberOption} from '../utils/auth';
 
 //import actions
@@ -37,9 +40,18 @@ const LogIn = ({
   const [isLoading, setIsLoading] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [loginType, setLoginType] = useState(0);
+  const [isFingerPrintAvailable, setIsFingerPrintAvailable] = useState(true);
   const [error, setError] = useState('');
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    detectFingerprintAvailable();
+  }, []);
+
+  detectFingerprintAvailable = () => {
+    FingerprintScanner.isSensorAvailable().catch(error => {
+      setIsFingerPrintAvailable(false);
+    });
+  };
 
   const onPressLogIn = () => {
     setIsLoading(true);
@@ -73,6 +85,31 @@ const LogIn = ({
     );
   };
 
+  const onLoginByFingerPrint = () => {
+    console.log('here');
+    if (isFingerPrintAvailable == false) {
+      return;
+    }
+    if (loginType != 1) {
+      return;
+    }
+    saveRememberOption(
+      rememberMe ? 'true' : 'false',
+      () => {
+        setIsLoading(false);
+        loadAccountsDataFromStorage();
+        loadNetworksDataFromStorage();
+        loadTokensDataFromStorage();
+        loadSettingsDataFromStorage();
+        navigation.replace('mainscreen');
+      },
+      () => {
+        setIsLoading(false);
+        console.log('Something went wrong in login save rememberme');
+      },
+    );
+  };
+
   useEffect(() => {
     // setTimeout(() => {
     //   navigation.replace('through');
@@ -88,7 +125,8 @@ const LogIn = ({
           width: '100%',
           height: '100%',
           flexDirection: 'row',
-          alignItems: 'center',
+          // alignItems: 'center',
+          paddingTop: 100,
           justifyContent: 'center',
           paddingHorizontal: 24,
         }}>
@@ -101,11 +139,14 @@ const LogIn = ({
             }}>
             <Image source={shapeImage} style={{width: 100, height: 100}} />
           </View>
-          <TouchableOpacity onPress={() => {}}>
+          <TouchableOpacity
+            onPress={() => {
+              setLoginType(0);
+            }}>
             <View
               style={{
-                marginTop: 24,
-                paddingLeft: 7,
+                marginTop: 40,
+                paddingLeft: 8,
                 flexDirection: 'row',
                 alignItems: 'center',
               }}>
@@ -122,39 +163,48 @@ const LogIn = ({
               />
             </View>
           </TouchableOpacity>
-          <View style={{marginTop: 24, width: '100%'}}>
-            <FloatLabelInput
-              label={'Password'}
-              isPassword
-              value={password}
-              onChangeText={value => {
-                setError('');
-                setPassword(value);
-              }}
-              autoFocus
-              style={error ? {borderColor: colors.red5} : {}}
-            />
-            {error.length > 0 && (
-              <Text
-                style={{
-                  paddingLeft: 16,
-                  ...fonts.caption_small12_16_regular,
-                  color: colors.red5,
-                }}>
-                {error}
-              </Text>
-            )}
-          </View>
-          <TouchableOpacity onPress={() => {}}>
+          {loginType == 0 && (
+            <View style={{marginTop: 24, width: '100%'}}>
+              <FloatLabelInput
+                label={'Password'}
+                isPassword
+                value={password}
+                onChangeText={value => {
+                  setError('');
+                  setPassword(value);
+                }}
+                autoFocus
+                style={error ? {borderColor: colors.red5} : {}}
+              />
+              {error.length > 0 && (
+                <Text
+                  style={{
+                    paddingLeft: 16,
+                    ...fonts.caption_small12_16_regular,
+                    color: colors.red5,
+                  }}>
+                  {error}
+                </Text>
+              )}
+            </View>
+          )}
+          <TouchableOpacity
+            onPress={() => {
+              setLoginType(1);
+            }}>
             <View
               style={{
                 marginTop: 24,
-                // width: '100%',
-                paddingLeft: 7,
+                width: '100%',
+                paddingLeft: 8,
                 flexDirection: 'row',
                 alignItems: 'center',
               }}>
-              <Text style={{color: colors.grey12, ...fonts.para_semibold}}>
+              <Text
+                style={{
+                  color: loginType == 1 ? 'white' : colors.grey12,
+                  ...fonts.para_semibold,
+                }}>
                 Using Touch ID{'   '}
               </Text>
               <FontAwesome
@@ -163,16 +213,32 @@ const LogIn = ({
               />
             </View>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => {}}>
+          {loginType == 1 && (
+            <View style={{width: '100%', height: 200}}>
+              <FingerPrintScreen
+                success={() => {
+                  onLoginByFingerPrint();
+                }}
+              />
+            </View>
+          )}
+          <TouchableOpacity
+            onPress={() => {
+              setLoginType(2);
+            }}>
             <View
               style={{
                 marginTop: 24,
-                // width: '100%',
-                paddingLeft: 7,
+                width: '100%',
+                paddingLeft: 8,
                 flexDirection: 'row',
                 alignItems: 'center',
               }}>
-              <Text style={{color: colors.grey12, ...fonts.para_semibold}}>
+              <Text
+                style={{
+                  color: loginType == 2 ? 'white' : colors.grey12,
+                  ...fonts.para_semibold,
+                }}>
                 Using PIN{'   '}
               </Text>
               <FontAwesome
@@ -181,6 +247,9 @@ const LogIn = ({
               />
             </View>
           </TouchableOpacity>
+          <View style={{width: '100%'}}>
+            <PINCode status={"choose"} touchIDDisabled={false} />
+          </View>
           <View
             style={{
               marginTop: 24,
@@ -201,7 +270,7 @@ const LogIn = ({
               labelStyle={{color: colors.grey12, ...fonts.para_semibold}}
             />
           </View>
-          <View style={{marginTop: 60}}>
+          <View style={{position: 'absolute', bottom: 120, width: '100%'}}>
             <PrimaryButton
               loading={isLoading}
               text={'Log In'}

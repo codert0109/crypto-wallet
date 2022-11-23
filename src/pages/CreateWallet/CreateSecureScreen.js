@@ -92,7 +92,7 @@ const CreateSecureScreen = ({navigation, createSecure}) => {
       {
         password,
         mnemonic: mnemonic.join(' '),
-        isFingerPrintUsed: isFingerPrintUsed
+        isFingerPrintUsed: isFingerPrintUsed,
       },
       () => {
         setSuccessLoading(true);
@@ -489,6 +489,15 @@ const CreateSecureScreen = ({navigation, createSecure}) => {
   const fingerprintRender = () => {
     return (
       <View style={{height: '100%'}}>
+        <Text
+          style={{
+            color: '#ffffff',
+            fontSize: 22,
+            marginTop: 30,
+            marginBottom: 5,
+          }}>
+          Please touch below
+        </Text>
         <FingerPrintScreen
           success={is_fingerprint_used => {
             setStatus('secure_wallet');

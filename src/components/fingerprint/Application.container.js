@@ -68,7 +68,7 @@ class Application extends Component {
 
     return (
       <View style={styles.container}>
-        <Text style={styles.heading}>Please touch below</Text>
+        {/* <Text style={styles.heading}>Please touch below</Text> */}
 
         <TouchableOpacity
           style={styles.fingerprint}
