@@ -32,7 +32,7 @@ const ThroughScreen = ({navigation}) => {
   const [current, setCurrent] = useState(0);
 
   useEffect(() => {
-    if(current) {
+    if(current == 3) {
       navigation.navigate('createwallet');
     }
   }, [current])

@@ -23,6 +23,11 @@ import FontAwesome, {SolidIcons, RegularIcons} from 'react-native-fontawesome';
 import {colors, fonts} from '../../styles';
 import ToggleSwitch from 'toggle-switch-react-native';
 import CheckBox from 'react-native-check-box';
+import PINCode, {
+  hasUserSetPinCode,
+  resetPinCodeInternalStates,
+  deleteUserPinCode,
+} from '@haskkor/react-native-pincode';
 import ConfirmSeedScreen from './ConfirmSeedScreen';
 import FingerPrintScreen from '../../components/fingerprint/Application.container';
 import {SvgXml} from 'react-native-svg';
@@ -50,6 +55,11 @@ const image = require('../../assets/images/createwallet2/image.png');
 
 const count_stages = 4;
 
+// stage 1 -> password
+// stage 2 -> fingerprint
+// stage 3 -> pin
+// stage 4 -> success
+
 const screenWidth = Dimensions.get('screen').width;
 
 const CreateSecureScreen = ({navigation, createSecure}) => {
@@ -64,6 +74,7 @@ const CreateSecureScreen = ({navigation, createSecure}) => {
   const [isAgreeChecked, setIsAgreeChecked] = useState(true);
   const [canPass, setCanPass] = useState(false);
   const [showSeed, setShowSeed] = useState(false);
+  const [pinCode, setPinCode] = useState(null);
   const [viewRef, setViewRef] = useState(null);
   const [understandNotSecurity, setUnderstandNotSecurity] = useState(false);
   const [successLoading, setSuccessLoading] = useState(false);
@@ -73,7 +84,7 @@ const CreateSecureScreen = ({navigation, createSecure}) => {
   const refRBSeedPhraseSheet = useRef(null);
   const refRBProtectWalletSheet = useRef(null);
 
-  const [status, setStatus] = useState('create_password');
+  const [status, setStatus] = useState(0);
   const [mnemonic, setMnemonic] = useState([]);
 
   useEffect(() => {
@@ -84,8 +95,17 @@ const CreateSecureScreen = ({navigation, createSecure}) => {
   }, []);
 
   const onPressCreatePassword = async () => {
-    setStatus('fingerprint');
+    setStatus(1);
   };
+
+  const setPin = async (e) => {
+    // const hasPin = await hasUserSetPinCode();
+    // console.log(hasPin);
+    // if (hasPin) {
+      setPinCode(e);
+      setStatus(3);
+    // }
+  }
 
   const onPressSuccess = () => {
     createSecure(
@@ -93,6 +113,7 @@ const CreateSecureScreen = ({navigation, createSecure}) => {
         password,
         mnemonic: mnemonic.join(' '),
         isFingerPrintUsed: isFingerPrintUsed,
+        pinCode: pinCode
       },
       () => {
         setSuccessLoading(true);
@@ -150,21 +171,18 @@ const CreateSecureScreen = ({navigation, createSecure}) => {
         <View>
           <TouchableOpacity
             onPress={() => {
-              if (status === 'success') {
-                setStatus('secure_wallet');
-              } else if (status == 'fingerprint') {
-                setStatus('create_password');
+              if (status === 3) {
+                // success
+                setStatus(2);
+              } else if (status === 2) {
+                // pin
+                setStatus(1);
+              } else if (status === 1) {
+                // fingerprint
+                setStatus(0);
                 setCreatePasswordModalVisible(false);
-              } else if (status === 'confirm_seed') {
-                setStatus('write_seed');
-              } else if (status === 'write_seed') {
-                setShowSeed(false);
-                setStatus('secure_seed');
-              } else if (status === 'secure_seed') {
-                setStatus('secure_wallet');
-              } else if (status === 'secure_wallet') {
-                setStatus('fingerprint');
-              } else if (status === 'create_password') {
+              } else if (status === 0) {
+                // password
                 navigation.goBack();
               }
             }}
@@ -193,53 +211,25 @@ const CreateSecureScreen = ({navigation, createSecure}) => {
             style={{
               width: '20%',
               height: 8,
-              backgroundColor:
-                status === 'fingerprint' ||
-                status === 'secure_wallet' ||
-                status === 'secure_seed' ||
-                status === 'write_seed' ||
-                status === 'confirm_seed' ||
-                status === 'success'
-                  ? colors.green5
-                  : colors.grey23,
+              backgroundColor: status >= 1 ? colors.green5 : colors.grey23,
             }}></View>
           <View
             style={{
               width: '20%',
               height: 8,
-              backgroundColor:
-                status === 'secure_wallet' ||
-                status === 'secure_seed' ||
-                status === 'write_seed' ||
-                status === 'confirm_seed' ||
-                status === 'success'
-                  ? colors.green5
-                  : colors.grey23,
+              backgroundColor: status >= 2 ? colors.green5 : colors.grey23,
             }}></View>
           <View
             style={{
               width: '20%',
               height: 8,
-              backgroundColor:
-                status === 'confirm_seed' || status === 'success'
-                  ? colors.green5
-                  : colors.grey23,
+              backgroundColor: status >= 3 ? colors.green5 : colors.grey23,
             }}></View>
         </View>
         <View style={{alignItems: 'center'}}>
           <Text
             style={{color: colors.grey13, ...fonts.caption_small12_16_regular}}>
-            {status === 'create_password'
-              ? '1/' + count_stages
-              : status === 'fingerprint'
-              ? '2/' + count_stages
-              : status === 'secure_wallet' ||
-                status === 'secure_seed' ||
-                status === 'write_seed'
-              ? '3/' + count_stages
-              : status === 'confirm_seed' || status === 'success'
-              ? '4/' + count_stages
-              : '??'}
+            {status + 1 + '/' + count_stages}
           </Text>
         </View>
       </View>
@@ -488,7 +478,14 @@ const CreateSecureScreen = ({navigation, createSecure}) => {
 
   const fingerprintRender = () => {
     return (
-      <View style={{height: '100%'}}>
+      <View
+        style={{
+          height: '100%',
+          width: '100%',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
         <Text
           style={{
             color: '#ffffff',
@@ -498,12 +495,94 @@ const CreateSecureScreen = ({navigation, createSecure}) => {
           }}>
           Please touch below
         </Text>
+        <TouchableOpacity
+          onPress={() => {
+            setStatus(2);
+          }}>
+          <View
+            style={{
+              marginTop: 40,
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}>
+            <Text
+              style={{
+                color: 'white',
+                // ...fonts.para_semibold,
+              }}>
+              Skip{"  "}
+            </Text>
+            <FontAwesome
+              style={{fontSize: 16, color: colors.grey12}}
+              icon={SolidIcons.chevronRight}
+            />
+          </View>
+        </TouchableOpacity>
         <FingerPrintScreen
           success={is_fingerprint_used => {
-            setStatus('secure_wallet');
+            setStatus(2);
             setIsFingerPrintUsed(is_fingerprint_used);
           }}
         />
+      </View>
+    );
+  };
+
+  const createPinRender = () => {
+    return (
+      <View style={{height: '100%'}}>
+        <PINCode status={'choose'} touchIDDisabled={true} storePin={(e) => {setPin(e)}} buttonDeleteText={"Del"} />
+      </View>
+    );
+  };
+
+  const successRender = () => {
+    return (
+      <View
+        style={{
+          width: '100%',
+          height: '100%',
+          padding: 24,
+          alignItems: 'center',
+          paddingTop: 150,
+        }}>
+        <View>
+          <SvgXml xml={successTitleSvgXml} />
+        </View>
+        <View style={{marginTop: 40}}>
+          <Text
+            style={{
+              textAlign: 'center',
+              ...fonts.para_regular,
+              color: 'white',
+            }}>
+            You've successfully protected your wallet. Remember to keep your
+            seed phrase safe, it's your responsibility!
+          </Text>
+        </View>
+        <View style={{marginTop: 24}}>
+          <Text
+            style={{
+              textAlign: 'center',
+              ...fonts.para_regular,
+              color: 'white',
+            }}>
+            BlockAuthy cannot recover your wallet should you lose it. You can
+            find your seedphrase in Setings &gt; Security &amp; Privacy
+          </Text>
+        </View>
+        <View
+          style={{
+            position: 'absolute',
+            bottom: 120,
+            width: '100%',
+          }}>
+          <PrimaryButton
+            onPress={onPressSuccess}
+            loading={successLoading}
+            text="Success"
+          />
+        </View>
       </View>
     );
   };
@@ -1051,58 +1130,7 @@ const CreateSecureScreen = ({navigation, createSecure}) => {
     );
   };
 
-  const successRender = () => {
-    return (
-      <View
-        style={{
-          width: '100%',
-          height: '100%',
-          padding: 24,
-          alignItems: 'center',
-          paddingTop: 150,
-        }}>
-        <View>
-          <SvgXml xml={successTitleSvgXml} />
-        </View>
-        <View style={{marginTop: 40}}>
-          <Text
-            style={{
-              textAlign: 'center',
-              ...fonts.para_regular,
-              color: 'white',
-            }}>
-            You've successfully protected your wallet. Remember to keep your
-            seed phrase safe, it's your responsibility!
-          </Text>
-        </View>
-        <View style={{marginTop: 24}}>
-          <Text
-            style={{
-              textAlign: 'center',
-              ...fonts.para_regular,
-              color: 'white',
-            }}>
-            DefiSquid cannot recover your wallet should you lose it. You can
-            find your seedphrase in Setings &gt; Security &amp; Privacy
-          </Text>
-        </View>
-        <View
-          style={{
-            position: 'absolute',
-            bottom: 120,
-            width: '100%',
-          }}>
-          <PrimaryButton
-            onPress={onPressSuccess}
-            loading={successLoading}
-            text="Success"
-          />
-        </View>
-      </View>
-    );
-  };
-
-  console.log('status', status);
+  // console.log('status', status);
 
   return (
     <KeyboardAvoidingView>
@@ -1113,9 +1141,10 @@ const CreateSecureScreen = ({navigation, createSecure}) => {
           height: '100%',
         }}>
         {createWalletHeaderRender()}
-        {status === 'create_password' && createPasswordRender()}
-        {status === 'fingerprint' && fingerprintRender()}
-        {status === 'secure_wallet' && secureWalletRender()}
+        {status === 0 && createPasswordRender()}
+        {status === 1 && fingerprintRender()}
+        {status === 2 && createPinRender()}
+        {/* {status === 'secure_wallet' && secureWalletRender()}
         {status === 'secure_seed' && secureSeedRender()}
         {status === 'write_seed' && writeSeedRender()}
         {status === 'confirm_seed' && (
@@ -1125,8 +1154,8 @@ const CreateSecureScreen = ({navigation, createSecure}) => {
             }}
             mnemonic={mnemonic}
           />
-        )}
-        {status === 'success' && successRender()}
+        )} */}
+        {status === 3 && successRender()}
       </SafeAreaView>
     </KeyboardAvoidingView>
   );

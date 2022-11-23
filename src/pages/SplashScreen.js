@@ -19,7 +19,7 @@ const SplashScreen = ({navigation}) => {
     const savedPassword = await AsyncStorage.getItem('password');
     const isFingerPrintUsed = await AsyncStorage.getItem('isFinterPrintUsed');
     const rememberMe = await AsyncStorage.getItem('remember_me');
-    console.log(savedPassword, isFingerPrintUsed, rememberMe);
+    // console.log(savedPassword, isFingerPrintUsed, rememberMe);
     if (rememberMe === 'true') {
       navigation.replace('mainscreen');
       return;

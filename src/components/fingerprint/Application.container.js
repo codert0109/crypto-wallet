@@ -17,7 +17,12 @@ class Application extends Component {
   }
 
   handleFingerprintShowed = () => {
-    this.setState({popupShowed: true});
+    // console.log(this.state.errorMessage);
+    if(this.state.errorMessage) {
+      this.props.success(false);
+    } else {
+      this.setState({popupShowed: true});
+    }
   };
 
   handleFingerprintDismissed = () => {
@@ -45,9 +50,9 @@ class Application extends Component {
   detectFingerprintAvailable = () => {
     FingerprintScanner.isSensorAvailable().catch(error => {
       this.setState({errorMessage: error.message, biometric: error.biometric});
-      setTimeout(() => {
-        this.props.success(false);
-      }, 1000)
+      // setTimeout(() => {
+      //   this.props.success(false);
+      // }, 2000)
     });
   };
 
@@ -73,7 +78,8 @@ class Application extends Component {
         <TouchableOpacity
           style={styles.fingerprint}
           onPress={this.handleFingerprintShowed}
-          disabled={!!errorMessage}>
+          // disabled={!!errorMessage}
+        >
           <Image source={require('../../assets/images/finger_print.png')} />
         </TouchableOpacity>
 

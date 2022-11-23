@@ -51,10 +51,10 @@ const MainScreen = ({
   navigation,
   networks,
   currentNetwork,
-  getFeeData,
+  // getFeeData,
   accounts,
   currentAccountIndex,
-  feeData,
+  // feeData,
 }) => {
   const [submittedTxn, setSubmittedTxn] = useState(tempTxn);
   const [submittedTxnTime, setSubmittedTxnTime] = useState('');
@@ -67,8 +67,8 @@ const MainScreen = ({
   const currentAccount = accounts[currentAccountIndex];
 
   useEffect(() => {
-    getFeeData(networks[currentNetwork]);
-    console.log(networks[currentNetwork]);
+    // getFeeData(networks[currentNetwork]);
+    // console.log(networks[currentNetwork]);
   }, [currentNetwork]);
 
   // useEffect(() => {
@@ -81,9 +81,9 @@ const MainScreen = ({
   //   });
   // }, []);
 
-  useEffect(() => {
-    console.log(feeData);
-  }, []);
+  // useEffect(() => {
+  //   console.log(feeData);
+  // }, []);
 
   const renderTxnRBSheet = () => {
     return (
@@ -404,8 +404,8 @@ const MainScreen = ({
           width: '100%',
           height: '100%',
         }}>
-        {/* {renderTxnRBSheet()}
-        <Tab.Navigator backBehavior="history" tabBar={tabBar}>
+        {renderTxnRBSheet()}
+        {/* <Tab.Navigator backBehavior="history" tabBar={tabBar}>
           <Tab.Screen
             name="Wallet"
             component={updatedWalletTab}
@@ -441,11 +441,11 @@ const mapStateToProps = state => ({
   currentNetwork: state.networks.currentNetwork,
   accounts: state.accounts.accounts,
   currentAccountIndex: state.accounts.currentAccountIndex,
-  feeData: state.engine.feeData,
+  // feeData: state.engine.feeData,
 });
 const mapDispatchToProps = dispatch => ({
-  getFeeData: currentNetworkObject =>
-    getFeeData(dispatch, currentNetworkObject),
+  // getFeeData: currentNetworkObject =>
+  //   getFeeData(dispatch, currentNetworkObject),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainScreen);

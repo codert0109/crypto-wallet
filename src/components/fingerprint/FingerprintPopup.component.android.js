@@ -51,8 +51,8 @@ class BiometricPopup extends Component {
     FingerprintScanner
       .authenticate({ description: this.props.description || 'Register with FingerPrint' })
       .then(() => {
-        Alert.alert('Fingerprint Authentication', 
-        'Authenticated successfully',
+        Alert.alert(null, 
+        'Success!',
         [
           {
             text: "OK",
