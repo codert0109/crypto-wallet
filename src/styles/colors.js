@@ -81,6 +81,12 @@ const blueVersion = {
 
   //gradient
   gradient8: ['#A9CDFF', '#72F6D1', '#A0ED8D', '#FED365', '#FAA49E'],
+
+  // new colors
+  PRIMARY_P1: '#FFC000',
+  SECONDARY_S1: '#353840',
+  BG: '#252333',
+  P3: '#191727'
 };
 
 export default blueVersion;

@@ -15,6 +15,7 @@ import MainScreen from '../pages/MainScreen/MainScreen';
 // import {colors, commonStyles} from '../styles';
 // import FontAwesome, {SolidIcons} from 'react-native-fontawesome';
 const Stack = createStackNavigator();
+import TokenShow from '../pages/MainScreen/WalletTab/TokenShow/TokenShow';
 
 // const ImportWalletHeader = ({navigation}) => {
 //   return (
@@ -93,6 +94,11 @@ class App extends React.Component {
         <Stack.Screen
           name="selectscreen"
           component={SelectScreen}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="tokenshow"
+          component={TokenShow}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

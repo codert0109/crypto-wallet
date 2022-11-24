@@ -43,7 +43,6 @@ import SendTokenBnb from './SendToken/SendTokenBnb';
 import AccountInfo from './AccountInfo';
 
 const backImage = require('../../../assets/images/mainscreen/backimage.png');
-const buyIconSvgXml = require('../SVGData').buyIcon;
 
 const SendTokenRBSheet = ({ refRBSendTokenSheet, currentNetworkObject, onSendSubmittedTxn, onSendError }) => {
   return (
@@ -201,57 +200,6 @@ const WalletTab = ({
         }}>
         <ReceiveToken token={'main'} />
       </RBSheet>
-    );
-  };
-
-  const renderTransactionButtonGroup = () => {
-    return (
-      <View
-        style={{
-          marginHorizontal: 24,
-          flexDirection: 'row',
-          marginTop: 40,
-          alignItems: 'center',
-          justifyContent: 'space-around',
-        }}>
-        <View style={{marginRight: 16}}>
-          <SecondaryButton
-            onPress={() => {
-              refRBSendTokenSheet.current.open();
-            }}
-            text="Send"
-            icon={
-              <FontAwesome
-                style={{fontSize: 16, color: colors.green5, marginRight: 16}}
-                icon={SolidIcons.arrowUp}
-              />
-            }
-          />
-        </View>
-        <View style={{marginRight: 16}}>
-          <SecondaryButton
-            onPress={() => {
-              refRBReceiveTokenSheet.current.open();
-            }}
-            text="Receive"
-            icon={
-              <FontAwesome
-                style={{fontSize: 16, color: colors.green5, marginRight: 16}}
-                icon={SolidIcons.arrowDown}
-              />
-            }
-          />
-        </View>
-        <View>
-          <SecondaryButton
-            onPress={() => {
-              refRBBuySheet.current.open();
-            }}
-            text="Buy"
-            icon={<SvgXml style={{marginRight: 16}} xml={buyIconSvgXml} />}
-          />
-        </View>
-      </View>
     );
   };
 

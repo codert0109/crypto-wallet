@@ -12,9 +12,6 @@ import constants from '../../../constants'
 // import styls
 import { fonts, colors } from '../../../styles'
 import { SvgXml } from 'react-native-svg';
-import { CommonButton } from '../../../components/Buttons';
-
-const stakingButtonImage = require('../../../assets/images/wallettab/staking.png')
 
 const AccountInfo = ({
     navigation,
@@ -28,15 +25,6 @@ const AccountInfo = ({
 }) => {
     const currentNetworkSymbol = networks[currentNetwork].symbol;
     const currentAccount = accounts[currentAccountIndex];
-
-    const renderTopButton = ({ icon, text, onPress }) => {
-        return <TouchableOpacity style={{ width: 72, marginHorizontal: 4, alignItems: 'center' }}>
-            <TouchableOpacity onPress={onPress} style={{ backgroundColor: colors.P3, padding: 14, borderRadius: 6 }}>
-                {icon}
-            </TouchableOpacity>
-            <Text style={{ textAlign: 'center', marginTop: 8, ...fonts.BODY_T3, color: 'white' }}>{text}</Text>
-        </TouchableOpacity>
-    }
 
     return (
         <View style={{ marginHorizontal: 24, marginTop: 24, }}>
