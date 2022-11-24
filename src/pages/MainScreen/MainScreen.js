@@ -13,19 +13,19 @@ import FontAwesome, {SolidIcons} from 'react-native-fontawesome';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 const Tab = createBottomTabNavigator();
 
-// import {getFeeData} from '../../redux/actions/EngineAction';
+import {getFeeData} from '../../redux/actions/EngineAction';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {initialSettings, NetworkList} from '../../engine/constants';
 import {ethers, utils} from 'ethers';
 import RBSheet from 'react-native-raw-bottom-sheet';
-// import TxnRBSheet from './WalletTab/TxnRBSheet';
+import TxnRBSheet from './WalletTab/TxnRBSheet';
 import Toast from 'react-native-toast-message';
-// import moment from 'moment';
+import moment from 'moment';
 // import SwapTab from './SwapTab/SwapTab';
 // import SwapTabBnb from './SwapTab/SwapTabBnb';
-// import WalletTab from './WalletTab/WalletTab';
-// import SettingsTab from './SettingsTab/SettingsTab';
-// import TxnRBSheetBnb from './WalletTab/TxnRBSheetBnb';
+import WalletTab from './WalletTab/WalletTab';
+import SettingsTab from './SettingsTab/SettingsTab';
+import TxnRBSheetBnb from './WalletTab/TxnRBSheetBnb';
 
 const tempTxn = {
   type: 2,
@@ -51,10 +51,10 @@ const MainScreen = ({
   navigation,
   networks,
   currentNetwork,
-  // getFeeData,
+  getFeeData,
   accounts,
   currentAccountIndex,
-  // feeData,
+  feeData,
 }) => {
   const [submittedTxn, setSubmittedTxn] = useState(tempTxn);
   const [submittedTxnTime, setSubmittedTxnTime] = useState('');
@@ -67,7 +67,7 @@ const MainScreen = ({
   const currentAccount = accounts[currentAccountIndex];
 
   useEffect(() => {
-    // getFeeData(networks[currentNetwork]);
+    getFeeData(networks[currentNetwork]);
     // console.log(networks[currentNetwork]);
   }, [currentNetwork]);
 
@@ -81,9 +81,9 @@ const MainScreen = ({
   //   });
   // }, []);
 
-  // useEffect(() => {
-  //   console.log(feeData);
-  // }, []);
+  useEffect(() => {
+    console.log(feeData);
+  }, []);
 
   const renderTxnRBSheet = () => {
     return (
@@ -405,7 +405,7 @@ const MainScreen = ({
           height: '100%',
         }}>
         {renderTxnRBSheet()}
-        {/* <Tab.Navigator backBehavior="history" tabBar={tabBar}>
+        <Tab.Navigator backBehavior="history" tabBar={tabBar}>
           <Tab.Screen
             name="Wallet"
             component={updatedWalletTab}
@@ -413,13 +413,13 @@ const MainScreen = ({
               tabBarLabel: 'Wallet',
             }}
           />
-          <Tab.Screen
+          {/* <Tab.Screen
             name="Swap"
             component={updatedSwapTab}
             options={{
               tabBarLabel: 'Swap',
             }}
-          />
+          /> */}
           <Tab.Screen
             name="Settings"
             component={SettingsTab}
@@ -427,7 +427,7 @@ const MainScreen = ({
               tabBarLabel: 'Settings',
             }}
           />
-        </Tab.Navigator> */}
+        </Tab.Navigator>
         <Text>
           Main Screen
         </Text>
@@ -441,11 +441,11 @@ const mapStateToProps = state => ({
   currentNetwork: state.networks.currentNetwork,
   accounts: state.accounts.accounts,
   currentAccountIndex: state.accounts.currentAccountIndex,
-  // feeData: state.engine.feeData,
+  feeData: state.engine.feeData,
 });
 const mapDispatchToProps = dispatch => ({
-  // getFeeData: currentNetworkObject =>
-  //   getFeeData(dispatch, currentNetworkObject),
+  getFeeData: currentNetworkObject =>
+    getFeeData(dispatch, currentNetworkObject),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainScreen);
