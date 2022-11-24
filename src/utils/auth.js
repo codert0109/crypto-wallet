@@ -37,7 +37,6 @@ export const checkAuthenticationByPinCode = (
 ) => {
   AsyncStorage.getItem('pinCode')
     .then(savedPinCode => {
-      console.log(savedPinCode, typeof pinCode);
       if (JSON.stringify(pinCode) === savedPinCode) {
         successCallback();
       } else {

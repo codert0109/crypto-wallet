@@ -24,24 +24,29 @@ import {
 } from '../../../redux/actions/TokensActions';
 import TokenAdd from './TokenAdd/TokenAdd';
 import RBSheet from 'react-native-raw-bottom-sheet';
+import CollectibleAdd from './CollectibleAdd';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import NftTokenRow from '../../../components/NftTokenRow';
 
 const screenHeight = Dimensions.get('screen').height;
 
 const TokenAndCollectiblesTab = ({
   navigation,
-  tokenPressed,
-  networks,
   currentNetwork,
-  balances,
-  accounts,
   currentAccountIndex,
-  getTokensList,
   tokens,
   setSelectedToken,
+  nftBalancesInfo,
+  networks,
 }) => {
   const [curTabIndex, setCurTabIndex] = useState(0);
 
   const refRBTokenAddSheet = useRef(null);
+  const refRBCollectibleAddSheet = useRef(null);
+
+  // useEffect(() => {
+  //   AsyncStorage.setItem('nftbalances_info', JSON.stringify({}));
+  // });
 
   const [tabRoutes] = useState([
     {
@@ -82,6 +87,35 @@ const TokenAndCollectiblesTab = ({
     );
   };
 
+  const renderCollectibleAdd = () => {
+    return (
+      <RBSheet
+        height={450}
+        ref={refRBCollectibleAddSheet}
+        closeOnDragDown={true}
+        closeOnPressBack={true}
+        closeOnPressMask={true}
+        customStyles={{
+          wrapper: {
+            backgroundColor: '#222531BB',
+          },
+          draggableIcon: {
+            backgroundColor: colors.grey9,
+          },
+          container: {
+            backgroundColor: colors.grey24,
+          },
+        }}>
+        <CollectibleAdd
+          onCancel={() => {
+            if (refRBCollectibleAddSheet)
+              refRBCollectibleAddSheet.current.close();
+          }}
+        />
+      </RBSheet>
+    );
+  };
+
   const TokenRoute = () => {
     const tokensList = tokens[currentNetwork]
       ? tokens[currentNetwork][currentAccountIndex]
@@ -89,8 +123,8 @@ const TokenAndCollectiblesTab = ({
         : []
       : [];
     return (
-      <View style={{flex: 1}}>
-        <ScrollView>
+      <View style={{ flex: 1 }}>
+        <ScrollView nestedScrollEnabled={true}>
           <TokenItemRow
             token={'main'}
             removable={false}
@@ -113,16 +147,16 @@ const TokenAndCollectiblesTab = ({
             );
           })}
         </ScrollView>
-        <View style={{marginTop: 24}}>
+        <View style={{ marginTop: 24 }}>
           <TextButton
-            text="Add Tokens"
+            text="Import Tokens"
             onPress={() => {
               refRBTokenAddSheet.current.open();
             }}
             icon={
               <FontAwesome
-                style={{fontSize: 24, color: colors.green5, marginRight: 12}}
-                icon={SolidIcons.plus}
+                style={{ fontSize: 24, color: colors.primary5, marginRight: 12 }}
+                icon={SolidIcons.plusCircle}
               />
             }
           />
@@ -131,9 +165,48 @@ const TokenAndCollectiblesTab = ({
     );
   };
 
-  const CollectibleRoute = () => (
-    <View style={{flex: 1, backgroundColor: '#673ab7'}} />
-  );
+  const CollectibleRoute = () => {
+    // const nftTokenList = nftBalancesInfo[currentNetwork.toString()]
+    //   ? nftBalancesInfo[currentNetwork.toString()][
+    //     currentAccountIndex.toString()
+    //   ]
+    //     ? nftBalancesInfo[currentNetwork.toString()][
+    //       currentAccountIndex.toString()
+    //     ].tokensList
+    //     : []
+    //   : [];
+    // console.log(nftTokenList);
+    return (
+      <View style={{ flex: 1 }}>
+        {/* <ScrollView style={{ marginTop: 40, marginHorizontal: 24 }}>
+          {nftTokenList.map(nftData => {
+            return (
+              <NftTokenRow
+                currentNetworkObject={networks[currentNetwork]}
+                currentNetwork={currentNetwork}
+                nftData={nftData}
+                key={'collectibles_' + nftData.nftAddress}
+              />
+            );
+          })}
+        </ScrollView> */}
+        <View style={{ marginTop: 24, flexDirection: 'column-reverse', flex: 1 }}>
+          <TextButton
+            text="Import Collectibles"
+            onPress={() => {
+              refRBCollectibleAddSheet.current.open();
+            }}
+            icon={
+              <FontAwesome
+                style={{ fontSize: 24, color: colors.primary5, marginRight: 12 }}
+                icon={SolidIcons.plusCircle}
+              />
+            }
+          />
+        </View>
+      </View>
+    );
+  };
 
   const initialLayout = {
     width: Dimensions.get('window').width,
@@ -188,17 +261,18 @@ const TokenAndCollectiblesTab = ({
   };
 
   return (
-    <>
+    <View style={{ height: 500 }}>
       {renderTokenAdd()}
+      {renderCollectibleAdd()}
       <TabView
-        style={{marginTop: 40, marginHorizontal: 24, marginBottom: '20%'}}
-        navigationState={{index: curTabIndex, routes: tabRoutes}}
+        style={{ marginVertical: 40, marginHorizontal: 24, }}
+        navigationState={{ index: curTabIndex, routes: tabRoutes }}
         renderTabBar={renderTabBar}
         renderScene={renderScene}
         onIndexChange={setCurTabIndex}
         initialLayout={initialLayout}
       />
-    </>
+    </View>
   );
 };
 
@@ -207,8 +281,8 @@ const mapStateToProps = state => ({
   currentNetwork: state.networks.currentNetwork,
   accounts: state.accounts.accounts,
   currentAccountIndex: state.accounts.currentAccountIndex,
-  balances: state.balances,
   tokens: state.tokens.tokensData,
+  nftBalancesInfo: state.nftBalances,
 });
 const mapDispatchToProps = dispatch => ({
   getTokensList: (currentNetwork, currentAccountIndex, successCallback) =>

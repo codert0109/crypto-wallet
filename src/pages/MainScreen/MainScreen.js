@@ -6,10 +6,11 @@ import {
   View,
   Text,
   TouchableOpacity,
+  BackHandler,
 } from 'react-native';
 import {colors, fonts} from '../../styles';
 import FontAwesome, {SolidIcons} from 'react-native-fontawesome';
-
+import { useRoute } from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 const Tab = createBottomTabNavigator();
 
@@ -21,8 +22,7 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 import TxnRBSheet from './WalletTab/TxnRBSheet';
 import Toast from 'react-native-toast-message';
 import moment from 'moment';
-// import SwapTab from './SwapTab/SwapTab';
-// import SwapTabBnb from './SwapTab/SwapTabBnb';
+
 import WalletTab from './WalletTab/WalletTab';
 import SettingsTab from './SettingsTab/SettingsTab';
 import TxnRBSheetBnb from './WalletTab/TxnRBSheetBnb';
@@ -63,11 +63,14 @@ const MainScreen = ({
     useState(undefined);
 
   const refTxnRBSheet = useRef(null);
+  const route = useRoute();
 
   const currentAccount = accounts[currentAccountIndex];
 
   useEffect(() => {
-    getFeeData(networks[currentNetwork]);
+    if (networks[currentNetwork]) {
+      getFeeData(networks[currentNetwork]);
+    }
     // console.log(networks[currentNetwork]);
   }, [currentNetwork]);
 
@@ -192,7 +195,7 @@ const MainScreen = ({
 
   const tabBar = ({state, descriptors, navigation}) => {
     return (
-      <View style={{flexDirection: 'row', marginBottom: 40}}>
+      <View style={{ flexDirection: 'row', backgroundColor: '#18171C', paddingVertical: 15 }}>
         {state.routes.map((route, index) => {
           const {options} = descriptors[route.key];
           const label =
@@ -277,123 +280,48 @@ const MainScreen = ({
     );
   };
 
-  const updatedWalletTab = ({navigation}) => {
-    return (
-      <WalletTab
-        navigation={navigation}
-        onSendSubmittedTxn={originTxn => {
-          setSubmittedNetworkObject(networks[currentNetwork]);
-          setSubmittedTxn({...originTxn});
-          const timeString = moment(new Date().valueOf())
-            .format('MMM DD [at] hh:mm a')
-            .toString();
-          setSubmittedTxnTime(timeString);
-          setSubmittedAccount(currentAccount);
-          Toast.show({
-            type: 'txnSubmitted',
-            position: 'bottom',
-            bottomOffset: 120,
-            props: {
-              transaction: {...originTxn},
-              onPress: () => {
-                refTxnRBSheet.current.open();
-              },
-            },
-          });
-        }}
-        onSendError={error => {
-          Toast.show({
-            type: 'error',
-            position: 'bottom',
-            bottomOffset: 120,
-            text1: 'Transaction failed',
-            props: {
-              error: error,
-            },
-          });
-        }}
-      />
+  const UpdatedWalletTab = ({ navigation }) => {
+    return (<>
+      {
+        networks[currentNetwork] ?
+          <WalletTab
+            navigation={navigation}
+            onSendSubmittedTxn={originTxn => {
+              if (networks[currentNetwork]) {
+                setSubmittedNetworkObject(networks[currentNetwork]);
+              }
+              setSubmittedTxn({ ...originTxn });
+              const timeString = moment(new Date().valueOf())
+                .format('MMM DD [at] hh:mm a')
+                .toString();
+              setSubmittedTxnTime(timeString);
+              setSubmittedAccount(currentAccount);
+              Toast.show({
+                type: 'txnSubmitted',
+                position: 'bottom',
+                bottomOffset: 120,
+                props: {
+                  transaction: { ...originTxn },
+                  onPress: () => {
+                    refTxnRBSheet.current.open();
+                  },
+                },
+              });
+            }}
+            onSendError={error => {
+              Toast.show({
+                type: 'error',
+                position: 'bottom',
+                bottomOffset: 120,
+                text1: 'Transaction failed',
+                props: {
+                  error: error,
+                },
+              });
+            }}
+          /> : <></>}
+    </>
     );
-  };
-
-  const updatedSwapTab = ({navigation}) => {
-    if (networks[currentNetwork].chainType == 'ethereum') {
-      return (
-        <SwapTab
-          navigation={navigation}
-          onSubmitTxn={originTxn => {
-            navigation.navigate('Wallet');
-            setSubmittedNetworkObject(networks[currentNetwork]);
-            setSubmittedTxn({...originTxn});
-            const timeString = moment(new Date().valueOf())
-              .format('MMM DD [at] hh:mm a')
-              .toString();
-            setSubmittedTxnTime(timeString);
-            setSubmittedAccount(currentAccount);
-            Toast.show({
-              type: 'txnSubmitted',
-              position: 'bottom',
-              bottomOffset: 120,
-              props: {
-                transaction: {...originTxn},
-                onPress: () => {
-                  refTxnRBSheet.current.open();
-                },
-              },
-            });
-          }}
-          onErrorOccured={error => {
-            Toast.show({
-              type: 'error',
-              position: 'bottom',
-              bottomOffset: 120,
-              text1: 'Transaction failed',
-              props: {
-                error: error,
-              },
-            });
-          }}
-        />
-      );
-    } else if (networks[currentNetwork].chainType == 'binance') {
-      return (
-        <SwapTabBnb
-          navigation={navigation}
-          onSubmitTxn={originTxn => {
-            navigation.navigate('Wallet');
-            setSubmittedNetworkObject(networks[currentNetwork]);
-            setSubmittedTxn({...originTxn});
-            const timeString = moment(new Date().valueOf())
-              .format('MMM DD [at] hh:mm a')
-              .toString();
-            setSubmittedTxnTime(timeString);
-            setSubmittedAccount(currentAccount);
-            Toast.show({
-              type: 'txnSubmitted',
-              position: 'bottom',
-              bottomOffset: 120,
-              props: {
-                transaction: {...originTxn},
-                onPress: () => {
-                  refTxnRBSheet.current.open();
-                },
-              },
-            });
-          }}
-          onErrorOccured={error => {
-            Toast.show({
-              type: 'error',
-              position: 'bottom',
-              bottomOffset: 120,
-              text1: 'Transaction failed',
-              props: {
-                error: error,
-              },
-            });
-          }}
-        />
-      );
-    }
   };
 
   return (
@@ -405,21 +333,14 @@ const MainScreen = ({
           height: '100%',
         }}>
         {renderTxnRBSheet()}
-        <Tab.Navigator backBehavior="history" tabBar={tabBar}>
+        <Tab.Navigator backBehavior="history" tabBar={tabBar} screenOptions={{ headerShown: false }}>
           <Tab.Screen
             name="Wallet"
-            component={updatedWalletTab}
+            component={UpdatedWalletTab}
             options={{
               tabBarLabel: 'Wallet',
             }}
           />
-          {/* <Tab.Screen
-            name="Swap"
-            component={updatedSwapTab}
-            options={{
-              tabBarLabel: 'Swap',
-            }}
-          /> */}
           <Tab.Screen
             name="Settings"
             component={SettingsTab}
@@ -428,9 +349,6 @@ const MainScreen = ({
             }}
           />
         </Tab.Navigator>
-        <Text>
-          Main Screen
-        </Text>
       </SafeAreaView>
     </KeyboardAvoidingView>
   );

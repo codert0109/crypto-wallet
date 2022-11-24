@@ -17,15 +17,14 @@ const SplashScreen = ({navigation}) => {
 
   const nextSplash = async () => {
     const savedPassword = await AsyncStorage.getItem('password');
-    const isFingerPrintUsed = await AsyncStorage.getItem('isFinterPrintUsed');
     const rememberMe = await AsyncStorage.getItem('remember_me');
-    // console.log(savedPassword, isFingerPrintUsed, rememberMe);
     if (rememberMe === 'true') {
       navigation.replace('mainscreen');
       return;
     }
-    if (savedPassword || isFingerPrintUsed) {
+    if (savedPassword) {
       navigation.replace('login');
+      return;
     } else {
       navigation.replace('through');
     }

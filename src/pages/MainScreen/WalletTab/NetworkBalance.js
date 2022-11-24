@@ -45,7 +45,7 @@ const NetworkBalance = ({
           </LinearGradient>
         </MaskedView>
       </View>
-      <View style={{marginTop: 24, flexDirection: 'row'}}>
+      {/* <View style={{marginTop: 24, flexDirection: 'row'}}>
         <View>
           <Text style={{...fonts.para_regular, color: 'white'}}>
             $16,858.15
@@ -56,7 +56,7 @@ const NetworkBalance = ({
             +0.7%
           </Text>
         </View>
-      </View>
+      </View> */}
     </View>
   );
 };

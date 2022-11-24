@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import {connect} from 'react-redux';
 import {
   Image,
   KeyboardAvoidingView,
@@ -33,7 +32,7 @@ const ThroughScreen = ({navigation}) => {
 
   useEffect(() => {
     if(current == 3) {
-      navigation.navigate('createwallet');
+      navigation.replace('createsecure');
     }
   }, [current])
 
@@ -88,33 +87,6 @@ const ThroughScreen = ({navigation}) => {
             </View>
           </>
         )}
-        {/* {current == 3 && (
-          <>
-            <View
-              style={{
-                flex: 1,
-                flexDirection: 'column-reverse',
-                marginBottom: 60,
-                marginHorizontal: 24,
-              }}>
-              <View>
-                <SecondaryButton
-                  onPress={() => {
-                    navigation.navigate('importwallet');
-                  }}
-                  text="Import Using Seed Phrase"
-                />
-                <View style={{height: 15}}></View>
-                <PrimaryButton
-                  onPress={() => {
-                    navigation.navigate('createwallet');
-                  }}
-                  text="Create a New Secure"
-                />
-              </View>
-            </View>
-          </>
-        )} */}
       </SafeAreaView>
     </KeyboardAvoidingView>
   );

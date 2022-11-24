@@ -113,19 +113,11 @@ const SettingsTab = ({navigation}) => {
             'Send Feed back',
             () => {},
           )}
-          <View
-            style={{
-              bottom: -200,
-              position: 'relative',
-              flex: 1,
-              flexDirection: 'column-reverse',
-            }}>
-            {renderSettingsRow(
-              <SvgXml xml={fonts.logoutIconSvgXml} />,
-              'Log out',
-              () => {},
-            )}
-          </View>
+          {renderSettingsRow(
+            <SvgXml xml={fonts.logoutIconSvgXml} />,
+            'Log out',
+            () => {},
+          )}
         </View>
       </>
     );

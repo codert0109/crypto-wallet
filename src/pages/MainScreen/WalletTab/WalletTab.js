@@ -1,5 +1,5 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {connect} from 'react-redux';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { connect } from 'react-redux';
 import {
   Dimensions,
   Image,
@@ -10,8 +10,9 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {colors, fonts} from '../../../styles';
-import {SvgXml} from 'react-native-svg';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { colors, fonts } from '../../../styles';
+import { SvgXml } from 'react-native-svg';
 import FontAwesome, {
   SolidIcons,
   RegularIcons,
@@ -39,9 +40,77 @@ import Toast from 'react-native-toast-message';
 import moment from 'moment';
 import TxnRBSheet from './TxnRBSheet';
 import SendTokenBnb from './SendToken/SendTokenBnb';
+import AccountInfo from './AccountInfo';
 
 const backImage = require('../../../assets/images/mainscreen/backimage.png');
 const buyIconSvgXml = require('../SVGData').buyIcon;
+
+const SendTokenRBSheet = ({ refRBSendTokenSheet, currentNetworkObject, onSendSubmittedTxn, onSendError }) => {
+  return (
+    <RBSheet
+      height={Dimensions.get('screen').height}
+      ref={refRBSendTokenSheet}
+      closeOnDragDown={true}
+      closeOnPressBack={true}
+      closeOnPressMask={true}
+      customStyles={{
+        wrapper: {
+          backgroundColor: '#222531BB',
+        },
+        draggableIcon: {
+          backgroundColor: colors.grey9,
+        },
+        container: {
+          backgroundColor: colors.BG,
+        },
+      }}>
+      {currentNetworkObject.chainType === 'ethereum' && (
+        <SendToken
+          isToken={false}
+          onPressClose={() => {
+            if (refRBSendTokenSheet && refRBSendTokenSheet.current) {
+              refRBSendTokenSheet.current.close();
+            }
+          }}
+          onSubmitTxn={originTxn => {
+            if (refRBSendTokenSheet && refRBSendTokenSheet.current) {
+              refRBSendTokenSheet.current.close();
+            }
+            onSendSubmittedTxn(originTxn);
+          }}
+          onErrorOccured={error => {
+            if (refRBSendTokenSheet && refRBSendTokenSheet.current) {
+              refRBSendTokenSheet.current.close();
+            }
+            onSendError(error);
+          }}
+        />
+      )}
+      {currentNetworkObject.chainType === 'binance' && (
+        <SendTokenBnb
+          isToken={false}
+          onPressClose={() => {
+            if (refRBSendTokenSheet && refRBSendTokenSheet.current) {
+              refRBSendTokenSheet.current.close();
+            }
+          }}
+          onSubmitTxn={originTxn => {
+            if (refRBSendTokenSheet && refRBSendTokenSheet.current) {
+              refRBSendTokenSheet.current.close();
+            }
+            onSendSubmittedTxn(originTxn);
+          }}
+          onErrorOccured={error => {
+            if (refRBSendTokenSheet && refRBSendTokenSheet.current) {
+              refRBSendTokenSheet.current.close();
+            }
+            onSendError(error);
+          }}
+        />
+      )}
+    </RBSheet>
+  );
+}
 
 const WalletTab = ({
   navigation,
@@ -66,6 +135,19 @@ const WalletTab = ({
   });
 
   const currentAccount = accounts[currentAccountIndex];
+  const currentNetworkObject = networks[currentNetwork];
+
+  const onSend = () => {
+    refRBSendTokenSheet.current.open();
+  }
+
+  const onReceive = () => {
+    refRBReceiveTokenSheet.current.open();
+  }
+
+  const onBuy = () => {
+    refRBBuySheet.current.open();
+  }
 
   const renderBuyRBSheet = () => {
     return (
@@ -177,75 +259,10 @@ const WalletTab = ({
     setSelectedToken(token);
   };
 
-  const renderSendTokenRBSheet = () => {
-    return (
-      <RBSheet
-        height={Dimensions.get('screen').height - 100}
-        ref={refRBSendTokenSheet}
-        closeOnDragDown={true}
-        closeOnPressBack={true}
-        closeOnPressMask={true}
-        customStyles={{
-          wrapper: {
-            backgroundColor: '#222531BB',
-          },
-          draggableIcon: {
-            backgroundColor: colors.grey9,
-          },
-          container: {
-            backgroundColor: colors.grey24,
-          },
-        }}>
-        {networks[currentNetwork].chainType === 'ethereum' && (
-          <SendToken
-            isToken={false}
-            onPressClose={() => {
-              if (refRBSendTokenSheet && refRBSendTokenSheet.current) {
-                refRBSendTokenSheet.current.close();
-              }
-            }}
-            onSubmitTxn={originTxn => {
-              if (refRBSendTokenSheet && refRBSendTokenSheet.current) {
-                refRBSendTokenSheet.current.close();
-              }
-              onSendSubmittedTxn(originTxn);
-            }}
-            onErrorOccured={error => {
-              if (refRBSendTokenSheet && refRBSendTokenSheet.current) {
-                refRBSendTokenSheet.current.close();
-              }
-              onSendError(error);
-            }}
-          />
-        )}
-        {networks[currentNetwork].chainType === 'binance' && (
-          <SendTokenBnb
-            isToken={false}
-            onPressClose={() => {
-              if (refRBSendTokenSheet && refRBSendTokenSheet.current) {
-                refRBSendTokenSheet.current.close();
-              }
-            }}
-            onSubmitTxn={originTxn => {
-              if (refRBSendTokenSheet && refRBSendTokenSheet.current) {
-                refRBSendTokenSheet.current.close();
-              }
-              onSendSubmittedTxn(originTxn);
-            }}
-            onErrorOccured={error => {
-              if (refRBSendTokenSheet && refRBSendTokenSheet.current) {
-                refRBSendTokenSheet.current.close();
-              }
-              onSendError(error);
-            }}
-          />
-        )}
-      </RBSheet>
-    );
-  };
-
   return (
-    <KeyboardAvoidingView>
+    <KeyboardAwareScrollView nestedScrollEnabled style={{
+      backgroundColor: colors.BG,
+    }}>
       <SafeAreaView
         style={{
           backgroundColor: colors.grey24,
@@ -284,7 +301,7 @@ const WalletTab = ({
         )}
         {!selectedToken && (
           <>
-            {renderSendTokenRBSheet()}
+            <SendTokenRBSheet currentNetworkObject={currentNetworkObject} onSendError={onSendError} onSendSubmittedTxn={onSendSubmittedTxn} refRBSendTokenSheet={refRBSendTokenSheet} />
             {renderReceiveTokenRBSheet()}
             {renderBuyRBSheet()}
             <Header navigation={navigation} />
@@ -292,9 +309,7 @@ const WalletTab = ({
               source={backImage}
               style={{position: 'absolute', right: '-15%', top: '10%'}}
             />
-            {/* <View style={{height: '20%'}}></View> */}
-            <NetworkBalance />
-            {renderTransactionButtonGroup()}
+            <AccountInfo onBuy={onBuy} onSend={onSend} onReceive={onReceive} />
             <TokenAndCollectiblesTab
               navigation={navigation}
               tokenPressed={tokenRowPressed}
@@ -302,7 +317,7 @@ const WalletTab = ({
           </>
         )}
       </SafeAreaView>
-    </KeyboardAvoidingView>
+    </KeyboardAwareScrollView>
   );
 };
 

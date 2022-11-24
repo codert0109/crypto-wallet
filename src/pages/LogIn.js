@@ -38,7 +38,7 @@ import {loadSettingsDataFromStorage} from '../redux/actions/SettingsAction';
 
 //import images
 const shapeImage = require('../assets/images/icon.png');
-// import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LogIn = ({
   navigation,
@@ -76,15 +76,23 @@ const LogIn = ({
       rememberMe ? 'true' : 'false',
       () => {
         setIsLoading(false);
-        loadAccountsDataFromStorage();
-        loadNetworksDataFromStorage();
-        loadTokensDataFromStorage();
-        loadSettingsDataFromStorage();
-        navigation.replace('mainscreen');
+        AsyncStorage.getItem('accounts_info').then((res) => {
+          // navigation.replace('selectscreen');
+          // return;
+          if(res) {
+            loadAccountsDataFromStorage();
+            loadNetworksDataFromStorage();
+            loadTokensDataFromStorage();
+            loadSettingsDataFromStorage();
+            navigation.replace('mainscreen');
+          } else {
+            navigation.replace('selectscreen');
+          }
+        }).catch(e => Alert.alert(e));
       },
       () => {
         setIsLoading(false);
-        console.log('Something went wrong in login save rememberme');
+        console.log('Something went wrong in login');
       },
     );
   };
@@ -134,13 +142,6 @@ const LogIn = ({
       },
     );
   };
-
-  useEffect(() => {
-    // setTimeout(() => {
-    //   navigation.replace('through');
-    // }, 3000);
-    return () => {};
-  });
 
   return (
     <KeyboardAvoidingView>

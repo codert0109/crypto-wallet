@@ -41,6 +41,7 @@ import {getFeeData} from '../../../redux/actions/EngineAction';
 const backImage = require('../../../assets/images/mainscreen/backimage.png');
 
 const avatars = require('../../../constants').default.avatars;
+const accountDefaultAvatar = require('../../../constants').default.defaultAvatar;
 const avatarsCount = require('../../../constants').default.avatarsCount;
 
 const avatarBadgeSvgXml = require('../SVGData').avatarBadge;
@@ -131,7 +132,9 @@ const Header = ({
       <TouchableOpacity
         key={account.address}
         onPress={() => {
-          refRBAccountSelectSheet.current.close();
+          if (refRBAccountSelectSheet) {
+            refRBAccountSelectSheet.current.close();
+          }
           setCurrentAccountIndex(account.index);
         }}>
         <View
@@ -279,16 +282,14 @@ const Header = ({
                 );
               })}
           </View>
-          <View style={{marginTop: 24}}>
-            <TextButton
+          <View style={{ marginTop: 24, flexDirection: 'row', justifyContent: 'space-around' }}>
+            <SecondaryButton
               text="Create New Account"
               onPress={() => {
                 setAccountStatus('create_account');
               }}
             />
-          </View>
-          <View style={{marginTop: 24}}>
-            <TextButton
+            <PrimaryButton
               text="Import Account"
               onPress={() => {
                 setAccountStatus('import_account');
@@ -332,26 +333,18 @@ const Header = ({
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-            <View
+            <Image
+              source={accountDefaultAvatar}
+              width={48}
+              height={48}
               style={{
-                width: 64,
-                height: 64,
-                borderRadius: 32,
-                backgroundColor: colors.grey23,
-              }}>
-              <Image
-                source={backImage}
-                width={24}
-                height={24}
-                style={{
-                  position: 'relative',
-                  left: 0,
-                  top: 0,
-                  width: 24,
-                  height: 24,
-                }}
-              />
-            </View>
+                position: 'relative',
+                left: 0,
+                top: 0,
+                width: 48,
+                height: 48,
+              }}
+            />
           </View>
           <View style={{marginTop: 24, marginHorizontal: '25%'}}>
             <SecondaryButton onPress={() => {}} text="Choose an icon" />
@@ -376,7 +369,9 @@ const Header = ({
                   },
                   () => {
                     console.log('Success create a new Account');
-                    refRBAccountSelectSheet.current.close();
+                    if (refRBAccountSelectSheet) {
+                      refRBAccountSelectSheet.current.close();
+                    }
                     setCreateAccountLoading(false);
                   },
                   () => {
@@ -386,7 +381,7 @@ const Header = ({
                 );
               }}
               enableFlag={accountName.length > 0}
-              text="Create"
+              text="Create a New Account"
             />
           </View>
         </View>
@@ -539,7 +534,9 @@ const Header = ({
                           setImportAccountLoading(true);
                         },
                         () => {
-                          refRBAccountSelectSheet.current.close();
+                          if (refRBAccountSelectSheet) {
+                            refRBAccountSelectSheet.current.close();
+                          }
                           setImportAccountLoading(false);
                           console.log('import account success');
                         },
@@ -606,29 +603,13 @@ const Header = ({
         onPress={() => {
           refRBAccountSelectSheet.current.open();
         }}>
-        <View style={{height: 36, width: 36}}>
-          <Avatar
-            rounded
-            source={
-              accounts
-                ? accounts[currentAccountIndex]
-                  ? avatars[accounts[currentAccountIndex].icon % avatarsCount]
-                  : avatar1Image
-                : avatar1Image
-            }
-            size={36}
-            overlayContainerStyle={{backgroundColor: colors.grey22}}
-          />
-          <Badge
-            containerStyle={{position: 'absolute', bottom: -8, right: -8}}
-            Component={() => <SvgXml xml={avatarBadgeSvgXml} />}
-          />
-        </View>
+        <SvgXml xml={fonts.headerMenuSvgXml} />
       </TouchableOpacity>
 
       <View
         style={{
-          width: '90%',
+          flex: 1,
+          height: '100%'
         }}>
         <TouchableOpacity
           onPress={() => {
@@ -652,6 +633,13 @@ const Header = ({
           </View>
         </TouchableOpacity>
       </View>
+      <TouchableOpacity
+        style={{ height: 32, width: 32 }}
+        onPress={() => {
+          // refRBAccountSelectSheet.current.open();
+        }}>
+        <SvgXml xml={fonts.headerTimeSvgXml} />
+      </TouchableOpacity>
       {renderNetworkRBSheet()}
       {renderAccountRBSheet()}
     </View>

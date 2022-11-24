@@ -3,12 +3,13 @@ import {connect} from 'react-redux';
 // import {View, Text, TouchableOpacity} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 
-
 import LogIn from '../pages/LogIn';
 import SplashScreen from '../pages/SplashScreen';
 import ThroughScreen from '../pages/ThroughScreen';
+import SelectScreen from '../pages/SelectScreen';
 // import ImportWalletScreen from '../pages/ImportWallet/ImportWalletScreen';
-import CreateSecureScreen from '../pages/CreateWallet/CreateSecureScreen';
+import CreateSecureScreen from '../pages/CreateSecure/CreateSecureScreen';
+import CreateWalletScreen from '../pages/CreateWallet/CreateWalletScreen';
 import MainScreen from '../pages/MainScreen/MainScreen';
 
 // import {colors, commonStyles} from '../styles';
@@ -75,13 +76,23 @@ class App extends React.Component {
           }}
         /> */}
         <Stack.Screen
-          name="createwallet"
+          name="createsecure"
           component={CreateSecureScreen}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="createwallet"
+          component={CreateWalletScreen}
           options={{headerShown: false}}
         />
         <Stack.Screen
           name="mainscreen"
           component={MainScreen}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="selectscreen"
+          component={SelectScreen}
           options={{headerShown: false}}
         />
       </Stack.Navigator>
