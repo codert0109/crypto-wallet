@@ -86,14 +86,6 @@ const ImportWalletScreen = ({navigation, createWallet}) => {
       setCanPass(false);
       return;
     }
-    if (!data.password) {
-      setCanPass(false);
-      return;
-    }
-    if (!data.passwordConfirm) {
-      setCanPass(false);
-      return;
-    }
     if (!utils.isValidMnemonic(data.seedPhrase)) {
       setCanPass(false);
       return;
@@ -104,7 +96,6 @@ const ImportWalletScreen = ({navigation, createWallet}) => {
   const onImportWallet = () => {
     createWallet(
       {
-        password,
         mnemonic: seedPhrase,
       },
       () => {
@@ -134,7 +125,7 @@ const ImportWalletScreen = ({navigation, createWallet}) => {
           paddingTop: 40,
         }}>
         <View style={{paddingHorizontal: 24, marginTop: 40}}>
-          <Modal
+          {/* <Modal
             isVisible={createPasswordModalVisible}
             style={{
               justifyContent: 'center',
@@ -175,7 +166,7 @@ const ImportWalletScreen = ({navigation, createWallet}) => {
                 />
               </View>
             </View>
-          </Modal>
+          </Modal> */}
           <View
             style={{
               display: 'flex',
@@ -236,126 +227,6 @@ const ImportWalletScreen = ({navigation, createWallet}) => {
               <SvgXml xml={qrScanSvgXml} />
             </View>
           </View>
-          <View style={{marginBottom: 24}}>
-            <FloatLabelInput
-              label={'New Password'}
-              isPassword
-              value={password}
-              onChangeText={value => {
-                setPassword(value);
-                checkCanPass({password: value, passwordConfirm, seedPhrase});
-                setPasswordStrengthLabel(
-                  passwordStrength(value, passwordStrengthCheckOption).value,
-                );
-              }}
-            />
-            {password.length > 0 && (
-              <>
-                <Text
-                  style={{
-                    paddingLeft: 16,
-                    ...fonts.caption_small12_16_regular,
-                    color: colors.grey12,
-                  }}>
-                  Password strength:{' '}
-                  <Text
-                    style={{color: passwordLevelColor[passwordStrengthLabel]}}>
-                    {passwordStrengthLabel}
-                  </Text>
-                </Text>
-                {password.length < 8 && (
-                  <Text
-                    style={{
-                      paddingLeft: 16,
-                      paddingTop: 4,
-                      ...fonts.caption_small12_16_regular,
-                      color: colors.grey12,
-                    }}>
-                    Must be at least 8 characters.
-                  </Text>
-                )}
-              </>
-            )}
-          </View>
-          <View style={{marginBottom: 24}}>
-            <FloatLabelInput
-              label={'Confirm Password'}
-              isPassword
-              value={passwordConfirm}
-              onChangeText={value => {
-                setPasswordConfirm(value);
-                checkCanPass({password, passwordConfirm: value, seedPhrase});
-              }}
-            />
-            {passwordConfirm.length > 0 && (
-              <Text
-                style={{
-                  paddingLeft: 16,
-                  ...fonts.caption_small12_16_regular,
-                  color:
-                    password === passwordConfirm
-                      ? colors.green5
-                      : colors.grey12,
-                }}>
-                {password === passwordConfirm
-                  ? 'Password matched. '
-                  : 'Password must match. '}
-                {password === passwordConfirm && (
-                  <FontAwesome
-                    style={{
-                      fontSize: 12,
-                      color: colors.green5,
-                      marginLeft: 12,
-                    }}
-                    icon={SolidIcons.check}
-                  />
-                )}
-              </Text>
-            )}
-          </View>
-          <View
-            style={{
-              marginBottom: 24,
-              flexDirection: 'row',
-              paddingHorizontal: 8,
-            }}>
-            <View style={{width: '60%'}}>
-              <Text style={{...fonts.title2, color: 'white'}}>
-                Sign in with Face ID?
-              </Text>
-            </View>
-            <View style={{width: '40%', alignItems: 'flex-end'}}>
-              <ToggleSwitch
-                isOn={signInWithFaceId}
-                onColor={colors.green5}
-                offColor="grey"
-                size="large"
-                onToggle={isOn => setSignInWithFaceId(isOn)}
-                animationSpeed={100}
-                thumbOnStyle={{borderRadius: 6}}
-                thumbOffStyle={{borderRadius: 6}}
-                trackOnStyle={{borderRadius: 8, width: 68, height: 32}}
-                trackOffStyle={{borderRadius: 8, width: 68, height: 32}}
-              />
-            </View>
-          </View>
-          <View
-            style={{
-              marginBottom: 24,
-              paddingHorizontal: 12,
-            }}>
-            <Text
-              style={{
-                ...fonts.para_regular,
-                color: 'grey',
-                textAlign: 'justify',
-              }}>
-              By proceeding, you agree to these{' '}
-              <Text style={{textDecorationLine: 'underline'}}>
-                Term and Conditions.
-              </Text>
-            </Text>
-          </View>
         </View>
         <View
           style={{
@@ -367,12 +238,6 @@ const ImportWalletScreen = ({navigation, createWallet}) => {
           <SecondaryButton
             enableFlag={canPass}
             onPress={() => {
-              if (
-                passwordStrength(password, passwordStrengthCheckOption).id < 2
-              ) {
-                setCreatePasswordModalVisible(true);
-                return;
-              }
               onImportWallet();
             }}
             text="Import"

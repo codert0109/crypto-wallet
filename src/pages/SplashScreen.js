@@ -5,19 +5,22 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {colors} from '../styles';
 
 //import images
-const shapeImage = require('../assets/images/splash/shape.png');
+const logoImage = require('../assets/images/splash/shape.png');
+const shapeImage = require('../assets/images/logo.png');
 
 const SplashScreen = ({navigation}) => {
   useEffect(() => {
     setTimeout(() => {
       nextSplash();
-    }, 3000);
+    }, 2000);
     return () => {};
   });
 
   const nextSplash = async () => {
     const savedPassword = await AsyncStorage.getItem('password');
     const rememberMe = await AsyncStorage.getItem('remember_me');
+    // navigation.replace('importwallet');
+    // return;
     if (rememberMe === 'true') {
       navigation.replace('mainscreen');
       return;
@@ -33,20 +36,30 @@ const SplashScreen = ({navigation}) => {
   return (
     <KeyboardAvoidingView>
       <SafeAreaView
-        onTouchEnd={nextSplash}
+        // onTouchEnd={nextSplash}
         style={{
           backgroundColor: colors.grey24,
           width: '100%',
           height: '100%',
         }}>
         <Image
+          source={logoImage}
+          style={{
+            left: '70%',
+            top: '-10%',
+            width: '30%',
+            // height: '10%',
+            resizeMode: 'contain',
+          }}
+        />
+        <Image
           source={shapeImage}
           style={{
-            left: '40%',
-            top: '-5.6%',
-            width: '60%',
-            height: '40%',
-            resizeMode: 'stretch',
+            // left: '40%',
+            top: '-20%',
+            width: '100%',
+            // height: '100%',
+            resizeMode: 'contain',
           }}
         />
         <Text
@@ -54,9 +67,9 @@ const SplashScreen = ({navigation}) => {
             fontFamily: 'Poppins',
             fontSize: 42,
             color: 'white',
-            width: 274,
+            width: '50%',
             left: '10%',
-            top: '16%',
+            top: '-10%',
           }}>
           Millions of people participate
         </Text>

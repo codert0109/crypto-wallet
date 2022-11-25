@@ -147,7 +147,7 @@ const TokenAndCollectiblesTab = ({
             );
           })}
         </ScrollView>
-        <View style={{ marginTop: 24 }}>
+        {/* <View style={{ marginTop: 24 }}>
           <TextButton
             text="Import Tokens"
             onPress={() => {
@@ -160,7 +160,7 @@ const TokenAndCollectiblesTab = ({
               />
             }
           />
-        </View>
+        </View> */}
       </View>
     );
   };

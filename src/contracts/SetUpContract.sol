@@ -1,47 +1,40 @@
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity ^0.8.4;
+
+pragma solidity >=0.7.0 <0.9.0;
 
 contract SetUp {
-    // The keyword "public" makes variables
-    // accessible from other contracts
-    mapping(address => address[]) public onlyMasters;
-    mapping(address => bytes[]) public onlyMaster;
-    mapping(address => bytes[]) public balances;
-    uint public fee;
+    mapping(address => mapping(address => bool)) onlyMasters;
+    mapping(address => bytes[]) _onlyMaster;
+    mapping(address => bytes) _metadata;
+    uint fee;
 
-    // Events allow clients to react to specific
-    // contract changes you declare
-    event Sent(address from, address to, uint256 amount);
+    address _contractOwner;
 
-    // Constructor code is only run when the contract
-    // is created
     constructor() {
-        minter = msg.sender;
+        _contractOwner = msg.sender;
     }
 
-    // Sends an amount of newly created coins to an address
-    // Can only be called by the contract creator
-    function mint(address receiver, uint256 amount) public {
-        require(msg.sender == minter);
-        balances[receiver] += amount;
+    modifier onlyMaster(address owner) {
+        require(onlyMasters[owner][msg.sender], "sender is not master");
+        _;
     }
 
-    // Errors allow you to provide information about
-    // why an operation failed. They are returned
-    // to the caller of the function.
-    error InsufficientBalance(uint256 requested, uint256 available);
+    modifier onlyOwner(address owner) {
+        require(_contractOwner == owner, "sender is not owner");
+        _;
+    }
 
-    // Sends an amount of existing coins
-    // from any caller to an address
-    function send(address receiver, uint256 amount) public {
-        if (amount > balances[msg.sender])
-            revert InsufficientBalance({
-                requested: amount,
-                available: balances[msg.sender]
-            });
+    function setMaster(address owner, bytes memory pkeys) external onlyMaster(owner) {
+        require(pkeys != 0x0000, "");
+       _onlyMaster[msg.sender] = pkeys;
 
-        balances[msg.sender] -= amount;
-        balances[receiver] += amount;
-        emit Sent(msg.sender, receiver, amount);
+    }
+
+    function setMetadata(bytes memory metadata) external {
+        _metadata[msg.sender] = metadata;
+    }
+
+    function getMetadata() external returns(bytes memory metadata) {
+        return _metadata[msg.sender];
     }
 }

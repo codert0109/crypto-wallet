@@ -7,10 +7,11 @@ import {
   Text,
   TouchableOpacity,
   BackHandler,
+  ImageBackground,
 } from 'react-native';
 import {colors, fonts} from '../../styles';
 import FontAwesome, {SolidIcons} from 'react-native-fontawesome';
-import { useRoute } from '@react-navigation/native';
+import {useRoute} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 const Tab = createBottomTabNavigator();
 
@@ -26,6 +27,7 @@ import moment from 'moment';
 import WalletTab from './WalletTab/WalletTab';
 import SettingsTab from './SettingsTab/SettingsTab';
 import TxnRBSheetBnb from './WalletTab/TxnRBSheetBnb';
+const backgroundImage = require('../../assets/images/logo-background-.jpg');
 
 const tempTxn = {
   type: 2,
@@ -195,7 +197,12 @@ const MainScreen = ({
 
   const tabBar = ({state, descriptors, navigation}) => {
     return (
-      <View style={{ flexDirection: 'row', backgroundColor: '#18171C', paddingVertical: 15 }}>
+      <View
+        style={{
+          flexDirection: 'row',
+          backgroundColor: '#18171C',
+          paddingVertical: 15,
+        }}>
         {state.routes.map((route, index) => {
           const {options} = descriptors[route.key];
           const label =
@@ -280,17 +287,17 @@ const MainScreen = ({
     );
   };
 
-  const UpdatedWalletTab = ({ navigation }) => {
-    return (<>
-      {
-        networks[currentNetwork] ?
+  const UpdatedWalletTab = ({navigation}) => {
+    return (
+      <>
+        {networks[currentNetwork] ? (
           <WalletTab
             navigation={navigation}
             onSendSubmittedTxn={originTxn => {
               if (networks[currentNetwork]) {
                 setSubmittedNetworkObject(networks[currentNetwork]);
               }
-              setSubmittedTxn({ ...originTxn });
+              setSubmittedTxn({...originTxn});
               const timeString = moment(new Date().valueOf())
                 .format('MMM DD [at] hh:mm a')
                 .toString();
@@ -301,7 +308,7 @@ const MainScreen = ({
                 position: 'bottom',
                 bottomOffset: 120,
                 props: {
-                  transaction: { ...originTxn },
+                  transaction: {...originTxn},
                   onPress: () => {
                     refTxnRBSheet.current.open();
                   },
@@ -319,8 +326,11 @@ const MainScreen = ({
                 },
               });
             }}
-          /> : <></>}
-    </>
+          />
+        ) : (
+          <></>
+        )}
+      </>
     );
   };
 
@@ -331,24 +341,30 @@ const MainScreen = ({
           backgroundColor: colors.grey24,
           width: '100%',
           height: '100%',
+          flex: 1
         }}>
-        {renderTxnRBSheet()}
-        <Tab.Navigator backBehavior="history" tabBar={tabBar} screenOptions={{ headerShown: false }}>
-          <Tab.Screen
-            name="Wallet"
-            component={UpdatedWalletTab}
-            options={{
-              tabBarLabel: 'Wallet',
-            }}
-          />
-          <Tab.Screen
-            name="Settings"
-            component={SettingsTab}
-            options={{
-              tabBarLabel: 'Settings',
-            }}
-          />
-        </Tab.Navigator>
+        <ImageBackground source={backgroundImage} style={{ flex: 1, justifyContent: 'center'}} resizeMode="stretch">
+          {renderTxnRBSheet()}
+          <Tab.Navigator
+            backBehavior="history"
+            tabBar={tabBar}
+            screenOptions={{headerShown: false}}>
+            <Tab.Screen
+              name="Wallet"
+              component={UpdatedWalletTab}
+              options={{
+                tabBarLabel: 'Wallet',
+              }}
+            />
+            <Tab.Screen
+              name="Settings"
+              component={SettingsTab}
+              options={{
+                tabBarLabel: 'Settings',
+              }}
+            />
+          </Tab.Navigator>
+        </ImageBackground>
       </SafeAreaView>
     </KeyboardAvoidingView>
   );

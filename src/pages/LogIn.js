@@ -77,8 +77,6 @@ const LogIn = ({
       () => {
         setIsLoading(false);
         AsyncStorage.getItem('accounts_info').then((res) => {
-          // navigation.replace('selectscreen');
-          // return;
           if(res) {
             loadAccountsDataFromStorage();
             loadNetworksDataFromStorage();
