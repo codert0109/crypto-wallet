@@ -24,10 +24,10 @@ import TxnRBSheet from './WalletTab/TxnRBSheet';
 import Toast from 'react-native-toast-message';
 import moment from 'moment';
 
+import {generatePKCEdata} from '../../utils/pkce';
 import WalletTab from './WalletTab/WalletTab';
 import SettingsTab from './SettingsTab/SettingsTab';
 import TxnRBSheetBnb from './WalletTab/TxnRBSheetBnb';
-const backgroundImage = require('../../assets/images/logo-background-.jpg');
 
 const tempTxn = {
   type: 2,
@@ -68,6 +68,7 @@ const MainScreen = ({
   const route = useRoute();
 
   const currentAccount = accounts[currentAccountIndex];
+  generatePKCEdata();
 
   useEffect(() => {
     if (networks[currentNetwork]) {
@@ -341,30 +342,27 @@ const MainScreen = ({
           backgroundColor: colors.grey24,
           width: '100%',
           height: '100%',
-          flex: 1
         }}>
-        <ImageBackground source={backgroundImage} style={{ flex: 1, justifyContent: 'center'}} resizeMode="stretch">
-          {renderTxnRBSheet()}
-          <Tab.Navigator
-            backBehavior="history"
-            tabBar={tabBar}
-            screenOptions={{headerShown: false}}>
-            <Tab.Screen
-              name="Wallet"
-              component={UpdatedWalletTab}
-              options={{
-                tabBarLabel: 'Wallet',
-              }}
-            />
-            <Tab.Screen
-              name="Settings"
-              component={SettingsTab}
-              options={{
-                tabBarLabel: 'Settings',
-              }}
-            />
-          </Tab.Navigator>
-        </ImageBackground>
+        {renderTxnRBSheet()}
+        <Tab.Navigator
+          backBehavior="history"
+          tabBar={tabBar}
+          screenOptions={{headerShown: false}}>
+          <Tab.Screen
+            name="Wallet"
+            component={UpdatedWalletTab}
+            options={{
+              tabBarLabel: 'Wallet',
+            }}
+          />
+          <Tab.Screen
+            name="Settings"
+            component={SettingsTab}
+            options={{
+              tabBarLabel: 'Settings',
+            }}
+          />
+        </Tab.Navigator>
       </SafeAreaView>
     </KeyboardAvoidingView>
   );

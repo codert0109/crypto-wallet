@@ -65,4 +65,7 @@ export default {
     {label: 'After 10 minutes', value: '600'},
     {label: 'Never', value: '-1'},
   ],
+  algorithm_type: 'RS256',
+  setupContractAddress: '0xe71CD14c97f8ab20025FE8C1B0Ed665c0994Bd78',
+  transactionContractAddress: '0xa14a448317f5add2260f9f88ea1aa7acd9fa5687',
 };

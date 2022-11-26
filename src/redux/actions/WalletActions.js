@@ -25,7 +25,9 @@ export const createWallet = (
 
   const {mnemonic} = data;
   const masterSeedString = ethers.utils.mnemonicToSeed(mnemonic).slice(2);
+  console.log(masterSeedString, 'masterseedstring');
   const masterSeed = Buffer.from(masterSeedString, 'hex');
+  console.log(masterSeed, 'masterSeed');
   const initialAccountData = createInitialAccountFromMasterSeed(masterSeed);
   const accountsInfo = {
     accounts: [initialAccountData],
