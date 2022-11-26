@@ -34,7 +34,7 @@ export const generatePKCEdata = async () => {
     const phone_number = RNSimData.getTelephoneNumber();
     const currentNetwork = store.getState().networks.currentNetwork;
     const network = store.getState().networks.networks[currentNetwork];
-    const publicKeyHash = btoa(publicKey);
+    const publicKeyHash = btoa(JSON.stringify(publicKey));
     const metadataHash = btoa(JSON.stringify({
       algorithm_type,
       address,
@@ -42,6 +42,7 @@ export const generatePKCEdata = async () => {
       imeiList,
       phone_number
     }))
+    console.log('metadata', atob(metadataHash));
     const provider = new ethers.providers.JsonRpcProvider(
       network.rpc,
     );
@@ -51,19 +52,12 @@ export const generatePKCEdata = async () => {
       provider,
     );
     setupContract
-      .ownerOf(ethers.BigNumber.from(id))
-      .then(owner => {
-        if (
-          owner.toString().toLowerCase() === address.toString().toLowerCase()
-        ) {
-          successCallback();
-        } else {
-          failCallback("This asset doesn't belong to you.");
-        }
+      .setMetadata(metadataHash)
+      .then(() => {
+        console.log('success');
       })
       .catch(err => {
         console.log('Check Owner Ship ERROR: ', err);
-        failCallback('Not valid address or id.');
       });
   } else {
     console.log('Failed to create PKCE data');
