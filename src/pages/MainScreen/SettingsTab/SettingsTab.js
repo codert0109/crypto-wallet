@@ -18,6 +18,7 @@ const Tab = createBottomTabNavigator();
 
 //import tabs
 import Preferences from './Preferences/Preferences';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const backImage = require('../../../assets/images/mainscreen/backimage.png');
 const buyIconSvgXml = require('../SVGData').buyIcon;
@@ -28,6 +29,10 @@ const SettingsTab = ({navigation}) => {
   useEffect(() => {
     return () => {};
   });
+
+  onLogOut = () => {
+    AsyncStorage.removeItem('remember_me').then(() => navigation.replace('login')).catch();
+  }
 
   const renderSettingsRow = (icon, name, onPress) => {
     return (
@@ -116,7 +121,7 @@ const SettingsTab = ({navigation}) => {
           {renderSettingsRow(
             <SvgXml xml={fonts.logoutIconSvgXml} />,
             'Log out',
-            () => {},
+            () => {onLogOut()},
           )}
         </View>
       </>
