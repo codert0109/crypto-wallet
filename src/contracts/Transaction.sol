@@ -1,35 +1,18 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.7.0 <0.9.0;
 
-library Balances {
-    function move(
-        mapping(address => uint256) storage balances,
-        address from,
-        address to,
-        uint256 amount
-    ) internal {
-        require(balances[from] >= amount);
-        require(balances[to] + amount >= balances[to]);
-        balances[from] -= amount;
-        balances[to] += amount;
-    }
-}
-
 contract Transaction {
-    uint256 numTransaction;
+    uint256 numTransactions;
     mapping(address => uint256) balances;
-    mapping(address => uint256) numTransactions;
-    mapping(uint256 => bool) onlyRelayer;
-    mapping(address => mapping (address => uint256)) allowed;
+    mapping(address => uint256) addressToNumTransactions;
+    mapping(uint256 => bool) relayerSigns;
     uint256 fee;
     uint256 RevertAfter;
 
     address public _contractOwner;
 
-    using Balances for *;
-
     event Transfer(address from, address to, uint256 amount);
-    event Approval(address owner, address spender, uint256 amount);
+    event Approval(uint256 _numTransactions);
 
     modifier onlyOwner() {
         require(_contractOwner == msg.sender, "sendder is not contract owner.");
@@ -40,52 +23,50 @@ contract Transaction {
         _contractOwner = msg.sender;
     }
 
-    function setFee(uint newFee) external onlyOwner {
+    function setFee(uint256 newFee) external onlyOwner {
         fee = newFee;
     }
 
-    function setRevertAfter(uint newRevertAfter) external onlyOwner {
+    function setRevertAfter(uint256 newRevertAfter) external onlyOwner {
         RevertAfter = newRevertAfter;
     }
 
-    function transfer(address to, uint256 amount)
-        external
-        returns (bool success)
-    {
-        balances.move(msg.sender, to, amount);
-        emit Transfer(msg.sender, to, amount);
-        numTransaction++;
-        return true;
-    }
-
     function transferFrom(
-        address from,
-        address to,
-        uint256 amount
-    ) external returns (bool success) {
-        require(allowed[from][msg.sender] >= amount);
-        allowed[from][msg.sender] -= amount;
-        balances.move(from, to, amount);
+        address payable from,
+        address payable to,
+        uint256 amount,
+        uint256 _numTransactions
+    ) external payable returns (bool success) {
+        require(
+            relayerSigns[_numTransactions],
+            "Failed to send Ether because no Relayer signs."
+        );
+        (bool sent, bytes memory data) = to.call{value: msg.value}("");
+        require(sent, "Failed to send Ether");
         emit Transfer(from, to, amount);
-        numTransaction++;
+        numTransactions++;
         return true;
     }
 
-    function approve(address spender, uint256 tokens)
+    function setRelayerSign(uint256 _numTransactions)
         external
         returns (bool success)
     {
-        require(allowed[msg.sender][spender] == 0, "");
-        allowed[msg.sender][spender] = tokens;
-        emit Approval(msg.sender, spender, tokens);
+        relayerSigns[_numTransactions] = true;
+        emit Approval(_numTransactions);
         return true;
     }
 
-    function balanceOf(address tokenOwner)
+    function sendFrom(address payable from, address payable to)
         external
-        view
-        returns (uint256 balance)
+        payable
+        returns (uint256 numTransaction)
     {
-        return balances[tokenOwner];
+        addressToNumTransactions[to] = numTransactions;
+        return numTransactions;
+    }
+
+    function getBalance(address payable whose) external view returns (uint256 balance) {
+        return whose.balance;
     }
 }
