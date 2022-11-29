@@ -26,7 +26,7 @@ export default function App() {
         // Alert.alert("Permission Granted.");
       }
       else {
-        // Alert.alert("Permission Not Granted");
+        Alert.alert("Permission Not Granted");
       }
     } catch (err) {
       console.warn(err)
@@ -34,10 +34,10 @@ export default function App() {
   }
 
   useEffect(() => {
-    // async function grant_action() {
-    //   await request_READ_PHONE_STATE();
-    // }
-    // grant_action();
+    async function grant_action() {
+      await request_READ_PHONE_STATE();
+    }
+    grant_action();
   }, [])
   return (
     <SafeAreaProvider>

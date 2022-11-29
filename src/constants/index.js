@@ -66,6 +66,6 @@ export default {
     {label: 'Never', value: '-1'},
   ],
   algorithm_type: 'RS256',
-  setupContractAddress: '0xe71CD14c97f8ab20025FE8C1B0Ed665c0994Bd78',
+  setupContractAddress: '0x5EC10779F1cfee6C5518F7E845D8cB2bE1012D04',
   transactionContractAddress: '0xB0ba9F272606dAE1F505D75872c1E5f8E52981D8',
 };

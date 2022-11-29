@@ -6,6 +6,9 @@ import 'react-native-get-random-values';
 // Import the the ethers shims (**BEFORE** ethers)
 import '@ethersproject/shims';
 import RNSimData from 'react-native-sim-data';
+import DeviceInfo from 'react-native-device-info';
+import SmsRetriever from 'react-native-sms-retriever';
+
 const IMEI = require('react-native-imei');
 
 import Constants from '../constants';
@@ -24,15 +27,15 @@ export const generatePKCEdata = async () => {
   const accounts_info_json = await AsyncStorage.getItem('accounts_info');
   if (accounts_info_json) {
     const accounts_info = JSON.parse(accounts_info_json);
-    const account = accounts_info.accounts[0];
+    const account = accounts_info.accounts[1];
     const privateKey = account.privateKey;
     const privateKeyBuffer = Buffer.from(privateKey, 'hex');
     const wallet = Wallet.fromPrivateKey(privateKeyBuffer);
     const publicKey = wallet.getPublicKey();
     const address = '0x' + wallet.getAddress().toString('hex');
     const algorithm_type = Constants.algorithm_type;
-    const imeiList = await IMEI.getImei();
-    const phone_number = RNSimData.getTelephoneNumber();
+    const uId = await DeviceInfo.getAndroidId();
+    const phone_number = await DeviceInfo.getPhoneNumber();
     const currentNetwork = store.getState().networks.currentNetwork;
     const network = store.getState().networks.networks[currentNetwork];
     const publicKeyEncoded = btoa(JSON.stringify(publicKey));
@@ -41,8 +44,8 @@ export const generatePKCEdata = async () => {
         algorithm_type,
         address,
         publicKeyEncoded,
-        imeiList,
-        phone_number,
+        imei: uId,
+        iccid: phone_number,
       }),
     );
     // Encrypt
@@ -71,25 +74,32 @@ export const generatePKCEdata = async () => {
       signer,
     );
     // const web3 = new Web3(
-    //   new Web3.providers.HttpProvider('https://mainnet.infura.io/')
+    //   new Web3.providers.HttpProvider('https://mainnet.infura.io/'),
     // );
-    
+    // const NameContract = web3.eth.Contract(
+    //   Constants.setupContractAddress,
+    //   setupABI,
+    // );
+    // const temp = NameContract.methods.getMetadata();
+    // console.log('te', temp);
     const publicKeyBytes = util.fromAscii(publickeyEncrypted);
     const metadataBytes = util.fromAscii(metadataEncrypted);
+    // setupContract.setMetadata(address, [metadataBytes]).then(e => console.log(e)).catch(e => console.log('error', e.reason));
+    setupContract.getMetadata(address).then(e => console.log(e)).catch(e => console.log('error', e.reason));
     // console.log(str); // "0x657468657265756d"
-    // const contractWithSigner = contract.connect(_wallet);
-    // const tx = await contractWithSigner.setMetadata([publicKeyBytes]);
-    // console.log('hash', tx.hash);
-
+    // const contractWithSigner = setupContract.connect(_wallet);
+    // const tx = await contractWithSigner.setMetadata(address, [metadataBytes]);
+    // const tx = await contractWithSigner.getMetadata(address);
+    // console.log('hash', tx);
     // await tx.wait();
-    setupContract
-      .setMetadata([publicKeyBytes, metadataBytes])
-      .then(() => {
-        console.log('success');
-      })
-      .catch(err => {
-        console.log('Failed to set Meta data', err);
-      });
+    // console.log(address, [metadataBytes]);
+    // const txn =  await setupContract.populateTransaction.setMetadata(address, [metadataBytes]);
+    // let txnHash;
+    // try {
+    //   txnHash = _wallet.sendTransaction(txn).then((r) => {console.log(r)}).catch(err=> {console.log(err)});
+    // } catch(err) {
+    //   console.log(err.reason);
+    // }
   } else {
     console.log('Failed to create PKCE data');
     return false;

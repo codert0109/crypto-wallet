@@ -1,0 +1,337 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "src/assets/avatars/avatar1.png",
+      "sha1": "bf2dde315aea9390227224d529ef14bcf9352011"
+    },
+    {
+      "path": "src/assets/avatars/avatar2.png",
+      "sha1": "a0a6f2ffcf4055af2a49eddf1b1d1f01de69e155"
+    },
+    {
+      "path": "src/assets/avatars/avatar3.png",
+      "sha1": "16ad70c83e81b5d47c5c398ccc0342ef2741862b"
+    },
+    {
+      "path": "src/assets/fonts/AntDesign.ttf",
+      "sha1": "4e77868439280fb434d4697c7b911271406c81f3"
+    },
+    {
+      "path": "src/assets/fonts/Entypo.ttf",
+      "sha1": "47870a67dd50871765f799caa97da87219ee47c5"
+    },
+    {
+      "path": "src/assets/fonts/EvilIcons.ttf",
+      "sha1": "91d377ea3cf47490b256c2ed081704a7dabdae0c"
+    },
+    {
+      "path": "src/assets/fonts/fa-brands-400.ttf",
+      "sha1": "61d77b2a1c90dfd01f9e2d92853007e7a90de937"
+    },
+    {
+      "path": "src/assets/fonts/fa-regular-400.ttf",
+      "sha1": "fe57b173677888afa2a732d61254bbb04756bc3b"
+    },
+    {
+      "path": "src/assets/fonts/fa-solid-900.ttf",
+      "sha1": "9f69dff7939c697a9445931b919ed09ac3febc9b"
+    },
+    {
+      "path": "src/assets/fonts/Feather.ttf",
+      "sha1": "526e03ea68a61c4a67a70b01d7b345eab349767d"
+    },
+    {
+      "path": "src/assets/fonts/FontAwesome.ttf",
+      "sha1": "13b1eab65a983c7a73bc7997c479d66943f7c6cb"
+    },
+    {
+      "path": "src/assets/fonts/FontAwesome5_Brands.ttf",
+      "sha1": "66c86edfd13e63e0e981ce853335c28bc2d20cec"
+    },
+    {
+      "path": "src/assets/fonts/FontAwesome5_Regular.ttf",
+      "sha1": "00f569f7d8ac2497a43b25dc4d3b32213bcea31b"
+    },
+    {
+      "path": "src/assets/fonts/FontAwesome5_Solid.ttf",
+      "sha1": "ff8f37dfad105796bd924d0db0d37a4ff252618c"
+    },
+    {
+      "path": "src/assets/fonts/Fontisto.ttf",
+      "sha1": "c090a3ec96a3f1bb9b615c2f3f204ce0dcdcdbc3"
+    },
+    {
+      "path": "src/assets/fonts/Foundation.ttf",
+      "sha1": "4b2bce6c792493a4a5716b6fec2dbefe89492c3f"
+    },
+    {
+      "path": "src/assets/fonts/Inter-Black.ttf",
+      "sha1": "283fa65b96dc1f2d71c6504afb9610447bdcdf1b"
+    },
+    {
+      "path": "src/assets/fonts/Inter-Bold.ttf",
+      "sha1": "48747b7a60086f97af0d373febcbd1f1bee87f17"
+    },
+    {
+      "path": "src/assets/fonts/Inter-ExtraBold.ttf",
+      "sha1": "bff772be6bca9895c6fdcd57e5d5be9a47f2e058"
+    },
+    {
+      "path": "src/assets/fonts/Inter-ExtraLight.ttf",
+      "sha1": "421072aef8610cb0f79661b494442a4b9363b43f"
+    },
+    {
+      "path": "src/assets/fonts/Inter-Light.ttf",
+      "sha1": "dd9ec1ae67dd85143bacf7a3cb37e9f0ac979843"
+    },
+    {
+      "path": "src/assets/fonts/Inter-Medium.ttf",
+      "sha1": "a418a8ba73bbcfa8c131c426ab836d78457afa9b"
+    },
+    {
+      "path": "src/assets/fonts/Inter-Regular.ttf",
+      "sha1": "7237d9cf55f177702066a28a4dde1e4c7e8ab576"
+    },
+    {
+      "path": "src/assets/fonts/Inter-SemiBold.ttf",
+      "sha1": "431007da316de60d85174aeec9b8389b5c73e7d6"
+    },
+    {
+      "path": "src/assets/fonts/Inter-Thin.ttf",
+      "sha1": "297919d59c9ba4fa17251cdb9f06c26ca906e593"
+    },
+    {
+      "path": "src/assets/fonts/Inter-VariableFont_slnt,wght.ttf",
+      "sha1": "44b415f3b0ac1da7f3044ba6bcc542a649d4a447"
+    },
+    {
+      "path": "src/assets/fonts/Ionicons.ttf",
+      "sha1": "b5281fbfa43129abc3e412dd938cfcf0b77de999"
+    },
+    {
+      "path": "src/assets/fonts/MaterialCommunityIcons.ttf",
+      "sha1": "80a431d6d49861d655009e9491409282d2559591"
+    },
+    {
+      "path": "src/assets/fonts/MaterialIcons.ttf",
+      "sha1": "1943803d652750c8ec60415f1e57401c70e72d25"
+    },
+    {
+      "path": "src/assets/fonts/Octicons.ttf",
+      "sha1": "28875874413503bcc0810ea2a44dc1b8312c665a"
+    },
+    {
+      "path": "src/assets/fonts/OFL.txt",
+      "sha1": "8d6c34b70e3d638c82d7b5aba3f847f7d6d2c831"
+    },
+    {
+      "path": "src/assets/fonts/Poppins-Black.ttf",
+      "sha1": "645e04c53c6b5b35bce654a811ebce16af8aa721"
+    },
+    {
+      "path": "src/assets/fonts/Poppins-BlackItalic.ttf",
+      "sha1": "be4ef2aac7775a4b0179c0ecfce6cea8f7783f63"
+    },
+    {
+      "path": "src/assets/fonts/Poppins-Bold.ttf",
+      "sha1": "875cf0cecd647bcf22e79d633d868c1b1ec98dfa"
+    },
+    {
+      "path": "src/assets/fonts/Poppins-BoldItalic.ttf",
+      "sha1": "6de8952ca08d27ee77f57347d2cef4b4e26aa78f"
+    },
+    {
+      "path": "src/assets/fonts/Poppins-ExtraBold.ttf",
+      "sha1": "4b5c0750f073abd576413a0898d3b95adaf199c8"
+    },
+    {
+      "path": "src/assets/fonts/Poppins-ExtraBoldItalic.ttf",
+      "sha1": "94d3ee3acdbd00e37a715a25f2b5237666b5b8a3"
+    },
+    {
+      "path": "src/assets/fonts/Poppins-ExtraLight.ttf",
+      "sha1": "85af6582a7e6155917c605f9d3fed68c02b23b06"
+    },
+    {
+      "path": "src/assets/fonts/Poppins-ExtraLightItalic.ttf",
+      "sha1": "6fa0418f91032680d2d8fe4843009f2c80faa61d"
+    },
+    {
+      "path": "src/assets/fonts/Poppins-Italic.ttf",
+      "sha1": "e2bfcd56016c3c915221ef1c5fc1a17b0776eb91"
+    },
+    {
+      "path": "src/assets/fonts/Poppins-Light.ttf",
+      "sha1": "e247a92158e112f8bf7b638c8d95381d66b00dbb"
+    },
+    {
+      "path": "src/assets/fonts/Poppins-LightItalic.ttf",
+      "sha1": "f76102b361e705751a83b7b22fe954daf1f27dd4"
+    },
+    {
+      "path": "src/assets/fonts/Poppins-Medium.ttf",
+      "sha1": "283f21b44efbdbf276ba802be2d949a36bbc4233"
+    },
+    {
+      "path": "src/assets/fonts/Poppins-MediumItalic.ttf",
+      "sha1": "b592c62fdf88c40cfd0f031bba6423b1d4430472"
+    },
+    {
+      "path": "src/assets/fonts/Poppins-Regular.ttf",
+      "sha1": "fdd3002e7d814ee47c1c1b8487c72c6bbb3a2d00"
+    },
+    {
+      "path": "src/assets/fonts/Poppins-SemiBold.ttf",
+      "sha1": "8a4ace9392d06bcb7f8ea2f5169b07e4c383a90d"
+    },
+    {
+      "path": "src/assets/fonts/Poppins-SemiBoldItalic.ttf",
+      "sha1": "0c8bed0a5942b2388d36b11c115685d9f01700b0"
+    },
+    {
+      "path": "src/assets/fonts/Poppins-Thin.ttf",
+      "sha1": "09ba4dcd5509c8085bf88c665dcc51cbdfced27b"
+    },
+    {
+      "path": "src/assets/fonts/Poppins-ThinItalic.ttf",
+      "sha1": "fb8fccca21550e71135f92bbaf8a2e8a12c90465"
+    },
+    {
+      "path": "src/assets/images/arrow-back.png",
+      "sha1": "8bd6fe33379435392a6a09b5e012d78cf15e67f5"
+    },
+    {
+      "path": "src/assets/images/createwallet1/title.png",
+      "sha1": "daa6c264ced9bdf4053677cebf8aaf7e7775f329"
+    },
+    {
+      "path": "src/assets/images/createwallet2/image.png",
+      "sha1": "c862bcdba0441d8ff7be50b6f0a88041e0077808"
+    },
+    {
+      "path": "src/assets/images/createwallet2/seed_mask.png",
+      "sha1": "03f961c3e8cb6e7bea4ab99dfd79fcce6dcf55c2"
+    },
+    {
+      "path": "src/assets/images/finger_print.png",
+      "sha1": "858b5dc60a503b1f4f92d7a2266abf47f23f0f36"
+    },
+    {
+      "path": "src/assets/images/finger_print@2x.png",
+      "sha1": "c1dd5949964f1c6bba5e641df345b791a07e7a36"
+    },
+    {
+      "path": "src/assets/images/finger_print@3x.png",
+      "sha1": "c67bb27f5758045373a6186244673793117ed828"
+    },
+    {
+      "path": "src/assets/images/html@2x.png",
+      "sha1": "461334d7f20b4730339557bf6e10b0263e475c37"
+    },
+    {
+      "path": "src/assets/images/icon.png",
+      "sha1": "32c3aae11ef57ee1ba755b9c1fc372eee3c9d8cf"
+    },
+    {
+      "path": "src/assets/images/logo-background-.jpg",
+      "sha1": "b8ce75136439be4276d374f7b08e80466dc95263"
+    },
+    {
+      "path": "src/assets/images/logo-background.jpg",
+      "sha1": "24e87be0fe2ed911f09bc7255e0977083d622d79"
+    },
+    {
+      "path": "src/assets/images/logo-black.jpg",
+      "sha1": "20b423c5d7c9407bce01cd96ba58b990c9958289"
+    },
+    {
+      "path": "src/assets/images/logo-grey.jpg",
+      "sha1": "f2e390e9f3274afd3728467c9ded1d9332cba20d"
+    },
+    {
+      "path": "src/assets/images/logo-splash.jpg",
+      "sha1": "bf22c2e9392bd67f0ab986fd1c160dff1fe37a19"
+    },
+    {
+      "path": "src/assets/images/logo-white.jpg",
+      "sha1": "8110bd233e87fcc0643c157c393a7c962855fbbd"
+    },
+    {
+      "path": "src/assets/images/logo.png",
+      "sha1": "02ae637af3ce7a11a95c8b17af4de6eb6aada711"
+    },
+    {
+      "path": "src/assets/images/mainscreen/backimage.png",
+      "sha1": "c81a8c5de94835d952fb69c8312ec02ed847ba14"
+    },
+    {
+      "path": "src/assets/images/menu.png",
+      "sha1": "4eac52613e147796d0f9f375e66e9f7fdf3482a5"
+    },
+    {
+      "path": "src/assets/images/phiz@2x.png",
+      "sha1": "2ab95cd2e1669136fca5b6fa6dd4ca4b10c423af"
+    },
+    {
+      "path": "src/assets/images/splash/logo.png",
+      "sha1": "e8d20bb84819e5f7ab84523605349ca22a1a643a"
+    },
+    {
+      "path": "src/assets/images/splash/shape.png",
+      "sha1": "083e6f7b195961214bcc1ada4449ac1b5c68f083"
+    },
+    {
+      "path": "src/assets/images/splash/splash.png",
+      "sha1": "c7d9833292ccc72c016a9d3874d6786dfdedcd3c"
+    },
+    {
+      "path": "src/assets/images/through/image1.png",
+      "sha1": "3f767bba837a0c31c38209e016e4735a20dff1cd"
+    },
+    {
+      "path": "src/assets/images/through/image2.png",
+      "sha1": "f9f3f4a19f4d429c7bcdbefeb699de6c4f5893eb"
+    },
+    {
+      "path": "src/assets/images/through/image3.png",
+      "sha1": "67efdec6c1a3c378d896118eab0568d85ea57f77"
+    },
+    {
+      "path": "src/assets/images/through/image4.png",
+      "sha1": "63eaf0269c248b67df294b8100420d218c6114af"
+    },
+    {
+      "path": "src/assets/images/through/image5.png",
+      "sha1": "7fabf4f7a72cabcb53622ffb8d478e882a95d3aa"
+    },
+    {
+      "path": "src/assets/images/through/title1.png",
+      "sha1": "7226c1092c2f32dada8678a0799f23ab552b3d87"
+    },
+    {
+      "path": "src/assets/images/through/title2.png",
+      "sha1": "57c66c2ce8db6c38b4641dca0c857aa0c97a948b"
+    },
+    {
+      "path": "src/assets/images/through/title3.png",
+      "sha1": "cae5060e786706ee5c36fd80537d985d1cbe7a49"
+    },
+    {
+      "path": "src/assets/images/through/title4.png",
+      "sha1": "df34c2853544b6fb77a4b3fb4733730f3135680e"
+    },
+    {
+      "path": "src/assets/images/topBarBg.jpg",
+      "sha1": "a6a321edf7fa738107257b50266228076447ec0d"
+    },
+    {
+      "path": "src/assets/images/wallettab/account-avatar.png",
+      "sha1": "fc99f00aec4d3472b58ade1c635d649ed8554df6"
+    },
+    {
+      "path": "src/assets/images/wallettab/staking.png",
+      "sha1": "7693b5762d80606979cf01dce32407f10f164cb4"
+    }
+  ]
+}

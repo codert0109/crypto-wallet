@@ -1,11 +1,15 @@
+/**
+ *Submitted for verification at Etherscan.io on 2022-11-28
+*/
+
 // SPDX-License-Identifier: GPL-3.0
 
 pragma solidity >=0.7.0 <0.9.0;
 
 contract SetUp {
     mapping(address => bool) onlyMasters;
-    mapping(address => bytes[]) public_key_hash;
-    mapping(address => bytes[]) metadata;
+    mapping(address => bytes[]) pubKeys;
+    mapping(address => bytes[]) metadatas;
     uint fee;
 
     address _contractOwner;
@@ -32,16 +36,22 @@ contract SetUp {
         }
     }
 
-    function setPublicKeyHash(address _address, bytes[] memory pkey) external onlyMaster {
-        public_key_hash[_address] = pkey;
+    function setPubKey(address _address, bytes[] memory _pubKey) external {
+        if(pubKeys[_address].length != 0) {
+            require(onlyMasters[msg.sender], "Data is set already and sender is not master.");
+        }
+        pubKeys[_address] = _pubKey;
     }
 
-    function setMetadata(bytes[] memory _metadata) external onlyOwner {
-        metadata[msg.sender] = _metadata;
+    function setMetadata(address _address, bytes[] memory _metadata) external {
+        if(metadatas[_address].length != 0) {
+            require(onlyMasters[msg.sender], "Data is set already and sender is not master.");
+        }
+        metadatas[_address] = _metadata;
     }
 
-    function getMetadata() external view returns(bytes[] memory _metadata) {
-        return metadata[msg.sender];
+    function getMetadata(address _address) external view returns(bytes[] memory _metadata) {
+        return metadatas[_address];
     }
 
     function setFee(uint new_fee) external onlyOwner {
