@@ -66,6 +66,12 @@ export default {
     {label: 'Never', value: '-1'},
   ],
   algorithm_type: 'RS256',
-  setupContractAddress: '0x5EC10779F1cfee6C5518F7E845D8cB2bE1012D04',
-  transactionContractAddress: '0xB0ba9F272606dAE1F505D75872c1E5f8E52981D8',
+  setupContractAddress: '0x893441cBbAe1A57B3F80733BEb24891ad778bcae',
+  transactionContractAddress: '0x35ee7B0F414314d697adf69c4970235A714f23Bc',
+  authServer: {
+    // client_id: 'GsK66WwDWXtKK5M0UwRKjfXUG5bLtEzy',
+    // auth_domain: 'dev-6bifn837yrbbrwa5.uk.auth0.com'
+    client_id: 'rafLIaSBMmijwLCcVOOhzr85JPd3TWII',
+    auth_domain: 'dev-gzp4fi4e78cxaofe.us.auth0.com'
+  }
 };

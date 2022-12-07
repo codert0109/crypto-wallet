@@ -146,7 +146,7 @@ const TokenItemRow = ({
                     ...fonts.caption_small12_16_regular,
                     color: colors.grey9,
                   }}>
-                  {'$' + parseFloat(usdAmount).toFixed(2)}
+                  {/* {'$' + parseFloat(usdAmount).toFixed(2)} */}
                 </Text>
                 <Text
                   style={{
@@ -154,7 +154,7 @@ const TokenItemRow = ({
                     color: trend > 0 ? colors.green5 : colors.red5,
                     marginLeft: 16,
                   }}>
-                  {(trend > 0 ? '+' : '') + trend + '%'}
+                  {/* {(trend > 0 ? '+' : '') + trend + '%'} */}
                 </Text>
               </View>
             </View>
@@ -203,7 +203,7 @@ const TokenItemRow = ({
                     ...fonts.caption_small12_16_regular,
                     color: colors.grey9,
                   }}>
-                  {'$' + parseFloat(usdAmount).toFixed(2)}
+                  {/* {'$' + parseFloat(usdAmount).toFixed(2)} */}
                 </Text>
                 <Text
                   style={{
@@ -211,7 +211,7 @@ const TokenItemRow = ({
                     color: trend > 0 ? colors.green5 : colors.red5,
                     marginLeft: 16,
                   }}>
-                  {(trend > 0 ? '+' : '') + trend + '%'}
+                  {/* {(trend > 0 ? '+' : '') + trend + '%'} */}
                 </Text>
               </View>
             </View>

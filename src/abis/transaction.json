@@ -58,7 +58,6 @@
   },
   {
     "inputs": [
-      {"internalType": "address payable", "name": "from", "type": "address"},
       {"internalType": "address payable", "name": "to", "type": "address"}
     ],
     "name": "sendFrom",

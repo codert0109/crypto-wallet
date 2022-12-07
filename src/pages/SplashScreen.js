@@ -19,10 +19,15 @@ const SplashScreen = ({navigation}) => {
   const nextSplash = async () => {
     const savedPassword = await AsyncStorage.getItem('password');
     const rememberMe = await AsyncStorage.getItem('remember_me');
+    const metadata = await AsyncStorage.getItem('metadata');
     // navigation.replace('importwallet');
     // return;
     if (rememberMe === 'true') {
-      navigation.replace('mainscreen');
+      if(metadata) {
+        navigation.replace('mainscreen');
+      } else {
+        navigation.replace('setupscreen');
+      }
       return;
     }
     if (savedPassword) {

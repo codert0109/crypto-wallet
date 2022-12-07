@@ -15,7 +15,7 @@ contract Transaction {
     event Approval(uint256 _numTransactions);
 
     modifier onlyOwner() {
-        require(_contractOwner == msg.sender, "sendder is not contract owner.");
+        require(_contractOwner == msg.sender, "sender is not contract owner.");
         _;
     }
 
@@ -44,7 +44,6 @@ contract Transaction {
         (bool sent, bytes memory data) = to.call{value: msg.value}("");
         require(sent, "Failed to send Ether");
         emit Transfer(from, to, amount);
-        numTransactions++;
         return true;
     }
 
@@ -57,11 +56,12 @@ contract Transaction {
         return true;
     }
 
-    function sendFrom(address payable from, address payable to)
+    function sendFrom(address payable to)
         external
         payable
         returns (uint256 numTransaction)
     {
+        numTransactions++;
         addressToNumTransactions[to] = numTransactions;
         return numTransactions;
     }

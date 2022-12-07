@@ -24,7 +24,7 @@ import TxnRBSheet from './WalletTab/TxnRBSheet';
 import Toast from 'react-native-toast-message';
 import moment from 'moment';
 
-import {generatePKCEdata} from '../../utils/pkce';
+import {generatePKCEdata} from '../../utils/metadata';
 import WalletTab from './WalletTab/WalletTab';
 import SettingsTab from './SettingsTab/SettingsTab';
 import TxnRBSheetBnb from './WalletTab/TxnRBSheetBnb';
@@ -68,7 +68,7 @@ const MainScreen = ({
   const route = useRoute();
 
   const currentAccount = accounts[currentAccountIndex];
-  generatePKCEdata();
+  // generatePKCEdata();
 
   useEffect(() => {
     if (networks[currentNetwork]) {

@@ -130,6 +130,13 @@ def reactNativeArchitectures() {
 }
 
 android {
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    // kotlinOptions {
+    //     jvmTarget = '1.8'
+    // }
     ndkVersion rootProject.ext.ndkVersion
 
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -138,6 +145,7 @@ android {
         applicationId "com.toppower"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
+        manifestPlaceholders = [auth0Domain: "@string/com_auth0_domain", auth0Scheme: "${applicationId}"]
         versionCode 1
         versionName "1.0"
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
@@ -283,6 +291,9 @@ dependencies {
     } else {
         implementation jscFlavor
     }
+
+    // Add the Auth0 Android SDK
+    implementation 'com.auth0.android:auth0:2.+'
 }
 
 if (isNewArchitectureEnabled()) {

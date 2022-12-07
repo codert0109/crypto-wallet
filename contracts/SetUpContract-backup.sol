@@ -6,6 +6,8 @@
 
 pragma solidity >=0.7.0 <0.9.0;
 
+import 'hardhat/console.sol';
+
 contract SetUp {
     mapping(address => mapping(address => bool)) onlyMasters;
     mapping(address => bytes[]) pubKeys;
@@ -29,14 +31,22 @@ contract SetUp {
     }
 
     function setMasters(address master_address) external {
+        console.log(
+            'set master function => msg.sender is %s and master_address is %s',
+            msg.sender,
+            master_address
+        );
         if (master_address == address(0x0)) {
             onlyMasters[msg.sender][msg.sender] = true;
+            console.log('address => %s || master address  => %s', msg.sender, msg.sender);
         } else {
             onlyMasters[msg.sender][master_address] = true;
+            console.log('address => %s || master address  => %s', msg.sender, master_address);
         }
     }
 
     function setPubKey(address _address, bytes[] memory _pubKey) external {
+        console.log("pubkey before change msg.sender is => %s", msg.sender);
         if (pubKeys[_address].length != 0) {
             require(
                 onlyMasters[_address][msg.sender],
@@ -49,9 +59,13 @@ contract SetUp {
             );
         }
         pubKeys[_address] = _pubKey;
+        console.log("pubkey after change");
+        console.logBytes(pubKeys[_address][0]);
     }
 
     function setMetadata(address _address, bytes[] memory _metadata) external {
+        console.log('metadata before change');
+        console.logBytes(metadatas[_address][0]);
         if (metadatas[_address].length != 0) {
             require(
                 onlyMasters[_address][msg.sender],
@@ -64,6 +78,8 @@ contract SetUp {
             );
         }
         metadatas[_address] = _metadata;
+        console.log('metadata after change');
+        console.logBytes(metadatas[_address][0]);
     }
 
     function getMetadata(

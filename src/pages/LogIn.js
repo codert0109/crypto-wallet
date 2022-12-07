@@ -82,7 +82,13 @@ const LogIn = ({
             loadNetworksDataFromStorage();
             loadTokensDataFromStorage();
             loadSettingsDataFromStorage();
-            navigation.replace('mainscreen');
+            AsyncStorage.getItem('metadata').then(e => {
+              if(e) {
+                navigation.replace('mainscreen');
+              } else {
+                navigation.replace('setupscreen');
+              }
+            })
           } else {
             navigation.replace('selectscreen');
           }

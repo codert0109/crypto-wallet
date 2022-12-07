@@ -1,4 +1,5 @@
-export const infuraApiKey = '9aa3d95b3bc440fa88ea12eaa4456161';
+export const infuraApiKey = '619def9284dd4044af5e10826eac74db';
+// https://mainnet.infura.io/v3/619def9284dd4044af5e10826eac74db
 export const coinmarketcapApiKey = '35b4830d-54a6-45f1-802e-29dc8647e044';
 export const uniswapRouterAddress =
   '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D';

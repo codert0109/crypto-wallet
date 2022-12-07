@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Blockauthy</string>
+    <string name="com_auth0_domain">dev-gzp4fi4e78cxaofe.us.auth0.com</string>
 </resources>
