@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-// import CustomToast from './components/CustomToast';
+import CustomToast from './components/CustomToast';
 import Navigator from './navigation/Navigator';
 
 export default function AppView(props) {
@@ -17,7 +17,7 @@ export default function AppView(props) {
         uriPrefix="/app"
         props={props}
       />
-      {/* <CustomToast /> */}
+      <CustomToast />
     </>
   );
 }

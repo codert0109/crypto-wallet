@@ -7,7 +7,8 @@ import '@ethersproject/shims';
 
 // Import the ethers library
 import {ethers} from 'ethers';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+const util = require('ethereumjs-util');
 const avatarsCount = require('../constants').default.avatarsCount;
 
 const createInitialAccountFromMasterSeed = masterSeed => {
@@ -55,8 +56,22 @@ const generateAccountFromPrivateKey = ({privateKey, accountName, index}) => {
   };
 };
 
+const getCurrentPublicKeyFromStorage = async () => {
+  const accounts_info = await AsyncStorage.getItem('accounts_info');
+  const accounts_info_json = JSON.parse(accounts_info);
+  const {accounts, currentAccountIndex} = accounts_info_json;
+  const currentAccountPublicKey = util.privateToPublic(
+    Buffer.from(accounts[currentAccountIndex].privateKey, 'hex'),
+  );
+  const currentAccountPublicKeyEncoded = btoa(
+    JSON.stringify(currentAccountPublicKey),
+  );
+  return currentAccountPublicKeyEncoded;
+};
+
 export {
   createInitialAccountFromMasterSeed,
   generateNewAccount,
   generateAccountFromPrivateKey,
+  getCurrentPublicKeyFromStorage,
 };

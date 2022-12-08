@@ -8,7 +8,7 @@ pragma solidity >=0.7.0 <0.9.0;
 
 import 'hardhat/console.sol';
 
-contract SetUp {
+contract SetUpBack {
     mapping(address => mapping(address => bool)) onlyMasters;
     mapping(address => bytes[]) pubKeys;
     mapping(address => bytes[]) metadatas;

@@ -29,6 +29,7 @@ import {
   saveRememberOption,
   getLoginType,
 } from '../utils/auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 //import actions
 import {loadAccountsDataFromStorage} from '../redux/actions/AccountsActions';
@@ -36,9 +37,13 @@ import {loadNetworksDataFromStorage} from '../redux/actions/NetworkActions';
 import {loadTokensDataFromStorage} from '../redux/actions/TokensActions';
 import {loadSettingsDataFromStorage} from '../redux/actions/SettingsAction';
 
+import {getCurrentPublicKeyFromStorage} from '../utils/account';
+import {getMetadataFromChain} from '../utils/metadata';
+import constants from '../constants';
+
 //import images
 const shapeImage = require('../assets/images/icon.png');
-import AsyncStorage from '@react-native-async-storage/async-storage';
+const util = require('ethereumjs-util');
 
 const LogIn = ({
   navigation,
@@ -76,23 +81,57 @@ const LogIn = ({
       rememberMe ? 'true' : 'false',
       () => {
         setIsLoading(false);
-        AsyncStorage.getItem('accounts_info').then((res) => {
-          if(res) {
-            loadAccountsDataFromStorage();
-            loadNetworksDataFromStorage();
-            loadTokensDataFromStorage();
-            loadSettingsDataFromStorage();
-            AsyncStorage.getItem('metadata').then(e => {
-              if(e) {
-                navigation.replace('mainscreen');
-              } else {
-                navigation.replace('setupscreen');
-              }
-            })
-          } else {
-            navigation.replace('selectscreen');
-          }
-        }).catch(e => Alert.alert(e));
+        AsyncStorage.getItem('accounts_info')
+          .then(res => {
+            if (res) {
+              loadAccountsDataFromStorage();
+              loadNetworksDataFromStorage();
+              loadTokensDataFromStorage();
+              loadSettingsDataFromStorage();
+              const accounts_info = JSON.parse(res);
+              const {accounts, currentAccountIndex} = accounts_info;
+              const currentAccountPublicKey = util.privateToPublic(
+                Buffer.from(accounts[currentAccountIndex].privateKey, 'hex'),
+              );
+              const currentAccountPublicKeyEncoded = btoa(
+                JSON.stringify(currentAccountPublicKey),
+              );
+              AsyncStorage.getItem('metadata').then(async e => {
+                if (e) {
+                  metadata = JSON.parse(e);
+                  console.log({metadata});
+                  if (metadata[0] == undefined) {
+                    return navigation.replace('setupscreen');
+                  }
+                  const currentMetadataIndex = metadata.findIndex(
+                    r => r.public_key == currentAccountPublicKeyEncoded,
+                  );
+                  if (currentMetadataIndex >= 0) {
+                    const _metadata = metadata[currentMetadataIndex];
+                    if (_metadata.isSaved) {
+                      navigation.replace('mainscreen');
+                    } else {
+                      navigation.replace('setupscreen');
+                    }
+                  } else {
+                    navigation.replace('setupscreen');
+                  }
+                } else {
+                  const {status, metadata} = await getMetadataFromChain();
+                  if(status) {
+                    if(status == constants.metadata.SAME) {
+
+                    }
+                  } else {
+                    navigation.replace('setupscreen');
+                  }
+                }
+              });
+            } else {
+              navigation.replace('selectscreen');
+            }
+          })
+          .catch(e => Alert.alert(e));
       },
       () => {
         setIsLoading(false);

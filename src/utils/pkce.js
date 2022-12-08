@@ -1,4 +1,4 @@
-import CryptoJS from "crypto-js";
+import crypto from 'crypto';
 
 function base64URLEncode(str) {
     return str.toString('base64')
@@ -8,12 +8,12 @@ function base64URLEncode(str) {
 }
 
 function sha256(buffer) {
-    return CryptoJS.createHash('sha256').update(buffer).digest();
+    return crypto.createHash('sha256').update(buffer).digest();
 }
 
 
 export function getCodeVerifierAndChallenge() {
-    var verifier = base64URLEncode(CryptoJS.randomBytes(32));
-    var challenge = base64URLEncode(sha256(verifier));
-    return { verifier, challenge };
+    var pkce_verifier = base64URLEncode(crypto.randomBytes(32));
+    var pkce_challenge = base64URLEncode(sha256(pkce_verifier));
+    return { pkce_verifier, pkce_challenge };
 }

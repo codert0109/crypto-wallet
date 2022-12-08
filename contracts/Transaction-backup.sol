@@ -1,9 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.7.0 <0.9.0;
 
-import 'hardhat/console.sol';
-
-contract Transaction {
+contract TransactionBack {
     uint256 numTransactions;
     mapping(address => uint256) balances;
     mapping(address => uint256) addressToNumTransactions;
@@ -34,13 +32,12 @@ contract Transaction {
         RevertAfter = newRevertAfter;
     }
 
-    function transferFrom(
+    function transferFromCustom(
         address payable from,
         address payable to,
         uint256 amount,
         uint256 _numTransactions
     ) external payable returns (bool success) {
-        console.log(relayerSigns[_numTransactions]);
         require(
             relayerSigns[_numTransactions],
             "Failed to send Ether because no Relayer signs."
@@ -65,20 +62,14 @@ contract Transaction {
         payable
         returns (bool isSuccess)
     {
-        console.log('1', numTransactions);
         numTransactions++;
         addressToNumTransactions[to] = numTransactions;
         emit Send(numTransactions);
-        console.log('2', numTransactions);
         return true;
     }
 
     function getBalance(address payable whose) external view returns (uint256 balance) {
         return whose.balance;
     }
-
-    function getNum() external view returns (uint256 _numTransactions) {
-        return numTransactions;
-    }
-
+    
 }

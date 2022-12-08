@@ -1,8 +1,10 @@
 import React, {useEffect} from 'react';
 import {Image, KeyboardAvoidingView, SafeAreaView, Text} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Toast from 'react-native-toast-message';
 
 import {colors} from '../styles';
+import {getCurrentPublicKeyFromStorage} from '../utils/account';
 
 //import images
 const logoImage = require('../assets/images/splash/shape.png');
@@ -19,12 +21,25 @@ const SplashScreen = ({navigation}) => {
   const nextSplash = async () => {
     const savedPassword = await AsyncStorage.getItem('password');
     const rememberMe = await AsyncStorage.getItem('remember_me');
-    const metadata = await AsyncStorage.getItem('metadata');
-    // navigation.replace('importwallet');
-    // return;
+    const currentAccountPublicKeyEncoded =
+    await getCurrentPublicKeyFromStorage();
+    let metadata = await AsyncStorage.getItem('metadata');
     if (rememberMe === 'true') {
-      if(metadata) {
-        navigation.replace('mainscreen');
+      if (metadata) {
+        metadata = JSON.parse(metadata);
+        const currentMetadataIndex = metadata.findIndex(
+          r => r.public_key == currentAccountPublicKeyEncoded,
+        );
+        if (currentMetadataIndex >= 0) {
+          const _metadata = metadata[currentMetadataIndex];
+          if (_metadata.isSaved) {
+            navigation.replace('mainscreen');
+          } else {
+            navigation.replace('setupscreen');
+          }
+        } else {
+          navigation.replace('setupscreen');
+        }
       } else {
         navigation.replace('setupscreen');
       }

@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { connect } from 'react-redux';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
+import {connect} from 'react-redux';
 import {
   Dimensions,
   Image,
@@ -10,9 +10,9 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { colors, fonts } from '../../../styles';
-import { SvgXml } from 'react-native-svg';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {colors, fonts} from '../../../styles';
+import {SvgXml} from 'react-native-svg';
 import FontAwesome, {
   SolidIcons,
   RegularIcons,
@@ -44,7 +44,13 @@ import AccountInfo from './AccountInfo';
 
 const backImage = require('../../../assets/images/mainscreen/backimage.png');
 
-const SendTokenRBSheet = ({ refRBSendTokenSheet, currentNetworkObject, onSendSubmittedTxn, onSendError }) => {
+const SendTokenRBSheet = ({
+  navigation,
+  refRBSendTokenSheet,
+  currentNetworkObject,
+  onSendSubmittedTxn,
+  onSendError,
+}) => {
   return (
     <RBSheet
       height={Dimensions.get('screen').height}
@@ -65,6 +71,7 @@ const SendTokenRBSheet = ({ refRBSendTokenSheet, currentNetworkObject, onSendSub
       }}>
       {currentNetworkObject.chainType === 'ethereum' && (
         <SendToken
+          navigation={navigation}
           isToken={false}
           onPressClose={() => {
             if (refRBSendTokenSheet && refRBSendTokenSheet.current) {
@@ -109,7 +116,7 @@ const SendTokenRBSheet = ({ refRBSendTokenSheet, currentNetworkObject, onSendSub
       )}
     </RBSheet>
   );
-}
+};
 
 const WalletTab = ({
   navigation,
@@ -138,15 +145,15 @@ const WalletTab = ({
 
   const onSend = () => {
     refRBSendTokenSheet.current.open();
-  }
+  };
 
   const onReceive = () => {
     refRBReceiveTokenSheet.current.open();
-  }
+  };
 
   const onBuy = () => {
     refRBBuySheet.current.open();
-  }
+  };
 
   const renderBuyRBSheet = () => {
     return (
@@ -207,10 +214,14 @@ const WalletTab = ({
     setSelectedToken(token);
   };
 
+  console.log(!selectedToken);
+
   return (
-    <KeyboardAwareScrollView nestedScrollEnabled style={{
-      backgroundColor: colors.BG,
-    }}>
+    <KeyboardAwareScrollView
+      nestedScrollEnabled
+      style={{
+        backgroundColor: colors.BG,
+      }}>
       <SafeAreaView
         style={{
           backgroundColor: colors.grey24,
@@ -249,7 +260,13 @@ const WalletTab = ({
         )}
         {!selectedToken && (
           <>
-            <SendTokenRBSheet currentNetworkObject={currentNetworkObject} onSendError={onSendError} onSendSubmittedTxn={onSendSubmittedTxn} refRBSendTokenSheet={refRBSendTokenSheet} />
+            <SendTokenRBSheet
+              navigation={navigation}
+              currentNetworkObject={currentNetworkObject}
+              onSendError={onSendError}
+              onSendSubmittedTxn={onSendSubmittedTxn}
+              refRBSendTokenSheet={refRBSendTokenSheet}
+            />
             {renderReceiveTokenRBSheet()}
             {renderBuyRBSheet()}
             <Header navigation={navigation} />

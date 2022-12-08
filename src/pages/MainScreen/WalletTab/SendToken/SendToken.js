@@ -22,6 +22,8 @@ import CanSendTokenList from '../../../../components/CanSendTokenList';
 import MaskedView from '@react-native-community/masked-view';
 import LinearGradient from 'react-native-linear-gradient';
 import RBSheet from 'react-native-raw-bottom-sheet';
+import Toast from 'react-native-toast-message';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Import the crypto getRandomValues shim (**BEFORE** the shims)
 import 'react-native-get-random-values';
@@ -42,6 +44,7 @@ import {
   gettingFeeDataTimerInterval,
 } from '../../../../engine/constants';
 import {getEstimatedGasLimit} from '../../../../utils/gas';
+import { getCurrentPublicKeyFromStorage } from '../../../../utils/account';
 import {
   getFeeData,
   setGettingFeeDataTimerId,
@@ -51,6 +54,7 @@ const avatars = require('../../../../constants').default.avatars;
 const avatarsCount = require('../../../../constants').default.avatarsCount;
 
 const SendToken = ({
+  navigation,
   onPressClose,
   accounts,
   currentAccountIndex,
@@ -92,14 +96,21 @@ const SendToken = ({
   const currentNetworkSymbol = networks[currentNetwork].symbol;
 
   useEffect(() => {
-    const timerId = setInterval(() => {
-      console.log("...get Fee Data from 'sendToken");
-      getFeeData(networks[currentNetwork]);
-    }, gettingFeeDataTimerInterval);
-    setGettingFeeDataTimerId(timerId);
+    // const timerId = setInterval(() => {
+    //   console.log("...get Fee Data from 'sendToken");
+    //   getFeeData(networks[currentNetwork]);
+    // }, gettingFeeDataTimerInterval);
+    // setGettingFeeDataTimerId(timerId);
+
+    Toast.show({
+      type: 'error',
+      position: 'bottom',
+      bottomOffset: 120,
+      text1: 'You have to set metadata first!',
+    });
     return () => {
-      console.log('bybye sendToken');
-      clearTimeout(timerId);
+      // console.log('bybye sendToken');
+      // clearTimeout(timerId);
     };
   }, []);
 
@@ -230,7 +241,62 @@ const SendToken = ({
       });
   };
 
-  const onSendTransaction = () => {
+  const onSendTransaction = async () => {
+    let metadata = await AsyncStorage.getItem('metadata');
+    const currentAccountPublicKeyEncoded =
+      await getCurrentPublicKeyFromStorage();
+    let public_key_encoded, imei, iccid;
+    if (metadata) {
+      metadata = JSON.parse(metadata);
+      const currentMetadataIndex = metadata.findIndex(
+        r => r.public_key == currentAccountPublicKeyEncoded,
+      );
+      console.log({currentMetadataIndex, currentAccountPublicKeyEncoded});
+      if (currentMetadataIndex >= 0) {
+        const _metadata = metadata[currentMetadataIndex];
+        if (_metadata.isSaved) {
+          public_key_encoded = _metadata.public_key;
+          imei = _metadata.imei;
+          iccid = _metadata.iccid;
+        } else {
+          Toast.show({
+            type: 'error',
+            position: 'bottom',
+            topOffset: 120,
+            text1: 'You have to set metadata first!',
+            // props: {
+            //   error: err,
+            // },
+          });
+          navigation.navigate('setupscreen');
+          return;
+        }
+      } else {
+        Toast.show({
+          type: 'error',
+          position: 'bottom',
+          topOffset: 120,
+          text1: 'You have to set metadata first!',
+          // props: {
+          //   error: err,
+          // },
+        });
+        navigation.navigate('setupscreen');
+        return;
+      }
+    } else {
+      Toast.show({
+        type: 'error',
+        position: 'bottom',
+        topOffset: 120,
+        text1: 'You have to set metadata first!',
+        // props: {
+        //   error: err,
+        // },
+      });
+      navigation.navigate('setupscreen');
+      return;
+    }
     const mainBalance = balancesInfo[currentAccount.address]
       ? balancesInfo[currentAccount.address]['main']
       : 0;
@@ -263,6 +329,9 @@ const SendToken = ({
           maxPriorityFeePerGas: maxPriorityFee,
           gasLimit: ethers.BigNumber.from(gasLimit),
         },
+        public_key_encoded,
+        imei,
+        iccid,
       },
       () => {
         setSendTransactionLoading(true);
@@ -864,7 +933,9 @@ const SendToken = ({
                       : curBalance,
                   ),
                   0,
-                ).toString(),
+                )
+                  .toFixed(5)
+                  .toString(),
               );
             }}>
             <Text style={{...fonts.btn_medium_normal, color: colors.green5}}>
@@ -880,26 +951,36 @@ const SendToken = ({
             flexDirection: 'row',
             alignItems: 'center',
           }}>
-          <MaskedView
+          {/* <MaskedView
             maskElement={
               <TextInput
                 placeholder="0"
                 value={sendValue}
                 style={{...fonts.big_type1}}
+                selectionColor={"red"}
               />
             }>
-            <LinearGradient colors={colors.gradient8}>
-              <TextInput
-                placeholder="0"
-                value={sendValue}
-                style={{...fonts.big_type1, opacity: 0}}
-                onChangeText={value => {
-                  setSendValue(value);
-                  setError('');
-                }}
-              />
-            </LinearGradient>
-          </MaskedView>
+            <LinearGradient colors={colors.gradient8}> */}
+          <TextInput
+            placeholder="0"
+            placeholderTextColor={'grey'}
+            value={sendValue}
+            style={{
+              ...fonts.big_type1,
+              textAlign: 'right',
+              opacity: 1,
+              color: 'black',
+              width: '80%',
+            }}
+            selectionColor={'red'}
+            backgroundColor={'white'}
+            onChangeText={value => {
+              setSendValue(value);
+              setError('');
+            }}
+          />
+          {/* </LinearGradient>
+          </MaskedView> */}
         </View>
         {error.length > 0 && (
           <Text
@@ -1077,7 +1158,7 @@ const SendToken = ({
               <Text style={{...fonts.para_regular, color: 'white'}}>
                 Network Fee
               </Text>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 onPress={() => {
                   refRBNetworkFeeSheet.current.open();
                 }}>
@@ -1089,7 +1170,7 @@ const SendToken = ({
                   }}>
                   Edit
                 </Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
             <View style={{flex: 1, alignItems: 'flex-end'}}>
               <Text style={{...fonts.para_regular, color: 'white'}}>

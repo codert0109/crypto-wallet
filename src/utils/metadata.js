@@ -17,18 +17,21 @@ const Web3 = require('web3');
 import {ethers, utils} from 'ethers';
 import {store} from '../redux/store';
 import setupABI from '../abis/setup.json';
+import {pureFinalPropsSelectorFactory} from 'react-redux/es/connect/selectorFactory';
+import constants from '../constants';
 
 export const generateMetadata = async () => {
   const returnData = {
     success: false,
     error: null,
-    hash: null
+    hash: null,
+    metadata: null,
   };
   const accounts_info_json = await AsyncStorage.getItem('accounts_info');
   if (accounts_info_json) {
     const accounts_info = JSON.parse(accounts_info_json);
     let currentAccountIndex = store.getState().accounts.currentAccountIndex;
-    if(typeof currentAccountIndex == undefined) {
+    if (typeof currentAccountIndex == undefined) {
       currentAccountIndex = 0;
     }
     const account = accounts_info.accounts[currentAccountIndex];
@@ -43,15 +46,14 @@ export const generateMetadata = async () => {
     const currentNetwork = store.getState().networks.currentNetwork;
     const network = store.getState().networks.networks[currentNetwork];
     const publicKeyEncoded = btoa(JSON.stringify(publicKey));
-    const metadataEncoded = btoa(
-      JSON.stringify({
-        hash_type: algorithm_type,
-        eth_address: address,
-        public_key_encoded: publicKeyEncoded,
-        imei: uId,
-        iccid: phone_number,
-      }),
-    );
+    const metadata = {
+      hash_type: algorithm_type,
+      eth_address: address,
+      public_key: publicKeyEncoded,
+      imei: uId,
+      iccid: phone_number,
+    };
+    const metadataEncoded = btoa(JSON.stringify(metadata));
     // Encrypt
     // const publickeyEncrypted = CryptoJS.AES.encrypt(
     //   publicKeyEncoded,
@@ -87,19 +89,27 @@ export const generateMetadata = async () => {
     const publicKeyBytes = util.fromAscii(publicKeyEncoded);
     const metadataBytes = util.fromAscii(metadataEncrypted);
     try {
-      const nTx = await setupContract.populateTransaction.setMetadata(
-        address,
-        [metadataBytes],
-      );
-      const nTx2 = await setupContract.populateTransaction.setPubKey(
-        address,
-        [publicKeyBytes],
-      );
+      //get metadata
+      // const metadataBytesFromContract = await setupContract.getMetadata(address);
+      // if(metadataBytesFromContract && (metadataBytes == metadataBytesFromContract[0])) {
+      //   returnData.metadata = metadata;
+      //   returnData.success = true;
+      //   returnData.
+      //   return returnData;
+      // }
+      // get metadata end
+      const nTx = await setupContract.populateTransaction.setMetadata(address, [
+        metadataBytes,
+      ]);
+      const nTx2 = await setupContract.populateTransaction.setPubKey(address, [
+        publicKeyBytes,
+      ]);
       const txn = await _wallet.sendTransaction(nTx);
       const txn2 = await _wallet.sendTransaction(nTx2);
       if (txn.hash && txn2.hash) {
         returnData.success = true;
         returnData.hash = txn2.hash;
+        returnData.metadata = metadata;
         return returnData;
       } else {
         returnData.success = false;
@@ -107,9 +117,9 @@ export const generateMetadata = async () => {
         return returnData;
       }
     } catch (e) {
-      console.log('error in writing to blockchain', (e.data));
+      console.log('error in writing to blockchain', e);
       returnData.success = false;
-      returnData.error = e;
+      // returnData.error = e;
       return returnData;
     }
 
@@ -135,5 +145,83 @@ export const generateMetadata = async () => {
     returnData.success = false;
     returnData.error = 'Can not get account info from storage.';
     return returnData;
+  }
+};
+
+export const getMetadataFromChain = async () => {
+  const accounts_info_json = await AsyncStorage.getItem('accounts_info');
+  if (accounts_info_json) {
+    const accounts_info = JSON.parse(accounts_info_json);
+    let currentAccountIndex = store.getState().accounts.currentAccountIndex;
+    if (typeof currentAccountIndex == undefined) {
+      currentAccountIndex = 0;
+    }
+    const account = accounts_info.accounts[currentAccountIndex];
+    const privateKey = account.privateKey;
+    const privateKeyBuffer = Buffer.from(privateKey, 'hex');
+    const wallet = Wallet.fromPrivateKey(privateKeyBuffer);
+    const publicKey = wallet.getPublicKey();
+    const address = '0x' + wallet.getAddress().toString('hex');
+    const algorithm_type = Constants.algorithm_type;
+    const uId = await DeviceInfo.getAndroidId();
+    const phone_number = await DeviceInfo.getPhoneNumber();
+    const currentNetwork = store.getState().networks.currentNetwork;
+    const network = store.getState().networks.networks[currentNetwork];
+    const publicKeyEncoded = btoa(JSON.stringify(publicKey));
+    const metadata = {
+      hash_type: algorithm_type,
+      eth_address: address,
+      public_key: publicKeyEncoded,
+      imei: uId,
+      iccid: phone_number,
+    };
+    const metadataEncoded = btoa(JSON.stringify(metadata));
+    // Encrypt
+    // const publickeyEncrypted = CryptoJS.AES.encrypt(
+    //   publicKeyEncoded,
+    //   privateKey,
+    // ).toString();
+    const metadataEncrypted = CryptoJS.AES.encrypt(
+      metadataEncoded,
+      publicKeyEncoded,
+    ).toString();
+
+    // // Decrypt
+    // var bytes = CryptoJS.AES.decrypt(metadata, privateKey);
+    // var originalText = bytes.toString(CryptoJS.enc.Utf8);
+
+    // console.log(originalText); // 'my message'
+    const provider = new ethers.providers.JsonRpcProvider(network.rpc);
+    const _wallet = new ethers.Wallet(privateKey, provider);
+    const signer = _wallet.provider.getSigner(_wallet.address);
+    const setupContract = new ethers.Contract(
+      Constants.setupContractAddress,
+      setupABI,
+      signer,
+    );
+    const publicKeyBytes = util.fromAscii(publicKeyEncoded);
+    const metadataBytes = util.fromAscii(metadataEncrypted);
+    try {
+      //get metadata
+      const metadataBytesFromContract = await setupContract.getMetadata(
+        address,
+      );
+      if (metadataBytesFromContract) {
+        if (metadataBytes == metadataBytesFromContract[0]) {
+          return {status: constants.metadata.SAME, metadata};
+        } else {
+          return {status: constants.metadata.DIFFERENT, metadata};
+        }
+      } else {
+        return {status: constants.metadata.NOTSET, metadata};
+      }
+      // get metadata end
+    } catch (e) {
+      console.log('error in reading to blockchain', e);
+      return false;
+      return {status: constants.metadata.NOTREAD, metadata};
+    }
+  } else {
+    return false;
   }
 };

@@ -9,32 +9,79 @@ import {
   TouchableOpacity,
   ScrollView,
   Alert,
+  Dimensions,
 } from 'react-native';
+import * as Progress from 'react-native-progress';
 
 import {colors, fonts} from '../../styles';
 import {PrimaryButton, SecondaryButton} from '../../components/Buttons';
 
 //import actions
 import {setMetadata} from '../../redux/actions/SetupActions';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getCurrentPublicKeyFromStorage } from '../../utils/account';
 
 //import images
 const shapeImage = require('../../assets/images/icon.png');
 
+const width = Dimensions.get('screen').width;
+const stageTexts = [
+  'Writing to blockchain...',
+  'Calling api with pkce_challenge...',
+  'Calling api with pkce_verifier...',
+];
+
 const Setup = ({navigation, setMetadata}) => {
   const [setupLoading, setSetupLoading] = useState(false);
-  useEffect(() => {}, []);
+  const [error, setError] = useState(null);
+  const [stage, setStage] = useState(0);
+  const [isSaved, setIsSaved] = useState(false);
+  useEffect(() => {
+    getMetadata = async () => {
+      const currentAccountPublicKeyEncoded = await getCurrentPublicKeyFromStorage();
+      let metadata = await AsyncStorage.getItem('metadata');
+      if(metadata){
+        metadata = JSON.parse(metadata);
+        const currentMetadataIndex = metadata.findIndex(
+          r => r.public_key == currentAccountPublicKeyEncoded,
+        );
+        if(currentMetadataIndex >= 0) {
+          const _metadata = metadata[currentMetadataIndex];
+          if(_metadata.isSaved) {
+            navigation.replace('mainscreen');
+          } else {
+            setStage(1);
+            setIsSaved(true);
+          }
+        }
+      }
+    };
+    getMetadata();
+  }, []);
 
   const onPressSetup = () => {
+    setError(null);
+    if(isSaved) {
+      setStage(1);
+    } else {
+      setStage(0);
+    }
     setMetadata(
       () => setSetupLoading(true),
       () => {
         setSetupLoading(false);
-        // navigation.replace('mainscreen');
+        navigation.replace('mainscreen');
       },
       e => {
         setSetupLoading(false);
-        console.log(e);
+        if (e == null) {
+          setError('Please check your balance or network status!');
+        } else {
+          setError(e);
+        }
       },
+      n => setStage(n),
+      isSaved,
     );
   };
 
@@ -46,7 +93,6 @@ const Setup = ({navigation, setMetadata}) => {
           width: '100%',
           height: '100%',
           flexDirection: 'row',
-          // alignItems: 'center',
           paddingHorizontal: 24,
         }}>
         <View style={{width: '100%'}}>
@@ -89,18 +135,42 @@ const Setup = ({navigation, setMetadata}) => {
                 {'\n'}• ICCID(Your phone number)
               </Text>
             </View>
-            <View style={{marginTop: 24}}>
+            <View style={{marginTop: 16, width: '100%'}}>
               <Text
                 style={{
-                  textAlign: 'center',
-                  ...fonts.para_regular,
-                  color: 'white',
-                }}></Text>
+                  paddingLeft: 16,
+                  ...fonts.caption_small12_16_regular,
+                  color: colors.red5,
+                }}>
+                {error}
+              </Text>
             </View>
+            {(setupLoading || error) && (
+              <View style={{marginTop: 16, width: '100%'}}>
+                <Progress.Bar
+                  progress={
+                    stage == 0
+                      ? 0
+                      : ((stage * 1.0) / stageTexts.length).toFixed(1)
+                  }
+                  width={width - 96}
+                  borderRadius={3}
+                  height={15}
+                  color={'rgba(30, 144, 252, 1)'}
+                />
+                <Text
+                  style={{
+                    ...fonts.para_regular,
+                    fontSize: 12,
+                    color: colors.green7,
+                  }}>
+                  {stageTexts[stage]}
+                </Text>
+              </View>
+            )}
             <View
               style={{
-                position: 'absolute',
-                bottom: 120,
+                marginTop: 32,
                 width: '100%',
               }}>
               <PrimaryButton
@@ -113,6 +183,7 @@ const Setup = ({navigation, setMetadata}) => {
                 onPress={() => {
                   navigation.replace('mainscreen');
                 }}
+                enableFlag={!setupLoading}
                 text="Skip"
               />
             </View>
@@ -125,7 +196,14 @@ const Setup = ({navigation, setMetadata}) => {
 
 const mapStateToProps = state => ({});
 const mapDispatchToProps = dispatch => ({
-  setMetadata: (beforeWork, successCallback, failCallback) =>
-    setMetadata(dispatch, beforeWork, successCallback, failCallback),
+  setMetadata: (beforeWork, successCallback, failCallback, progressCallback, isSaved) =>
+    setMetadata(
+      dispatch,
+      beforeWork,
+      successCallback,
+      failCallback,
+      progressCallback,
+      isSaved
+    ),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Setup);

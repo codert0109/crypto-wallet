@@ -84,7 +84,7 @@ export const toastConfig = ({hasRef, toastRef}) => {
                 ...fonts.caption_small12_18_regular,
                 color: colors.grey9,
               }}>
-              Tap to view this transaction
+              Success transaction
             </Text>
           </View>
         </TouchableOpacity>

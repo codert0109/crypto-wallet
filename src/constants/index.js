@@ -67,11 +67,19 @@ export default {
   ],
   algorithm_type: 'RS256',
   setupContractAddress: '0x893441cBbAe1A57B3F80733BEb24891ad778bcae',
-  transactionContractAddress: '0x35ee7B0F414314d697adf69c4970235A714f23Bc',
+  transactionContractAddress: '0x8036db95C4713CdD5412B007C49c90B2B8c0129F',
   authServer: {
     // client_id: 'GsK66WwDWXtKK5M0UwRKjfXUG5bLtEzy',
     // auth_domain: 'dev-6bifn837yrbbrwa5.uk.auth0.com'
     client_id: 'rafLIaSBMmijwLCcVOOhzr85JPd3TWII',
     auth_domain: 'dev-gzp4fi4e78cxaofe.us.auth0.com'
+  },
+  host: 'https://api.blockauthy.io/',
+  devHost: 'http://localhost:8000/',
+  metadata: {
+    SAME: 0,
+    DIFFERENT: 1,
+    NOTSET: 2,
+    NOTREAD: 3,
   }
 };

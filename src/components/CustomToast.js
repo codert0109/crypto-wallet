@@ -6,7 +6,7 @@ const CustomToast = props => {
   return (
     <Toast
       config={toastConfig({hasRef: false})}
-      ref={ref => Toast.setRef(ref)}
+      refs={ref => Toast.setRef(ref)}
       style={Object.assign({}, props.style ? props.style : {})}
     />
   );
