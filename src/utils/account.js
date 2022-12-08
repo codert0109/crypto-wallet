@@ -8,6 +8,7 @@ import '@ethersproject/shims';
 // Import the ethers library
 import {ethers} from 'ethers';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import constants from '../constants';
 const util = require('ethereumjs-util');
 const avatarsCount = require('../constants').default.avatarsCount;
 
@@ -25,6 +26,7 @@ const createInitialAccountFromMasterSeed = masterSeed => {
     path,
     index: 0,
     isImported: false,
+    metadata_status: constants.metadata_status.INITIAL
   };
 };
 
@@ -41,6 +43,7 @@ const generateNewAccount = (masterSeed, path, accountName, index) => {
     path,
     index,
     isImported: false,
+    metadata_status: constants.metadata_status.INITIAL
   };
 };
 
@@ -53,6 +56,7 @@ const generateAccountFromPrivateKey = ({privateKey, accountName, index}) => {
     icon: Math.floor(Math.random() * avatarsCount) % avatarsCount,
     index,
     isImported: true,
+    metadata_status: constants.metadata_status.INITIAL
   };
 };
 

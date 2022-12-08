@@ -72,6 +72,13 @@ contract SetUp {
         return metadatas[_address];
     }
 
+    function isMasterAddress(
+        address to_address,
+        address master_address
+    ) external view returns (bool isMaster) {
+        return onlyMasters[to_address][master_address];
+    }
+
     function getPubKey(
         address _address
     ) external view returns (bytes[] memory _pubkey) {

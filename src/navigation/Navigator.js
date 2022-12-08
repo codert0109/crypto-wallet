@@ -12,6 +12,7 @@ import CreateSecureScreen from '../pages/CreateSecure/CreateSecureScreen';
 import CreateWalletScreen from '../pages/CreateWallet/CreateWalletScreen';
 import MainScreen from '../pages/MainScreen/MainScreen';
 import SetupScreen from '../pages/Setup/SetupScreen';
+import MasterScreen from '../pages/MasterScreen';
 
 import {colors, commonStyles} from '../styles';
 import FontAwesome, {SolidIcons} from 'react-native-fontawesome';
@@ -105,6 +106,11 @@ class App extends React.Component {
         <Stack.Screen
           name="setupscreen"
           component={SetupScreen}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="masterscreen"
+          component={MasterScreen}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

@@ -19,7 +19,11 @@ import {PrimaryButton, SecondaryButton} from '../../components/Buttons';
 //import actions
 import {setMetadata} from '../../redux/actions/SetupActions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getCurrentPublicKeyFromStorage } from '../../utils/account';
+import {getCurrentPublicKeyFromStorage} from '../../utils/account';
+import {
+  getMetadataFromChain,
+  verifyMasterAddressFromChain,
+} from '../../utils/metadata';
 
 //import images
 const shapeImage = require('../../assets/images/icon.png');
@@ -38,21 +42,34 @@ const Setup = ({navigation, setMetadata}) => {
   const [isSaved, setIsSaved] = useState(false);
   useEffect(() => {
     getMetadata = async () => {
-      const currentAccountPublicKeyEncoded = await getCurrentPublicKeyFromStorage();
-      let metadata = await AsyncStorage.getItem('metadata');
-      if(metadata){
-        metadata = JSON.parse(metadata);
-        const currentMetadataIndex = metadata.findIndex(
-          r => r.public_key == currentAccountPublicKeyEncoded,
-        );
-        if(currentMetadataIndex >= 0) {
-          const _metadata = metadata[currentMetadataIndex];
-          if(_metadata.isSaved) {
-            navigation.replace('mainscreen');
-          } else {
-            setStage(1);
-            setIsSaved(true);
-          }
+      const metadataBytesFromContract = await getMetadataFromChain();
+      // const isMaster = await verifyMasterAddressFromChain();
+      // console.log('asdfa', isMaster)
+      if (metadataBytesFromContract && metadataBytesFromContract[0]) {
+        setIsSaved(true);
+        const isMaster = await verifyMasterAddressFromChain();
+        if (!isMaster) {
+          Alert.alert(
+            '',
+            'Your data is already set in chain. To change your data, you need to set the master address first.',
+            [
+              {
+                text: 'Check Now',
+                onPress: () => {
+                  navigation.navigate('masterscreen');
+                },
+                style: 'cancel',
+              },
+            ],
+            // {
+            //   cancelable: true,
+            //   onDismiss: () => {
+            //     // Alert.alert(
+            //     //   "This alert was dismissed by tapping outside of the alert dialog."
+            //     // ),
+            //   },
+            // },
+          );
         }
       }
     };
@@ -61,7 +78,7 @@ const Setup = ({navigation, setMetadata}) => {
 
   const onPressSetup = () => {
     setError(null);
-    if(isSaved) {
+    if (isSaved && false) {
       setStage(1);
     } else {
       setStage(0);
@@ -84,6 +101,8 @@ const Setup = ({navigation, setMetadata}) => {
       isSaved,
     );
   };
+
+  console.log(stage == 0 ? 0 : ((stage * 1.0) / stageTexts.length).toFixed(1));
 
   return (
     <KeyboardAvoidingView>
@@ -196,14 +215,20 @@ const Setup = ({navigation, setMetadata}) => {
 
 const mapStateToProps = state => ({});
 const mapDispatchToProps = dispatch => ({
-  setMetadata: (beforeWork, successCallback, failCallback, progressCallback, isSaved) =>
+  setMetadata: (
+    beforeWork,
+    successCallback,
+    failCallback,
+    progressCallback,
+    isSaved,
+  ) =>
     setMetadata(
       dispatch,
       beforeWork,
       successCallback,
       failCallback,
       progressCallback,
-      isSaved
+      isSaved,
     ),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Setup);

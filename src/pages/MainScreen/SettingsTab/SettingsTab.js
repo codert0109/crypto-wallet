@@ -31,8 +31,10 @@ const SettingsTab = ({navigation}) => {
   });
 
   onLogOut = () => {
-    AsyncStorage.removeItem('remember_me').then(() => navigation.replace('login')).catch();
-  }
+    AsyncStorage.removeItem('remember_me')
+      .then(() => navigation.replace('login'))
+      .catch();
+  };
 
   const renderSettingsRow = (icon, name, onPress) => {
     return (
@@ -93,13 +95,17 @@ const SettingsTab = ({navigation}) => {
           )}
           {renderSettingsRow(
             <AntIcon name="sharealt" size={32} color="white" />,
-            'Share My Public Address',
-            () => {},
+            'Set My Master Address',
+            () => {
+              navigation.navigate('masterscreen');
+            },
           )}
           {renderSettingsRow(
             <AntIcon name="eyeo" size={32} color="white" />,
-            'View on Etherscan',
-            () => {},
+            'Sync Metadata',
+            () => {
+              navigation.navigate('setupscreen');
+            },
           )}
           {renderSettingsRow(
             <SvgXml xml={fonts.preferenceIconSvgXml} />,
@@ -121,7 +127,9 @@ const SettingsTab = ({navigation}) => {
           {renderSettingsRow(
             <SvgXml xml={fonts.logoutIconSvgXml} />,
             'Log out',
-            () => {onLogOut()},
+            () => {
+              onLogOut();
+            },
           )}
         </View>
       </>

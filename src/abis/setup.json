@@ -1,30 +1,78 @@
 [
-  {"inputs": [], "stateMutability": "nonpayable", "type": "constructor"},
+  {
+    "inputs": [],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
   {
     "inputs": [
-      {"internalType": "address", "name": "_address", "type": "address"}
+      {
+        "internalType": "address",
+        "name": "_address",
+        "type": "address"
+      }
     ],
     "name": "getMetadata",
     "outputs": [
-      {"internalType": "bytes[]", "name": "_metadata", "type": "bytes[]"}
+      {
+        "internalType": "bytes[]",
+        "name": "_metadata",
+        "type": "bytes[]"
+      }
     ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      {"internalType": "address", "name": "_address", "type": "address"}
+      {
+        "internalType": "address",
+        "name": "_address",
+        "type": "address"
+      }
     ],
     "name": "getPubKey",
     "outputs": [
-      {"internalType": "bytes[]", "name": "_pubkey", "type": "bytes[]"}
+      {
+        "internalType": "bytes[]",
+        "name": "_pubkey",
+        "type": "bytes[]"
+      }
     ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      {"internalType": "uint256", "name": "new_fee", "type": "uint256"}
+      {
+        "internalType": "address",
+        "name": "to_address",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "master_address",
+        "type": "address"
+      }
+    ],
+    "name": "isMasterAddress",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "isMaster",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "new_fee",
+        "type": "uint256"
+      }
     ],
     "name": "setFee",
     "outputs": [],
@@ -33,7 +81,11 @@
   },
   {
     "inputs": [
-      {"internalType": "address", "name": "master_address", "type": "address"}
+      {
+        "internalType": "address",
+        "name": "master_address",
+        "type": "address"
+      }
     ],
     "name": "setMasters",
     "outputs": [],
@@ -42,8 +94,16 @@
   },
   {
     "inputs": [
-      {"internalType": "address", "name": "_address", "type": "address"},
-      {"internalType": "bytes[]", "name": "_metadata", "type": "bytes[]"}
+      {
+        "internalType": "address",
+        "name": "_address",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes[]",
+        "name": "_metadata",
+        "type": "bytes[]"
+      }
     ],
     "name": "setMetadata",
     "outputs": [],
@@ -52,8 +112,16 @@
   },
   {
     "inputs": [
-      {"internalType": "address", "name": "_address", "type": "address"},
-      {"internalType": "bytes[]", "name": "_pubKey", "type": "bytes[]"}
+      {
+        "internalType": "address",
+        "name": "_address",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes[]",
+        "name": "_pubKey",
+        "type": "bytes[]"
+      }
     ],
     "name": "setPubKey",
     "outputs": [],

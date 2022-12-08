@@ -44,11 +44,16 @@ import {
   gettingFeeDataTimerInterval,
 } from '../../../../engine/constants';
 import {getEstimatedGasLimit} from '../../../../utils/gas';
-import { getCurrentPublicKeyFromStorage } from '../../../../utils/account';
+import {getCurrentPublicKeyFromStorage} from '../../../../utils/account';
 import {
   getFeeData,
   setGettingFeeDataTimerId,
 } from '../../../../redux/actions/EngineAction';
+import constants from '../../../../constants';
+import {
+  getMetadataFromStorage,
+  getMetadataStatus,
+} from '../../../../utils/metadata';
 
 const avatars = require('../../../../constants').default.avatars;
 const avatarsCount = require('../../../../constants').default.avatarsCount;
@@ -94,6 +99,19 @@ const SendToken = ({
 
   const currentAccount = accounts[currentAccountIndex];
   const currentNetworkSymbol = networks[currentNetwork].symbol;
+  console.log(currentAccount);
+  // if (
+  //   currentAccount.metadata_status != constants.metadata_status.SAME ||
+  //   currentAccount != constants.metadata_status.DIFFERENTCHAINLOCAL
+  // ) {
+  //   Toast.show({
+  //     type: 'error',
+  //     position: 'bottom',
+  //     bottomOffset: 120,
+  //     text1: 'You have to set metadata first!',
+  //   });
+  //   navigation.navigate('setupscreen');
+  // }
 
   useEffect(() => {
     // const timerId = setInterval(() => {
@@ -102,12 +120,29 @@ const SendToken = ({
     // }, gettingFeeDataTimerInterval);
     // setGettingFeeDataTimerId(timerId);
 
-    Toast.show({
-      type: 'error',
-      position: 'bottom',
-      bottomOffset: 120,
-      text1: 'You have to set metadata first!',
-    });
+    // Toast.show({
+    //   type: 'error',
+    //   position: 'bottom',
+    //   bottomOffset: 120,
+    //   text1: 'You have to set metadata first!',
+    // });
+    const d = async () => {
+      const status = await getMetadataStatus();
+      console.log({status});
+      if (
+        status != constants.metadata_status.SAME &&
+        status != constants.metadata_status.DIFFERENTCHAINLOCAL
+      ) {
+        Toast.show({
+          type: 'error',
+          position: 'bottom',
+          bottomOffset: 120,
+          text1: 'You have to set metadata first!',
+        });
+        navigation.replace('setupscreen');
+      }
+    };
+    d();
     return () => {
       // console.log('bybye sendToken');
       // clearTimeout(timerId);
@@ -242,61 +277,61 @@ const SendToken = ({
   };
 
   const onSendTransaction = async () => {
-    let metadata = await AsyncStorage.getItem('metadata');
-    const currentAccountPublicKeyEncoded =
-      await getCurrentPublicKeyFromStorage();
-    let public_key_encoded, imei, iccid;
-    if (metadata) {
-      metadata = JSON.parse(metadata);
-      const currentMetadataIndex = metadata.findIndex(
-        r => r.public_key == currentAccountPublicKeyEncoded,
-      );
-      console.log({currentMetadataIndex, currentAccountPublicKeyEncoded});
-      if (currentMetadataIndex >= 0) {
-        const _metadata = metadata[currentMetadataIndex];
-        if (_metadata.isSaved) {
-          public_key_encoded = _metadata.public_key;
-          imei = _metadata.imei;
-          iccid = _metadata.iccid;
-        } else {
-          Toast.show({
-            type: 'error',
-            position: 'bottom',
-            topOffset: 120,
-            text1: 'You have to set metadata first!',
-            // props: {
-            //   error: err,
-            // },
-          });
-          navigation.navigate('setupscreen');
-          return;
-        }
-      } else {
-        Toast.show({
-          type: 'error',
-          position: 'bottom',
-          topOffset: 120,
-          text1: 'You have to set metadata first!',
-          // props: {
-          //   error: err,
-          // },
-        });
-        navigation.navigate('setupscreen');
-        return;
-      }
-    } else {
-      Toast.show({
-        type: 'error',
-        position: 'bottom',
-        topOffset: 120,
-        text1: 'You have to set metadata first!',
-        // props: {
-        //   error: err,
-        // },
-      });
-      navigation.navigate('setupscreen');
-      return;
-    }
+    const publicKeyEncoded = await getCurrentPublicKeyFromStorage();
+    let metadata = await getMetadataFromStorage(publicKeyEncoded);
+    console.log(metadata);
+    let {public_key, imei, iccid} = metadata;
+    // if (metadata) {
+    //   metadata = JSON.parse(metadata);
+    //   const currentMetadataIndex = metadata.findIndex(
+    //     r => r.public_key == currentAccountPublicKeyEncoded,
+    //   );
+    //   console.log({currentMetadataIndex, currentAccountPublicKeyEncoded});
+    //   if (currentMetadataIndex >= 0) {
+    //     const _metadata = metadata[currentMetadataIndex];
+    //     if (_metadata.isSaved) {
+    //       public_key_encoded = _metadata.public_key;
+    //       imei = _metadata.imei;
+    //       iccid = _metadata.iccid;
+    //     } else {
+    //       Toast.show({
+    //         type: 'error',
+    //         position: 'bottom',
+    //         topOffset: 120,
+    //         text1: 'You have to set metadata first!',
+    //         // props: {
+    //         //   error: err,
+    //         // },
+    //       });
+    //       navigation.navigate('setupscreen');
+    //       return;
+    //     }
+    //   } else {
+    //     Toast.show({
+    //       type: 'error',
+    //       position: 'bottom',
+    //       topOffset: 120,
+    //       text1: 'You have to set metadata first!',
+    //       // props: {
+    //       //   error: err,
+    //       // },
+    //     });
+    //     navigation.navigate('setupscreen');
+    //     return;
+    //   }
+    // } else {
+    //   Toast.show({
+    //     type: 'error',
+    //     position: 'bottom',
+    //     topOffset: 120,
+    //     text1: 'You have to set metadata first!',
+    //     // props: {
+    //     //   error: err,
+    //     // },
+    //   });
+    //   navigation.navigate('setupscreen');
+    //   return;
+    // }
     const mainBalance = balancesInfo[currentAccount.address]
       ? balancesInfo[currentAccount.address]['main']
       : 0;
@@ -329,7 +364,7 @@ const SendToken = ({
           maxPriorityFeePerGas: maxPriorityFee,
           gasLimit: ethers.BigNumber.from(gasLimit),
         },
-        public_key_encoded,
+        public_key_encoded: public_key,
         imei,
         iccid,
       },
@@ -971,6 +1006,7 @@ const SendToken = ({
               opacity: 1,
               color: 'black',
               width: '80%',
+              borderRadius: 6
             }}
             selectionColor={'red'}
             backgroundColor={'white'}

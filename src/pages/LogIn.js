@@ -88,45 +88,100 @@ const LogIn = ({
               loadNetworksDataFromStorage();
               loadTokensDataFromStorage();
               loadSettingsDataFromStorage();
-              const accounts_info = JSON.parse(res);
-              const {accounts, currentAccountIndex} = accounts_info;
-              const currentAccountPublicKey = util.privateToPublic(
-                Buffer.from(accounts[currentAccountIndex].privateKey, 'hex'),
-              );
-              const currentAccountPublicKeyEncoded = btoa(
-                JSON.stringify(currentAccountPublicKey),
-              );
-              AsyncStorage.getItem('metadata').then(async e => {
-                if (e) {
-                  metadata = JSON.parse(e);
-                  console.log({metadata});
-                  if (metadata[0] == undefined) {
-                    return navigation.replace('setupscreen');
-                  }
-                  const currentMetadataIndex = metadata.findIndex(
-                    r => r.public_key == currentAccountPublicKeyEncoded,
-                  );
-                  if (currentMetadataIndex >= 0) {
-                    const _metadata = metadata[currentMetadataIndex];
-                    if (_metadata.isSaved) {
-                      navigation.replace('mainscreen');
-                    } else {
-                      navigation.replace('setupscreen');
-                    }
-                  } else {
-                    navigation.replace('setupscreen');
-                  }
-                } else {
-                  const {status, metadata} = await getMetadataFromChain();
-                  if(status) {
-                    if(status == constants.metadata.SAME) {
-
-                    }
-                  } else {
-                    navigation.replace('setupscreen');
-                  }
-                }
-              });
+              navigation.replace('mainscreen');
+              // const accounts_info = JSON.parse(res);
+              // const {accounts, currentAccountIndex} = accounts_info;
+              // const currentAccountPublicKey = util.privateToPublic(
+              //   Buffer.from(accounts[currentAccountIndex].privateKey, 'hex'),
+              // );
+              // const currentAccountPublicKeyEncoded = btoa(
+              //   JSON.stringify(currentAccountPublicKey),
+              // );
+              // AsyncStorage.getItem('metadata').then(async e => {
+              //   if (e) {
+              //     metadata = JSON.parse(e);
+              //     console.log({metadata});
+              //     if (metadata[0] == undefined) {
+              //       return navigation.replace('setupscreen');
+              //     }
+              //     const currentMetadataIndex = metadata.findIndex(
+              //       r => r.public_key == currentAccountPublicKeyEncoded,
+              //     );
+              //     if (currentMetadataIndex >= 0) {
+              //       const _metadata = metadata[currentMetadataIndex];
+              //       if (_metadata.isSaved) {
+              //         navigation.replace('mainscreen');
+              //       } else {
+              //         navigation.replace('setupscreen');
+              //       }
+              //     } else {
+              //       navigation.replace('mainscreen');
+              //       // console.log('1')
+              //       // const {status, metadata} = await getMetadataFromChain();
+              //       // if (status) {
+              //       //   if (status == constants.metadata.SAME) {
+              //       //     let newData = [
+              //       //       {
+              //       //         metadata,
+              //       //         hash: null,
+              //       //         isSaved: false,
+              //       //       },
+              //       //     ];
+              //       //     const isSuccess = await AsyncStorage.setItem(
+              //       //       'metadata',
+              //       //       JSON.stringify(newData),
+              //       //     );
+              //       //     if (isSuccess) {
+              //       //       navigation.replace('mainscreen');
+              //       //     } else {
+              //       //       navigation.replace('setupscreen');
+              //       //     }
+              //       //   } else if (status == constants.metadata.DIFFERENT) {
+              //       //     Alert.alert(
+              //       //       'Your metadata is set already but different from current data in localStorage. You need to sync this data first. Before doing that, you need to set the master address first so that can change metadata.',
+              //       //     );
+              //       //     navigation.replace('masterscreen');
+              //       //   } else {
+              //       //     navigation.replace('setupscreen');
+              //       //   }
+              //       // } else {
+              //       //   navigation.replace('setupscreen');
+              //       // }
+              //       // console.log('2');
+              //     }
+              //   } else {
+              //     const {status, metadata} = await getMetadataFromChain();
+              //     if (status) {
+              //       if (status == constants.metadata.SAME) {
+              //         let newData = [
+              //           {
+              //             metadata,
+              //             hash: null,
+              //             isSaved: false,
+              //           },
+              //         ];
+              //         const isSuccess = await AsyncStorage.setItem(
+              //           'metadata',
+              //           JSON.stringify(newData),
+              //         );
+              //         if (isSuccess) {
+              //           navigation.replace('mainscreen');
+              //         } else {
+              //           navigation.replace('setupscreen');
+              //         }
+              //       } else if (status == constants.metadata.DIFFERENT) {
+              //         Alert.alert(
+              //           'Your metadata is set already but different from current data in localStorage. You need to sync this data first. Before doing that, you need to set the master address first so that can change metadata.',
+              //         );
+              //         navigation.replace('masterscreen');
+              //       } else {
+              //         navigation.replace('setupscreen');
+              //       }
+              //     } else {
+              //       navigation.replace('setupscreen');
+              //     }
+              //   }
+              // });
             } else {
               navigation.replace('selectscreen');
             }

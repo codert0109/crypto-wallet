@@ -1,6 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import {SET_ACCOUNTS_DATA, SET_CURRENT_ACCOUNT_INDEX} from '../types';
+import {
+  SET_ACCOUNTS_DATA,
+  SET_CURRENT_ACCOUNT_INDEX,
+  SET_CURRENT_ACCOUNT_METADATA_STATUS,
+} from '../types';
 
 import {store} from '../store';
 
@@ -107,6 +111,11 @@ export const setCurrentAccountIndex = (dispatch, index) => {
       console.log('AccountsAction: ERROR!!!!: ', err);
     });
   dispatch({type: SET_CURRENT_ACCOUNT_INDEX, payload: index});
+};
+
+export const setMetadataStatus = (dispatch, status) => {
+  console.log('set metadata status action', status);
+  dispatch({type: SET_CURRENT_ACCOUNT_METADATA_STATUS, payload: status});
 };
 
 export const importAccount = (

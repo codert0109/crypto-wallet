@@ -66,7 +66,7 @@ export default {
     {label: 'Never', value: '-1'},
   ],
   algorithm_type: 'RS256',
-  setupContractAddress: '0x893441cBbAe1A57B3F80733BEb24891ad778bcae',
+  setupContractAddress: '0xB23DCD815105eb0E94eFa56C2f2080CB47dFA85E',
   transactionContractAddress: '0x8036db95C4713CdD5412B007C49c90B2B8c0129F',
   authServer: {
     // client_id: 'GsK66WwDWXtKK5M0UwRKjfXUG5bLtEzy',
@@ -74,12 +74,15 @@ export default {
     client_id: 'rafLIaSBMmijwLCcVOOhzr85JPd3TWII',
     auth_domain: 'dev-gzp4fi4e78cxaofe.us.auth0.com'
   },
-  host: 'https://api.blockauthy.io/',
-  devHost: 'http://localhost:8000/',
-  metadata: {
-    SAME: 0,
-    DIFFERENT: 1,
-    NOTSET: 2,
-    NOTREAD: 3,
+  devHost: 'https://api.blockauthy.io/',
+  // devHost: 'http://localhost:8000/',
+  metadata_status: {
+    INITIAL: -1,
+    SAME: 0,   // current == storage == chain
+    DIFFERENTCHAINLOCAL: 1,    //  
+    NOTBOTHSET: 2,
+    NOTLOCALSET: 3,
+    NOTCAHINSET: 4,
+    DIFFERENTSTORAGECURRENT: 5,
   }
 };

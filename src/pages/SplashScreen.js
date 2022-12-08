@@ -19,30 +19,31 @@ const SplashScreen = ({navigation}) => {
   });
 
   const nextSplash = async () => {
+    // await AsyncStorage.removeItem('metadata');
     const savedPassword = await AsyncStorage.getItem('password');
     const rememberMe = await AsyncStorage.getItem('remember_me');
-    const currentAccountPublicKeyEncoded =
-    await getCurrentPublicKeyFromStorage();
-    let metadata = await AsyncStorage.getItem('metadata');
+    // const currentAccountPublicKeyEncoded = await getCurrentPublicKeyFromStorage();
+    // let metadata = await AsyncStorage.getItem('metadata');
     if (rememberMe === 'true') {
-      if (metadata) {
-        metadata = JSON.parse(metadata);
-        const currentMetadataIndex = metadata.findIndex(
-          r => r.public_key == currentAccountPublicKeyEncoded,
-        );
-        if (currentMetadataIndex >= 0) {
-          const _metadata = metadata[currentMetadataIndex];
-          if (_metadata.isSaved) {
-            navigation.replace('mainscreen');
-          } else {
-            navigation.replace('setupscreen');
-          }
-        } else {
-          navigation.replace('setupscreen');
-        }
-      } else {
-        navigation.replace('setupscreen');
-      }
+      navigation.replace('mainscreen');
+      // if (metadata) {
+      //   metadata = JSON.parse(metadata);
+      //   const currentMetadataIndex = metadata.findIndex(
+      //     r => r.public_key == currentAccountPublicKeyEncoded,
+      //   );
+      //   if (currentMetadataIndex >= 0) {
+      //     const _metadata = metadata[currentMetadataIndex];
+      //     if (_metadata.isSaved) {
+      //       navigation.replace('mainscreen');
+      //     } else {
+      //       navigation.replace('setupscreen');
+      //     }
+      //   } else {
+      //     navigation.replace('setupscreen');
+      //   }
+      // } else {
+      //   navigation.replace('setupscreen');
+      // }
       return;
     }
     if (savedPassword) {

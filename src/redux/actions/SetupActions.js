@@ -1,9 +1,10 @@
-import {generateMetadata} from '../../utils/metadata';
+import {getMetadataFromStorage, updateMetadataStorage, writeMetadata} from '../../utils/metadata';
 import {getCodeVerifierAndChallenge} from '../../utils/pkce';
 import {ConvertToUrlForm, generateAccessToken} from '../../utils/form';
 import Constants from '../../constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {getCurrentPublicKeyFromStorage} from '../../utils/account';
+import {Alert} from 'react-native';
 
 export const setMetadata = async (
   dispatch,
@@ -15,48 +16,22 @@ export const setMetadata = async (
 ) => {
   beforeWork();
   let returned;
-  let metadata = await AsyncStorage.getItem('metadata');
-  if (metadata) {
-    metadata = JSON.parse(metadata);
-  }
-  if (isSaved) {
-    const currentAccountPublicKeyEncoded =
-      await getCurrentPublicKeyFromStorage();
-    const currentMetadataIndex = metadata.findIndex(
-      r => r.public_key == currentAccountPublicKeyEncoded,
-    );
-    returned = {
-      error: null,
-      hash: metadata[currentMetadataIndex].hash,
-      metadata: metadata[currentMetadataIndex],
-      success: true,
-    };
-  } else {
-    returned = await generateMetadata();
-    let newData;
-    if (metadata) {
-      newData = [
-        ...metadata,
-        {
-          ...returned.metadata,
-          hash: returned.hash,
-          isSaved: false,
-        },
-      ];
-    } else {
-      newData = [
-        {
-          ...returned.metadata,
-          hash: returned.hash,
-          isSaved: false,
-        },
-      ];
-    }
-    const success = await AsyncStorage.setItem(
-      'metadata',
-      JSON.stringify(newData),
-    );
-  }
+  // if (isSaved && false) {
+  //   const currentAccountPublicKeyEncoded =
+  //     await getCurrentPublicKeyFromStorage();
+  //   const currentMetadata = metadata.find(
+  //     r => r.public_key == currentAccountPublicKeyEncoded,
+  //   );
+  //   returned = {
+  //     error: null,
+  //     hash: currentMetadata.hash,
+  //     metadata: currentMetadata,
+  //     success: true,
+  //   };
+  // } else {
+  returned = await writeMetadata();
+  const success = await updateMetadataStorage(returned.metadata);
+  // }
   // const returned = {
   //   error: null,
   //   hash: '0xb650709cc9777f91fe934f59a0fc827f1ab708c3c12c3bfd07927ddeb6422334',
@@ -70,6 +45,10 @@ export const setMetadata = async (
   //   },
   //   success: true,
   // };
+  if (returned.hash == null) {
+    Alert.alert('Assert failed, write metadata hash is null:: SetupActions');
+  }
+  console.log('sdfs');
   if (returned.success) {
     const {pkce_verifier, pkce_challenge} = getCodeVerifierAndChallenge();
     let response;
@@ -114,29 +93,29 @@ export const setMetadata = async (
         const response2Json = await response2.json();
         if (response2Json.status) {
           progressCallback(3);
-          let newData;
-          if (metadata) {
-            newData = [
-              ...metadata,
-              {
-                ...returned.metadata,
-                hash: returned.hash,
-                isSaved: false,
-              },
-            ];
-          } else {
-            newData = [
-              {
-                ...returned.metadata,
-                hash: returned.hash,
-                isSaved: false,
-              },
-            ];
-          }
-          const success = await AsyncStorage.setItem(
-            'metadata',
-            JSON.stringify(newData),
-          );
+          // let newData;
+          // if (metadata) {
+          //   newData = [
+          //     ...metadata,
+          //     {
+          //       ...returned.metadata,
+          //       hash: returned.hash,
+          //       isSaved: false,
+          //     },
+          //   ];
+          // } else {
+          //   newData = [
+          //     {
+          //       ...returned.metadata,
+          //       hash: returned.hash,
+          //       isSaved: false,
+          //     },
+          //   ];
+          // }
+          // const success = await AsyncStorage.setItem(
+          //   'metadata',
+          //   JSON.stringify(newData),
+          // );
           setTimeout(() => {
             successCallback();
           }, 2000);

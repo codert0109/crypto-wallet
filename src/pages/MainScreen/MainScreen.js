@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   BackHandler,
   ImageBackground,
+  Alert,
 } from 'react-native';
 import {colors, fonts} from '../../styles';
 import FontAwesome, {SolidIcons} from 'react-native-fontawesome';
@@ -16,6 +17,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 const Tab = createBottomTabNavigator();
 
 import {getFeeData} from '../../redux/actions/EngineAction';
+import {setMetadataStatus} from '../../redux/actions/AccountsActions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {initialSettings, NetworkList} from '../../engine/constants';
 import {ethers, utils} from 'ethers';
@@ -24,10 +26,11 @@ import TxnRBSheet from './WalletTab/TxnRBSheet';
 import Toast from 'react-native-toast-message';
 import moment from 'moment';
 
-import {generatePKCEdata} from '../../utils/metadata';
+import {getMetadataStatus} from '../../utils/metadata';
 import WalletTab from './WalletTab/WalletTab';
 import SettingsTab from './SettingsTab/SettingsTab';
 import TxnRBSheetBnb from './WalletTab/TxnRBSheetBnb';
+import constants from '../../constants';
 
 const tempTxn = {
   type: 2,
@@ -57,6 +60,7 @@ const MainScreen = ({
   accounts,
   currentAccountIndex,
   feeData,
+  setMetadataStatus,
 }) => {
   const [submittedTxn, setSubmittedTxn] = useState(tempTxn);
   const [submittedTxnTime, setSubmittedTxnTime] = useState('');
@@ -68,7 +72,7 @@ const MainScreen = ({
   const route = useRoute();
 
   const currentAccount = accounts[currentAccountIndex];
-  // generatePKCEdata();
+  console.log('status: mainscreen', currentAccount.metadata_status);
 
   useEffect(() => {
     if (networks[currentNetwork]) {
@@ -86,6 +90,44 @@ const MainScreen = ({
   //     });
   //   });
   // }, []);
+  useEffect(() => {
+    console.log('here');
+    setCurrentMetadataStatus();
+  }, []);
+
+  const setCurrentMetadataStatus = async () => {
+    const status = await getMetadataStatus();
+    setMetadataStatus(status);
+    if (status != constants.metadata_status.SAME && status != constants.metadata_status.DIFFERENTCHAINLOCAL) {
+      Toast.show({
+        type: 'error',
+        position: 'bottom',
+        bottomOffset: 120,
+        text1: 'You data is not synchonized. \n Please sync first now.',
+      });
+      // Alert.alert(
+      //   'You data is not synchonized to chain. Please sync first now.',
+      //   '',
+      //   [
+      //     {
+      //       text: 'Sync Now',
+      //       onPress: () => {
+      //         navigation.navigate('setupscreen');
+      //       },
+      //       style: 'ok',
+      //     },
+      //   ],
+      //   {
+      //     cancelable: true,
+      //     onDismiss: () => {
+      //       // Alert.alert(
+      //       //   "This alert was dismissed by tapping outside of the alert dialog."
+      //       // ),
+      //     },
+      //   },
+      // );
+    }
+  };
 
   useEffect(() => {
     console.log(feeData);
@@ -378,6 +420,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   getFeeData: currentNetworkObject =>
     getFeeData(dispatch, currentNetworkObject),
+  setMetadataStatus: status => setMetadataStatus(dispatch, status),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainScreen);
