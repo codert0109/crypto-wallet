@@ -4,6 +4,7 @@ import {
   Image,
   KeyboardAvoidingView,
   SafeAreaView,
+  ScrollView,
   Text,
   TouchableOpacity,
   View,
@@ -65,7 +66,7 @@ const SettingsTab = ({navigation}) => {
 
   const MainSettingsTab = () => {
     return (
-      <>
+      <ScrollView>
         <Image
           source={backImage}
           style={{position: 'absolute', right: '-15%', top: '10%'}}
@@ -132,7 +133,7 @@ const SettingsTab = ({navigation}) => {
             },
           )}
         </View>
-      </>
+      </ScrollView>
     );
   };
 

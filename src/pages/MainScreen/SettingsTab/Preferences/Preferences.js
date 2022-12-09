@@ -171,48 +171,55 @@ const Preferences = ({navigation, onGoBack}) => {
           style={{position: 'absolute', right: '-15%', top: '10%'}}
         />
         {renderHeader()}
-        <View
-          style={{
-            marginTop: 40,
-            marginHorizontal: 24,
-            height: '100%',
-          }}>
-          {renderSettingsRow(
-            undefined,
-            'General',
-            () => {
-              refRBGeneralSheet.current.open();
-            },
-            'Currency conversion, primary currency, language and search engine',
-          )}
-          {renderSettingsRow(
-            undefined,
-            'Security & Privacy',
-            () => {
-              refRBSecuritySheet.current.open();
-            },
-            'Privacy settings, private key and wallet seed phrase',
-          )}
-          {renderSettingsRow(
-            undefined,
-            'Advanced',
-            () => {},
-            'Access developer features, reset account, setup testnets, sync extension, state logs,...',
-          )}
-          {renderSettingsRow(
-            undefined,
-            'Contracts',
-            () => {},
-            'Add, edit, remove, and manage your accounts',
-          )}
-          {renderSettingsRow(
-            undefined,
-            'Networks',
-            () => {},
-            'Add and edit custom RPC networks',
-          )}
-          {renderSettingsRow(undefined, 'Experimental', () => {}, 'About DeGe')}
-        </View>
+        <ScrollView>
+          <View
+            style={{
+              marginTop: 40,
+              marginHorizontal: 24,
+              height: '100%',
+            }}>
+            {renderSettingsRow(
+              undefined,
+              'General',
+              () => {
+                refRBGeneralSheet.current.open();
+              },
+              'Currency conversion, primary currency, language and search engine',
+            )}
+            {renderSettingsRow(
+              undefined,
+              'Security & Privacy',
+              () => {
+                refRBSecuritySheet.current.open();
+              },
+              'Privacy settings, private key and wallet seed phrase',
+            )}
+            {renderSettingsRow(
+              undefined,
+              'Advanced',
+              () => {},
+              'Access developer features, reset account, setup testnets, sync extension, state logs,...',
+            )}
+            {renderSettingsRow(
+              undefined,
+              'Contracts',
+              () => {},
+              'Add, edit, remove, and manage your accounts',
+            )}
+            {renderSettingsRow(
+              undefined,
+              'Networks',
+              () => {},
+              'Add and edit custom RPC networks',
+            )}
+            {renderSettingsRow(
+              undefined,
+              'Experimental',
+              () => {},
+              'About DeGe',
+            )}
+          </View>
+        </ScrollView>
         {renderGeneralRBSheet()}
         {renderSecurityAndPrivacyRBSheet()}
       </SafeAreaView>

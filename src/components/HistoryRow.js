@@ -43,7 +43,7 @@ const HistoryRow = ({
       <View style={{paddingVertical: 8}}>
         <Text
           style={{color: colors.grey9, ...fonts.caption_small12_18_regular}}>
-          Mar 3 at 10:04 AM
+          {/* Mar 3 at 10:04 AM */}
         </Text>
       </View>
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -89,7 +89,7 @@ const HistoryRow = ({
                 ...fonts.caption_small12_18_regular,
                 color: colors.grey9,
               }}>
-              {'$' + parseFloat(totalAmount * usdAmount).toFixed(4)}
+              {/* {'$' + parseFloat(totalAmount * usdAmount).toFixed(4)} */}
             </Text>
           </View>
         </View>

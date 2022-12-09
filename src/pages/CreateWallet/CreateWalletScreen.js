@@ -10,6 +10,7 @@ import {
   Dimensions,
   TouchableOpacity,
   Alert,
+  ScrollView,
 } from 'react-native';
 
 import {
@@ -356,70 +357,71 @@ const CreateWalletScreen = ({navigation, createWallet}) => {
           </View>
         </RBSheet>
 
-        <View style={{width: '100%', alignItems: 'center'}}>
-          <Image source={image} />
-        </View>
-        <View style={{marginTop: 40, paddingHorizontal: 24}}>
-          <View style={{paddingBottom: 16}}>
-            <Text
-              style={{textAlign: 'center', ...fonts.title2, color: 'white'}}>
-              Secure Your Wallet
-            </Text>
+        <ScrollView>
+          <View style={{width: '100%', alignItems: 'center'}}>
+            <Image source={image} />
           </View>
-          <View>
-            <Text
-              style={{
-                color: colors.grey9,
-                ...fonts.para_regular,
-                textAlign: 'left',
-              }}>
-              Don't risk losing your funds. Protect your wallet by saving your{' '}
+          <View style={{marginTop: 40, paddingHorizontal: 24}}>
+            <View style={{paddingBottom: 16}}>
               <Text
-                style={{color: colors.blue5, ...fonts.para_semibold}}
-                onPress={() => {
-                  refRBSeedPhraseSheet.current.open();
+                style={{textAlign: 'center', ...fonts.title2, color: 'white'}}>
+                Secure Your Wallet
+              </Text>
+            </View>
+            <View>
+              <Text
+                style={{
+                  color: colors.grey9,
+                  ...fonts.para_regular,
+                  textAlign: 'left',
                 }}>
-                Seed Phrase
-              </Text>{' '}
-              in a place you trust.
-            </Text>
+                Don't risk losing your funds. Protect your wallet by saving your{' '}
+                <Text
+                  style={{color: colors.blue5, ...fonts.para_semibold}}
+                  onPress={() => {
+                    refRBSeedPhraseSheet.current.open();
+                  }}>
+                  Seed Phrase
+                </Text>{' '}
+                in a place you trust.
+              </Text>
+            </View>
+            <View style={{marin: 8}}>
+              <Text
+                style={{
+                  color: colors.grey9,
+                  ...fonts.para_semibold,
+                  textAlign: 'left',
+                }}>
+                It's the only way to recover your wallet if you get locked out
+                of the app or get a new device.
+              </Text>
+            </View>
           </View>
-          <View style={{marin: 8}}>
-            <Text
-              style={{
-                color: colors.grey9,
-                ...fonts.para_semibold,
-                textAlign: 'left',
-              }}>
-              It's the only way to recover your wallet if you get locked out of
-              the app or get a new device.
-            </Text>
+          <View
+            style={{
+              marginTop: 40,
+              width: '90%',
+              left: '5%',
+            }}>
+            <View>
+              <TextButton
+                onPress={() => {
+                  refRBSkipSecuritySheet.current.open();
+                }}
+                text="Remind Me Later"
+              />
+            </View>
+            <View style={{marginTop: 24}}>
+              <PrimaryButton
+                onPress={() => {
+                  setStatus(1);
+                }}
+                text="Start"
+              />
+            </View>
           </View>
-        </View>
-        <View
-          style={{
-            position: 'absolute',
-            bottom: 120,
-            width: '90%',
-            left: '5%',
-          }}>
-          <View>
-            <TextButton
-              onPress={() => {
-                refRBSkipSecuritySheet.current.open();
-              }}
-              text="Remind Me Later"
-            />
-          </View>
-          <View style={{marginTop: 24}}>
-            <PrimaryButton
-              onPress={() => {
-                setStatus(1);
-              }}
-              text="Start"
-            />
-          </View>
-        </View>
+        </ScrollView>
       </View>
     );
   };
@@ -514,87 +516,90 @@ const CreateWalletScreen = ({navigation, createWallet}) => {
             "
           </Text>
         </View>
-        <View
-          style={{
-            paddingHorizontal: 24,
-            marginTop: 40,
-          }}>
-          <View>
-            <Text style={{...fonts.para_semibold, color: 'white'}}>Manual</Text>
-          </View>
-          <View style={{marginTop: 16}}>
-            <Text style={{...fonts.para_regular, color: 'white'}}>
-              Write down your seed phrase on a piece of paper and store in a
-              safe place.
-            </Text>
-          </View>
-          <View style={{marginTop: 16}}>
+        <ScrollView>
+          <View
+            style={{
+              paddingHorizontal: 24,
+              marginTop: 40,
+            }}>
             <View>
-              <Text style={{...fonts.para_regular, color: 'white'}}>
-                Security level: Very strong
+              <Text style={{...fonts.para_semibold, color: 'white'}}>
+                Manual
               </Text>
             </View>
-            <View style={{marginTop: 8}}>
-              <View style={{flexDirection: 'row'}}>
-                <View
-                  style={{
-                    borderRadius: 4,
-                    height: 8,
-                    width: 53,
-                    marginRight: 8,
-                    backgroundColor: colors.green5,
-                  }}></View>
-                <View
-                  style={{
-                    borderRadius: 4,
-                    height: 8,
-                    width: 53,
-                    marginRight: 8,
-                    backgroundColor: colors.green5,
-                  }}></View>
-                <View
-                  style={{
-                    borderRadius: 4,
-                    height: 8,
-                    width: 53,
-                    backgroundColor: colors.green5,
-                  }}></View>
+            <View style={{marginTop: 16}}>
+              <Text style={{...fonts.para_regular, color: 'white'}}>
+                Write down your seed phrase on a piece of paper and store in a
+                safe place.
+              </Text>
+            </View>
+            <View style={{marginTop: 16}}>
+              <View>
+                <Text style={{...fonts.para_regular, color: 'white'}}>
+                  Security level: Very strong
+                </Text>
+              </View>
+              <View style={{marginTop: 8}}>
+                <View style={{flexDirection: 'row'}}>
+                  <View
+                    style={{
+                      borderRadius: 4,
+                      height: 8,
+                      width: 53,
+                      marginRight: 8,
+                      backgroundColor: colors.green5,
+                    }}></View>
+                  <View
+                    style={{
+                      borderRadius: 4,
+                      height: 8,
+                      width: 53,
+                      marginRight: 8,
+                      backgroundColor: colors.green5,
+                    }}></View>
+                  <View
+                    style={{
+                      borderRadius: 4,
+                      height: 8,
+                      width: 53,
+                      backgroundColor: colors.green5,
+                    }}></View>
+                </View>
               </View>
             </View>
+            <View style={{marginTop: 16}}>
+              <Text style={{...fonts.para_regular, color: 'white'}}>
+                Risks are:{'\n'}• You lose it {'\n'}• You forget where you put
+                it {'\n'}• Someone else finds it
+              </Text>
+            </View>
+            <View style={{marginTop: 16}}>
+              <Text style={{...fonts.para_regular, color: 'white'}}>
+                Other options doesn't have to be paper!
+              </Text>
+            </View>
+            <View style={{marginTop: 16}}>
+              <Text style={{...fonts.para_regular, color: 'white'}}>
+                Tips:{'\n'}• Store in bank vault
+                {'\n'}• Store in a safe
+                {'\n'}• Store in multiple secret places
+              </Text>
+            </View>
           </View>
-          <View style={{marginTop: 16}}>
-            <Text style={{...fonts.para_regular, color: 'white'}}>
-              Risks are:{'\n'}• You lose it {'\n'}• You forget where you put it{' '}
-              {'\n'}• Someone else finds it
-            </Text>
+          <View
+            style={{
+              marginTop: 30,
+              width: '90%',
+              left: '5%',
+            }}>
+            <PrimaryButton
+              onPress={() => {
+                setStatus(2);
+              }}
+              text="Start"
+            />
           </View>
-          <View style={{marginTop: 16}}>
-            <Text style={{...fonts.para_regular, color: 'white'}}>
-              Other options doesn't have to be paper!
-            </Text>
-          </View>
-          <View style={{marginTop: 16}}>
-            <Text style={{...fonts.para_regular, color: 'white'}}>
-              Tips:{'\n'}• Store in bank vault
-              {'\n'}• Store in a safe
-              {'\n'}• Store in multiple secret places
-            </Text>
-          </View>
-        </View>
-        <View
-          style={{
-            position: 'absolute',
-            bottom: 120,
-            width: '90%',
-            left: '5%',
-          }}>
-          <PrimaryButton
-            onPress={() => {
-              setStatus(2);
-            }}
-            text="Start"
-          />
-        </View>
+        </ScrollView>
       </View>
     );
   };

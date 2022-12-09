@@ -114,9 +114,9 @@ const TokenAndCollectiblesTab = ({
     const fetchURL = `${baseURL}`;
     fetch(fetchURL, requestOptions)
       .then(response => response.json())
-      .then(result =>
-        console.log(setTransactions(result.result.transfers.slice(0, 15))),
-      )
+      .then(result => {
+        setTransactions(result.result.transfers.slice(0, 15));
+      })
       .catch(error => console.log('error', error));
   };
 
@@ -248,10 +248,10 @@ const TokenAndCollectiblesTab = ({
     //     : []
     //   : [];
     // console.log(nftTokenList);
-    console.log({transactions});
+    console.log(transactions.length);
     return (
       <View style={{flex: 1}}>
-        <ScrollView style={{marginTop: 40, marginHorizontal: 24}}>
+        <ScrollView style={{marginTop: 40, marginHorizontal: 24}} scrollEnabled>
           {transactions.length > 0 ? (
             transactions.map((transaction, index) => {
               return (

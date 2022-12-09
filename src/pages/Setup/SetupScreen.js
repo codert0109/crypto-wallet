@@ -109,7 +109,7 @@ const Setup = ({navigation, setMetadata}) => {
     );
   };
 
-  console.log(stage == 0 ? 0 : ((stage * 1.0) / stageTexts.length).toFixed(1));
+  console.log('stage => ', stage == 0 ? 0 : ((stage * 1.0) / stageTexts.length).toFixed(1));
 
   return (
     <KeyboardAvoidingView>
@@ -129,7 +129,7 @@ const Setup = ({navigation, setMetadata}) => {
                 height: '100%',
                 padding: 24,
                 alignItems: 'center',
-                paddingTop: 150,
+                paddingTop: 70,
               }}>
               <View
                 style={{
