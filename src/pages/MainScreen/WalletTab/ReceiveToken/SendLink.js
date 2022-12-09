@@ -264,7 +264,7 @@ const SendLink = ({token, onPressClose, networks, currentNetwork}) => {
                   'https://dege.app.link/send/0xBBB6A12945aC14C84185a17C6BD2eAe96e/value=21jq',
                 );
                 if (toastRef) {
-                  toastRef.current.show({
+                  toastRef.current?.show({
                     type: 'copy',
                     text1: 'Link copied to clipboard',
                     props: {

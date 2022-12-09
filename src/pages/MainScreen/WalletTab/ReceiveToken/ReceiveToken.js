@@ -93,7 +93,7 @@ const ReceiveToken = ({token, accounts, currentAccountIndex}) => {
               onPress={() => {
                 Clipboard.setString(currentAccount.address);
                 if (toastRef)
-                  toastRef.current.show({
+                  toastRef.current?.show({
                     type: 'copy',
                     position: 'bottom',
                     text1: 'Copied on the clipboard',

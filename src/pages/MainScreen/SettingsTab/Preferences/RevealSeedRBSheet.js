@@ -72,7 +72,7 @@ const RevealSeedRBSheet = ({onPressDone}) => {
 
   const onPressCopy = () => {
     Clipboard.setString(seedPhrase);
-    toastRef.current.show({
+    toastRef.current?.show({
       type: 'copy',
       position: 'bottom',
       text1: 'Copied on the clipboard',
