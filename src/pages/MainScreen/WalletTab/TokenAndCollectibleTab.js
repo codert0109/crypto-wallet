@@ -248,17 +248,23 @@ const TokenAndCollectiblesTab = ({
     //     : []
     //   : [];
     // console.log(nftTokenList);
-    console.log(transactions.length);
+    console.log({transactions});
     return (
       <View style={{flex: 1}}>
-        <ScrollView style={{marginTop: 40, marginHorizontal: 24}} scrollEnabled>
+        <ScrollView
+          style={{marginTop: 40, marginHorizontal: 24}}
+          scrollEnabled
+          nestedScrollEnabled>
           {transactions.length > 0 ? (
             transactions.map((transaction, index) => {
+              console.log(transaction.from, currentAddress);
               return (
                 <HistoryRow
                   key={index}
                   transactionType={
-                    transaction.from == currentAddress ? 'sent' : 'received'
+                    transaction.from == currentAddress.toLowerCase()
+                      ? 'sent'
+                      : 'received'
                   }
                   resultType="confirmed"
                   totalAmount={transaction.value}
