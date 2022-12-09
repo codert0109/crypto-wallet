@@ -114,100 +114,102 @@ const Setup = ({navigation, setMetadata}) => {
           flexDirection: 'row',
           paddingHorizontal: 24,
         }}>
-        <View style={{width: '100%'}}>
-          <View
-            style={{
-              width: '100%',
-              height: '100%',
-              padding: 24,
-              alignItems: 'center',
-              paddingTop: 150,
-            }}>
+        <ScrollView>
+          <View style={{width: '100%'}}>
             <View
               style={{
-                flexDirection: 'row',
-                justifyContent: 'center',
                 width: '100%',
+                height: '100%',
+                padding: 24,
+                alignItems: 'center',
+                paddingTop: 150,
               }}>
-              <Image source={shapeImage} style={{width: 100, height: 100}} />
-            </View>
-            <View style={{marginTop: 40, width: '100%'}}>
-              <Text
+              <View
                 style={{
-                  textAlign: 'left',
-                  ...fonts.para_regular,
-                  color: 'white',
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  width: '100%',
                 }}>
-                {'  '}We are going to write your following encrypted metadata to
-                blockchain. To secure, you need some assets. If you don't have
-                now, please deposit first.
-              </Text>
-            </View>
-            <View style={{marginTop: 16, width: '100%'}}>
-              <Text
-                style={{
-                  ...fonts.para_regular,
-                  color: 'white',
-                  textAlign: 'left',
-                }}>
-                • Hash Type {'\n'}• Eth Address {'\n'}• Public Key {'\n'}• IMEI{' '}
-                {'\n'}• ICCID(Your phone number)
-              </Text>
-            </View>
-            <View style={{marginTop: 16, width: '100%'}}>
-              <Text
-                style={{
-                  paddingLeft: 16,
-                  ...fonts.caption_small12_16_regular,
-                  color: colors.red5,
-                }}>
-                {error}
-              </Text>
-            </View>
-            {(setupLoading || error) && (
+                <Image source={shapeImage} style={{width: 100, height: 100}} />
+              </View>
+              <View style={{marginTop: 40, width: '100%'}}>
+                <Text
+                  style={{
+                    textAlign: 'left',
+                    ...fonts.para_regular,
+                    color: 'white',
+                  }}>
+                  {'  '}We are going to write your following encrypted metadata
+                  to blockchain. To secure, you need some assets. If you don't
+                  have now, please deposit first.
+                </Text>
+              </View>
               <View style={{marginTop: 16, width: '100%'}}>
-                <Progress.Bar
-                  progress={
-                    stage == 0
-                      ? 0
-                      : ((stage * 1.0) / stageTexts.length).toFixed(1)
-                  }
-                  width={width - 96}
-                  borderRadius={3}
-                  height={15}
-                  color={'rgba(30, 144, 252, 1)'}
-                />
                 <Text
                   style={{
                     ...fonts.para_regular,
-                    fontSize: 12,
-                    color: colors.green7,
+                    color: 'white',
+                    textAlign: 'left',
                   }}>
-                  {stageTexts[stage]}
+                  • Hash Type {'\n'}• Eth Address {'\n'}• Public Key {'\n'}•
+                  IMEI {'\n'}• ICCID(Your phone number)
                 </Text>
               </View>
-            )}
-            <View
-              style={{
-                marginTop: 32,
-                width: '100%',
-              }}>
-              <PrimaryButton
-                onPress={onPressSetup}
-                loading={setupLoading}
-                text="Proceed"
-              />
-              <View style={{height: 15}}></View>
-              <SecondaryButton
-                onPress={() => {
-                  navigation.replace('mainscreen');
-                }}
-                enableFlag={!setupLoading}
-                text="Skip"
-              />
+              <View style={{marginTop: 16, width: '100%'}}>
+                <Text
+                  style={{
+                    paddingLeft: 16,
+                    ...fonts.caption_small12_16_regular,
+                    color: colors.red5,
+                  }}>
+                  {error}
+                </Text>
+              </View>
+              {(setupLoading || error) && (
+                <View style={{marginTop: 16, width: '100%'}}>
+                  <Progress.Bar
+                    progress={
+                      stage == 0
+                        ? 0
+                        : ((stage * 1.0) / stageTexts.length).toFixed(1)
+                    }
+                    width={width - 96}
+                    borderRadius={3}
+                    height={15}
+                    color={'rgba(30, 144, 252, 1)'}
+                  />
+                  <Text
+                    style={{
+                      ...fonts.para_regular,
+                      fontSize: 12,
+                      color: colors.green7,
+                    }}>
+                    {stageTexts[stage]}
+                  </Text>
+                </View>
+              )}
+              <View
+                style={{
+                  marginTop: 32,
+                  width: '100%',
+                }}>
+                <PrimaryButton
+                  onPress={onPressSetup}
+                  loading={setupLoading}
+                  text="Proceed"
+                />
+                <View style={{height: 15}}></View>
+                <SecondaryButton
+                  onPress={() => {
+                    navigation.replace('mainscreen');
+                  }}
+                  enableFlag={!setupLoading}
+                  text="Skip"
+                />
+              </View>
             </View>
           </View>
-        </View>
+        </ScrollView>
       </SafeAreaView>
     </KeyboardAvoidingView>
   );
