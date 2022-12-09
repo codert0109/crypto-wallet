@@ -1,6 +1,13 @@
 import React, {useEffect, useState, useMemo, createRef, useRef} from 'react';
 import {connect} from 'react-redux';
-import {View, Dimensions, Pressable, Animated, ScrollView} from 'react-native';
+import {
+  View,
+  Dimensions,
+  Pressable,
+  Animated,
+  ScrollView,
+  Text,
+} from 'react-native';
 import {colors, fonts} from '../../../styles';
 import {SvgXml} from 'react-native-svg';
 import FontAwesome, {
@@ -27,12 +34,32 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 import CollectibleAdd from './CollectibleAdd';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NftTokenRow from '../../../components/NftTokenRow';
+import {GOERLI, MAINNET} from '../../../engine/constants';
+import HistoryRow from '../../../components/HistoryRow';
 
 const screenHeight = Dimensions.get('screen').height;
+
+// // Setup: npm install alchemy-sdk
+// import { Alchemy, Network } from "alchemy-sdk";
+
+// const config = {
+//   apiKey: "7vqFbz6_rvbEVu_B0vS2z3EFgJ_5hso0",
+//   network: Network.ETH_GOERLI,
+// };
+// const alchemy = new Alchemy(config);
+
+// const data = await alchemy.core.getAssetTransfers({
+//   fromBlock: "0x0",
+//   fromAddress: "0x5c43B1eD97e52d009611D89b74fA829FE4ac56b1",
+//   category: ["external", "internal", "erc20", "erc721", "erc1155"],
+// });
+
+// console.log(data);
 
 const TokenAndCollectiblesTab = ({
   navigation,
   currentNetwork,
+  accounts,
   currentAccountIndex,
   tokens,
   setSelectedToken,
@@ -40,13 +67,58 @@ const TokenAndCollectiblesTab = ({
   networks,
 }) => {
   const [curTabIndex, setCurTabIndex] = useState(0);
+  const [transactions, setTransactions] = useState([]);
 
   const refRBTokenAddSheet = useRef(null);
   const refRBCollectibleAddSheet = useRef(null);
+  const currentAddress = accounts[currentAccountIndex].address;
 
   // useEffect(() => {
   //   AsyncStorage.setItem('nftbalances_info', JSON.stringify({}));
   // });
+
+  useEffect(() => {
+    getTransactions();
+  }, []);
+
+  const getTransactions = () => {
+    let data = JSON.stringify({
+      jsonrpc: '2.0',
+      id: 0,
+      method: 'alchemy_getAssetTransfers',
+      params: [
+        {
+          fromBlock: '0x0',
+          fromAddress: currentAddress,
+          category: ['external', 'internal', 'erc20', 'erc721', 'erc1155'],
+        },
+      ],
+    });
+
+    const requestOptions = {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: data,
+      redirect: 'follow',
+    };
+
+    const apiKey = '7vqFbz6_rvbEVu_B0vS2z3EFgJ_5hso0';
+    let baseURL;
+    if (currentNetwork == MAINNET) {
+      baseURL = `https://eth-mainnet.g.alchemy.com/v2/${apiKey}`;
+    } else if (currentNetwork == GOERLI) {
+      baseURL = `https://eth-goerli.g.alchemy.com/v2/${apiKey}`;
+    } else {
+      baseURL = `https://eth-mainnet.g.alchemy.com/v2/${apiKey}`;
+    }
+    const fetchURL = `${baseURL}`;
+    fetch(fetchURL, requestOptions)
+      .then(response => response.json())
+      .then(result =>
+        console.log(setTransactions(result.result.transfers.slice(0, 15))),
+      )
+      .catch(error => console.log('error', error));
+  };
 
   const [tabRoutes] = useState([
     {
@@ -55,7 +127,7 @@ const TokenAndCollectiblesTab = ({
     },
     {
       key: 'second',
-      title: 'Collectibles',
+      title: 'History',
     },
   ]);
 
@@ -123,14 +195,14 @@ const TokenAndCollectiblesTab = ({
         : []
       : [];
     return (
-      <View style={{ flex: 1 }}>
+      <View style={{flex: 1}}>
         <ScrollView nestedScrollEnabled={true}>
           <TokenItemRow
             token={'main'}
             removable={false}
             onPress={() => {
-              setSelectedToken('main');
-              navigation.navigate('tokenshow');
+              // setSelectedToken('main');
+              // navigation.navigate('tokenshow');
             }}
           />
           {tokensList.map(token => {
@@ -165,7 +237,7 @@ const TokenAndCollectiblesTab = ({
     );
   };
 
-  const CollectibleRoute = () => {
+  const HistoryRoute = () => {
     // const nftTokenList = nftBalancesInfo[currentNetwork.toString()]
     //   ? nftBalancesInfo[currentNetwork.toString()][
     //     currentAccountIndex.toString()
@@ -176,21 +248,32 @@ const TokenAndCollectiblesTab = ({
     //     : []
     //   : [];
     // console.log(nftTokenList);
+    console.log({transactions});
     return (
-      <View style={{ flex: 1 }}>
-        {/* <ScrollView style={{ marginTop: 40, marginHorizontal: 24 }}>
-          {nftTokenList.map(nftData => {
-            return (
-              <NftTokenRow
-                currentNetworkObject={networks[currentNetwork]}
-                currentNetwork={currentNetwork}
-                nftData={nftData}
-                key={'collectibles_' + nftData.nftAddress}
-              />
-            );
-          })}
-        </ScrollView> */}
-        <View style={{ marginTop: 24, flexDirection: 'column-reverse', flex: 1 }}>
+      <View style={{flex: 1}}>
+        <ScrollView style={{marginTop: 40, marginHorizontal: 24}}>
+          {transactions.length > 0 ? (
+            transactions.map((transaction, index) => {
+              return (
+                <HistoryRow
+                  key={index}
+                  transactionType={
+                    transaction.from == currentAddress ? 'sent' : 'received'
+                  }
+                  resultType="confirmed"
+                  totalAmount={transaction.value}
+                  unit={transaction.asset}
+                  from={transaction.from}
+                  to={transaction.to}
+                  nonce="#0"
+                />
+              );
+            })
+          ) : (
+            <Text style={{color: 'white'}}>No transactions</Text>
+          )}
+        </ScrollView>
+        {/* <View style={{ marginTop: 24, flexDirection: 'column-reverse', flex: 1 }}>
           <TextButton
             text="Import Collectibles"
             onPress={() => {
@@ -203,7 +286,7 @@ const TokenAndCollectiblesTab = ({
               />
             }
           />
-        </View>
+        </View> */}
       </View>
     );
   };
@@ -213,7 +296,7 @@ const TokenAndCollectiblesTab = ({
   };
   const renderScene = SceneMap({
     first: TokenRoute,
-    second: CollectibleRoute,
+    second: HistoryRoute,
   });
 
   const renderTabBar = props => {
@@ -261,12 +344,12 @@ const TokenAndCollectiblesTab = ({
   };
 
   return (
-    <View style={{ height: 500 }}>
+    <View style={{height: 500}}>
       {renderTokenAdd()}
       {renderCollectibleAdd()}
       <TabView
-        style={{ marginVertical: 40, marginHorizontal: 24, }}
-        navigationState={{ index: curTabIndex, routes: tabRoutes }}
+        style={{marginVertical: 40, marginHorizontal: 24}}
+        navigationState={{index: curTabIndex, routes: tabRoutes}}
         renderTabBar={renderTabBar}
         renderScene={renderScene}
         onIndexChange={setCurTabIndex}

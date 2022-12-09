@@ -6,9 +6,6 @@ export const uniswapRouterAddress =
 export const pancakeSwapRouterAddress =
   '0x9Ac64Cc6e4415144C455BD8E4837Fea55603e5c3'; //0x10ED43C718714eb63d5aA57B78B54704E256024E
 export const MAINNET = '1';
-export const ROPSTEN = '3';
-export const KOVAN = '42';
-export const RINKEBY = '4';
 export const GOERLI = '5';
 export const RPC = 'rpc';
 export const NO_RPC_BLOCK_EXPLORER = 'NO_BLOCK_EXPLORER';
@@ -28,42 +25,42 @@ export const NetworkList = {
     symbol: 'ETH',
     chainType: 'ethereum',
   },
-  [ROPSTEN]: {
-    name: 'Ropsten Test Network',
-    shortName: 'Ropsten',
-    networkId: 3,
-    chainId: 3,
-    hexChainId: '0x3',
-    color: '#ff4a8d',
-    networkType: 'ropsten',
-    rpc: 'https://ropsten.infura.io/v3/' + infuraApiKey,
-    symbol: 'ETH',
-    chainType: 'ethereum',
-  },
-  [KOVAN]: {
-    name: 'Kovan Test Network',
-    shortName: 'Kovan',
-    networkId: 42,
-    chainId: 42,
-    hexChainId: '0x2a',
-    color: '#7057ff',
-    networkType: 'kovan',
-    rpc: 'https://kovan.infura.io/v3/' + infuraApiKey,
-    symbol: 'ETH',
-    chainType: 'ethereum',
-  },
-  [RINKEBY]: {
-    name: 'Rinkeby Test Network',
-    shortName: 'Rinkeby',
-    networkId: 4,
-    chainId: 4,
-    hexChainId: '0x4',
-    color: '#f6c343',
-    networkType: 'rinkeby',
-    rpc: 'https://rinkeby.infura.io/v3/' + infuraApiKey,
-    symbol: 'ETH',
-    chainType: 'ethereum',
-  },
+  // [ROPSTEN]: {
+  //   name: 'Ropsten Test Network',
+  //   shortName: 'Ropsten',
+  //   networkId: 3,
+  //   chainId: 3,
+  //   hexChainId: '0x3',
+  //   color: '#ff4a8d',
+  //   networkType: 'ropsten',
+  //   rpc: 'https://ropsten.infura.io/v3/' + infuraApiKey,
+  //   symbol: 'ETH',
+  //   chainType: 'ethereum',
+  // },
+  // [KOVAN]: {
+  //   name: 'Kovan Test Network',
+  //   shortName: 'Kovan',
+  //   networkId: 42,
+  //   chainId: 42,
+  //   hexChainId: '0x2a',
+  //   color: '#7057ff',
+  //   networkType: 'kovan',
+  //   rpc: 'https://kovan.infura.io/v3/' + infuraApiKey,
+  //   symbol: 'ETH',
+  //   chainType: 'ethereum',
+  // },
+  // [RINKEBY]: {
+  //   name: 'Rinkeby Test Network',
+  //   shortName: 'Rinkeby',
+  //   networkId: 4,
+  //   chainId: 4,
+  //   hexChainId: '0x4',
+  //   color: '#f6c343',
+  //   networkType: 'rinkeby',
+  //   rpc: 'https://rinkeby.infura.io/v3/' + infuraApiKey,
+  //   symbol: 'ETH',
+  //   chainType: 'ethereum',
+  // },
   [GOERLI]: {
     name: 'Goerli Test Network',
     shortName: 'Goerli',

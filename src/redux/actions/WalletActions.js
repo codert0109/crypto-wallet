@@ -35,7 +35,7 @@ export const createWallet = (
   };
   const networksInfo = {
     networks: NetworkList,
-    currentNetwork: RINKEBY,
+    currentNetwork: GOERLI,
   };
   const balancesInfo = {
     [initialAccountData.address]: {main: '0'},
