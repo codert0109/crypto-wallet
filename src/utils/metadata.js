@@ -310,7 +310,7 @@ export const updateMetadataStorage = async metadata => {
   const publicKeyEncoded = await getCurrentPublicKeyFromStorage();
   const metadatasFromStorage_json = await AsyncStorage.getItem('metadata');
   let metadatasFromStorage;
-  console.log('q');
+  console.log('q', metadatasFromStorage_json);
   if (metadatasFromStorage_json) {
     console.log('w');
     metadatasFromStorage = JSON.parse(metadatasFromStorage_json);
@@ -337,6 +337,11 @@ export const updateMetadataStorage = async metadata => {
       'metadata',
       JSON.stringify([metadata]),
     );
+    if (success) {
+      return true;
+    } else {
+      return false;
+    }
   }
   console.log('r');
   return false;

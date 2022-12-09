@@ -19,6 +19,7 @@ import {PrimaryButton, SecondaryButton} from '../../components/Buttons';
 //import actions
 import {setMetadata} from '../../redux/actions/SetupActions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Toast from 'react-native-toast-message';
 import {getCurrentPublicKeyFromStorage} from '../../utils/account';
 import {
   getMetadataFromChain,
@@ -87,6 +88,12 @@ const Setup = ({navigation, setMetadata}) => {
       () => setSetupLoading(true),
       () => {
         setSetupLoading(false);
+        Toast.show({
+          type: 'success',
+          position: 'bottom',
+          bottomOffset: 120,
+          text1: 'Success',
+        });
         navigation.replace('mainscreen');
       },
       e => {
@@ -114,6 +121,7 @@ const Setup = ({navigation, setMetadata}) => {
           flexDirection: 'row',
           paddingHorizontal: 24,
         }}>
+        <ScrollView>
         <View style={{width: '100%'}}>
           <View
             style={{
@@ -208,6 +216,7 @@ const Setup = ({navigation, setMetadata}) => {
             </View>
           </View>
         </View>
+        </ScrollView>
       </SafeAreaView>
     </KeyboardAvoidingView>
   );
