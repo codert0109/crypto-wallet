@@ -12850,10 +12850,15 @@ string_decoder@^1.1.1:
   dependencies:
     safe-buffer "~5.2.0"
 
-string_decoder@~0.10.25, string_decoder@~0.10.x:
+string_decoder@~0.10.x:
   version "0.10.31"
   resolved "https://registry.yarnpkg.com/string_decoder/-/string_decoder-0.10.31.tgz#62e203bc41766c6c28c9fc84301dab1c5310fa94"
   integrity sha512-ev2QzSzWPYmy9GuqfIVildA4OdcGLeFZQrq5ys6RtiuF+RQQiZWr8TZNyAcuVXyQRYfEO+MsoB/1BuQVhOJuoQ==
+
+string_decoder@~0.11.10:
+  version "0.11.10"
+  resolved "https://registry.yarnpkg.com/string_decoder/-/string_decoder-0.11.10.tgz#f0a31205d59b2f1f2e90fdd5032d670a5f9ecf4a"
+  integrity sha512-zUJCCW4PWae2PJ4G80jGK1ITuaZsp/6pUmo4n47Jko8Mq/A0yXLyyb+xntKKTPxYzWa2eZMVwMOLRMu1myE/WQ==
 
 string_decoder@~1.1.1:
   version "1.1.1"
