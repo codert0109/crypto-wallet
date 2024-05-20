@@ -31,53 +31,38 @@ CryptoWallet is a feature-rich, open-source wallet application that provides use
 
 ### Prerequisites
 
-- Node.js (v14 or higher)
+- Node.js (v18 or higher)
 - npm or yarn
 - Git
 
 ### Clone the Repository
 
-Bash
-
-
-git clone https://github.com/username/CryptoWallet.git
-cd CryptoWallet
+`git clone https://github.com/codert0109/crypto-wallet.git`
+`cd crypto-wallet`
 
 
 ### Install Dependencies
 
 Using npm:
 
-Bash
-
-
-npm install
+`npm install`
 
 
 Or using yarn:
 
-Bash
-
-
-yarn install
+`yarn install`
 
 
 ### Running the Application
 
 For development:
 
-Bash
-
-
-npm start
+`npm start`
 
 
 Or for production build:
 
-Bash
-
-
-npm build
+`npm build`
 
 
 ## Usage
@@ -108,7 +93,7 @@ This project is licensed under the MIT License. See the LICENSE file for more de
 
 If you have any questions or need further assistance, feel free to reach out:
 
-- Project Maintainer's Name
+- Code Rt
 - GitHub Issues
 
 Thank you for using and contributing to CryptoWallet!
