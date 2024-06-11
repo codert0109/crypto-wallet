@@ -50,7 +50,7 @@
     "punycode": "^1.2.4",
     "querystring-es3": "~0.2.0",
     "react": "18.1.0",
-    "react-native": "0.70.5",
+    "react-native": "0.74.1",
     "react-native-auth0": "^2.16.0",
     "react-native-bip39": "^2.3.0",
     "react-native-camera": "^4.2.1",
